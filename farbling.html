@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Farbling</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h1>Farbling Tests</h1>
+        <p>
+          Crossed out items are planned, but are not currently implemented.
+        </p>
+
+        <h3>Shields up</h3>
+        <p>
+          All not-crossed-out values values should be the same, per-session,
+          per-eTLD+1, below.  They should differ across sessions, and across
+          eTLD+1.
+        </p>
+
+        <h3>Shields down</h3>
+        <p>
+          With shields down, the below fingerprinting values should be
+          consistent across sessions and eTLD+1.
+        </p>
+
+        <p>
+          <button id="start" class="btn btn-primary btn-block btn-large" disabled>Generate fingerprints</button>
+        </p>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="row">
+      <div class="col">
+        <h2>Local Use</h2>
+        <p>
+          Calls to fingerprinting APIs in the local, top-level frame
+        </p>
+
+      </div>
+
+      <div class="col">
+        <h2>Local Frame</h2>
+        <p>The values in this frame should be identical to the above values.</p>
+      </div>
+
+      <div class="col">
+        <h2>Remote Frame</h2>
+        <p>The values in this frame should also identical to the above values.</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <dl>
+          <dt>WebGL Drawing</dt>
+          <dd class="value-webgl">-</dd>
+
+          <dt>WebGL Vendor and Render</dt>
+          <dd class="value-webglVendorAndRenderer">-</dd>
+
+          <dt>Canvas</dt>
+          <dd class="value-canvas">-</dd>
+
+          <dt>Web Audio</dt>
+          <dd class="value-audio">-</dd>
+
+          <dt class="not-yet">Plugins</dt>
+          <dd class="not-yet value-plugins">-</dd>
+
+          <dt class="not-yet">Enumerate devices</dt>
+          <dd class="not-yet value-enumerateDevices">-</dd>
+        </dl>
+      </div>
+
+      <div class="col">
+        <iframe src="/frames/farbling.html" class="embed-responsive"></iframe>
+      </div>
+
+      <div class="col">
+        <iframe class="other-origin embed-responsive" src="/frames/farbling.html"></iframe>
+      </div>
+    </div>
+  </div>
+  <script src="/static/js/brave-fp.js"></script>
+  <script src="/static/js/farbling.js"></script>
+</body>
+
+</html>
