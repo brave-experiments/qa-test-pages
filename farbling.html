@@ -18,18 +18,22 @@
           Crossed out items are planned, but are not currently implemented.
         </p>
 
-        <h3>Shields up</h3>
-        <p>
-          All not-crossed-out values values should be the same, per-session,
-          per-eTLD+1, below.  They should differ across sessions, and across
-          eTLD+1.
-        </p>
-
-        <h3>Shields down</h3>
-        <p>
-          With shields down, the below fingerprinting values should be
-          consistent across sessions and eTLD+1.
-        </p>
+        <h3>Test instructions</h3>
+        <p>Confirm that:</p>
+        <ul class="list-group">
+          <li class="list-group-item">with shields up, FP values are the same
+            for each individual item (ex. WebGL Drawing) on a given page, but
+            the values are different between the two pages above.</li>
+          <li class="list-group-item">with shields up, if you close and
+            relaunch the browser, and visit the pages again the values are
+            different (they are not retained between sessions).</li>
+          <li class="list-group-item">with shields down, FP values are the
+            same for each individual item on a given page and are the same
+            for both pages</li>
+          <li class="list-group-item">with shields down, if you close and
+            relaunch the browser, and visit the pages again, the values
+            are the same (they are retained between sessions)</li>
+        </ul>
 
         <p>
           <button id="start" class="btn btn-primary btn-block btn-large" disabled>Generate fingerprints</button>
@@ -65,8 +69,8 @@
           <dt>WebGL Drawing</dt>
           <dd class="value-webgl">-</dd>
 
-          <dt>WebGL Vendor and Render</dt>
-          <dd class="value-webglVendorAndRenderer">-</dd>
+          <dt class="not-yet">WebGL Vendor and Render</dt>
+          <dd class="not-yet value-webglVendorAndRenderer">-</dd>
 
           <dt>Canvas</dt>
           <dd class="value-canvas">-</dd>
