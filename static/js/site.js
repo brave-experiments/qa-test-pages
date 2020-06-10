@@ -13,7 +13,7 @@
       break
 
     case braveSoftwareComOrigin:
-    default:  // Test server configs
+    default: // Test server configs
       otherOrigin = braveSoftwareOrigin
       bodyElm.className += ' brave-software'
       break

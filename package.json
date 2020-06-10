@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Test pages for manual QA",
   "scripts": {
-    "lint": "./node_modules/standard/bin/cmd.js",
-    "lint:fix": "./node_modules/standard/bin/cmd.js --fix",
+    "lint": "./node_modules/standard/bin/cmd.js && ./node_modules/@linthtml/linthtml/bin/linthtml.js **/*.html *.html",
+    "lint:js": "./node_modules/standard/bin/cmd.js",
+    "lint:js:fix": "./node_modules/standard/bin/cmd.js --fix",
+    "lint:html": "./node_modules/@linthtml/linthtml/bin/linthtml.js **/*.html *.html",
     "serve": "./node_modules/http-server/bin/http-server"
   },
   "repository": {
@@ -18,6 +20,7 @@
   },
   "homepage": "https://github.com/brave-experiments/qa-test-pages#readme",
   "devDependencies": {
+    "@linthtml/linthtml": "^0.4.1",
     "http-server": "^0.12.3",
     "standard": "^14.3.4"
   },
