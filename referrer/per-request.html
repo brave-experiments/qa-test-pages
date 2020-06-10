@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Referrer Policy | Per Request</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+  <meta name="referrer" content="no-referrer">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="/referrer/index.html">Referrer</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Per Request</li>
+          </ol>
+        </nav>
+
+        <h1>Referrer policy tests: Per Request</h1>
+        <p>
+          This page tests how Brave handles referrers when referrer policy
+          is determined per-request, and not with a whole-page policy.
+        </p>
+      </div>
+    </div>
+
+    <section class="border-bottom">
+      <div class="row">
+        <div class="col">
+          <h2><code>same-origin</code></h2>
+          <p>Brave Shields behavior should not affect this setting, so these
+            tests are more to make sure something wasn't broken upstream.
+          </p>
+          <h3>Expected Behavior</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Shields Setting</th>
+                <th>Cross-Origin?</th>
+                <th>Expected Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Up</td>
+                <td>No</td>
+                <td>Full URL of this page</td>
+              </tr>
+              <tr>
+                <td>Up</td>
+                <td>Yes</td>
+                <td>No value</td>
+              </tr>
+              <tr>
+                <td>Down</td>
+                <td>No</td>
+                <td>Full URL of this page</td>
+              </tr>
+              <tr>
+                <td>Down</td>
+                <td>Yes</td>
+                <td>No value</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <h2>Same Origin Request</h2>
+          <iframe data-src="/frames/referrer-reporter.html" referrerpolicy="same-origin" class="embed-responsive this-origin"></iframe>
+        </div>
+        <div class="col">
+          <h2>Cross Origin Request</h2>
+          <iframe data-src="/frames/referrer-reporter.html" referrerpolicy="same-origin" class="embed-responsive other-origin"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2><code>unsafe-url</code></h2>
+          <p>
+            Brave Shields should treat <code>unsafe-url</code> as if it was
+            <code>strict-origin-when-cross-origin</code>.
+          </p>
+          <h3>Expected Behavior</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Shields Setting</th>
+                <th>Cross-Origin?</th>
+                <th>Expected Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Up</td>
+                <td>No</td>
+                <td>Full URL of this page</td>
+              </tr>
+              <tr>
+                <td>Up</td>
+                <td>Yes</td>
+                <td>Domain of this page</td>
+              </tr>
+              <tr>
+                <td>Down</td>
+                <td>No</td>
+                <td>Full URL of this page</td>
+              </tr>
+              <tr>
+                <td>Down</td>
+                <td>Yes</td>
+                <td>Full URL of this page</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <h2>Same Origin Request</h2>
+          <iframe data-src="/frames/referrer-reporter.html" referrerpolicy="unsafe-url" class="embed-responsive this-origin"></iframe>
+        </div>
+        <div class="col">
+          <h2>Cross Origin Request</h2>
+          <iframe data-src="/frames/referrer-reporter.html" referrerpolicy="unsafe-url" class="embed-responsive other-origin"></iframe>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+</body>
+
+</html>

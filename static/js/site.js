@@ -13,6 +13,7 @@
       break
 
     case braveSoftwareComOrigin:
+    default:  // Test server configs
       otherOrigin = braveSoftwareOrigin
       bodyElm.className += ' brave-software'
       break
@@ -31,11 +32,11 @@
         case 'iframe':
         case 'img':
         case 'script':
-          elm.src = '//' + anOrigin + elm.src
+          elm.src = '//' + anOrigin + elm.dataset.src
           break
 
         case 'a':
-          elm.href = '//' + anOrigin + elm.href
+          elm.href = '//' + anOrigin + elm.dataset.href
           break
 
         default:

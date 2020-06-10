@@ -2,6 +2,26 @@
   text-decoration: line-through;
 }
 
-iframe {
+iframe.tall {
   height: 450px;
+}
+
+.container {
+  background: white;
+  min-height: 100%;
+  padding-top: 1em;
+  padding-bottom: 2em;
+}
+
+body.brave-software-com {
+  background-color: aquamarine;
+}
+
+body.brave-software {
+  background-color: pink;
+}
+
+section:not(:last-child) {
+  padding-bottom: 1em;
+  margin-bottom: 2em;
 }

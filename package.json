@@ -4,7 +4,8 @@
   "description": "Test pages for manual QA",
   "scripts": {
     "lint": "./node_modules/standard/bin/cmd.js",
-    "lint:fix": "./node_modules/standard/bin/cmd.js --fix"
+    "lint:fix": "./node_modules/standard/bin/cmd.js --fix",
+    "serve": "./node_modules/http-server/bin/http-server"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/brave-experiments/qa-test-pages#readme",
   "devDependencies": {
+    "http-server": "^0.12.3",
     "standard": "^14.3.4"
   },
   "standard": {

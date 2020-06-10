@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Referrer Policy | No-Referrer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="/referrer/index.html">Referrer</a></li>
+            <li class="breadcrumb-item active" aria-current="page">No-Referrer</li>
+          </ol>
+        </nav>
+
+        <h1>Referrer policy tests: Navigations</h1>
+        <p>
+          This page tests how Brave applies referrer policy to navigations.
+          For each of these tests, make sure you follow each link in the same
+          tab; please do no open in new tabs or anything like that.
+        </p>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Link</th>
+              <th>Policy</th>
+              <th>Cross-Site?</th>
+              <th>Expected Shields Up Behavior</th>
+              <th>Expected Shields Down Behavior</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="" data-href="/referrer/receiver.html" class="this-origin">Link</a></td>
+              <td>none</td>
+              <td>no</td>
+              <td>this page's URL</td>
+              <td>this page's URL</td>
+            </tr>
+            <tr>
+              <td><a href="" data-href="/referrer/receiver.html" class="other-origin">Link</a></td>
+              <td>none</td>
+              <td>yes</td>
+              <td>no value</td>
+              <td>this page's domain</td>
+            </tr>
+            <tr>
+              <td><a href="" data-href="/referrer/receiver.html" class="this-origin" referrerpolicy="unsafe-url">Link</a></td>
+              <td>unsafe-url</td>
+              <td>no</td>
+              <td>this page's URL</td>
+              <td>this page's URL</td>
+            </tr>
+            <tr>
+              <td><a href="" data-href="/referrer/receiver.html" class="other-origin" referrerpolicy="unsafe-url">Link</a></td>
+              <td>unsafe-url</td>
+              <td>yes</td>
+              <td>no value</td>
+              <td>this page's URL</td>
+            </tr>
+            <tr>
+              <td><a href="" data-href="/referrer/receiver.html" class="this-origin" referrerpolicy="strict-origin">Link</a></td>
+              <td>strict-origin</td>
+              <td>no</td>
+              <td>this page's domain</td>
+              <td>this page's domain</td>
+            </tr>
+            <tr>
+              <td><a href="" data-href="/referrer/receiver.html" class="other-origin" referrerpolicy="strict-origin">Link</a></td>
+              <td>strict-origin</td>
+              <td>yes</td>
+              <td>no value</td>
+              <td>this page's domain</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script src="/static/js/site.js"></script>
+</body>
+
+</html>

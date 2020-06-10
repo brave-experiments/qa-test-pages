@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Referrer Policy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Referrer</li>
+          </ol>
+        </nav>
+
+        <h1>Referrer policy tests</h1>
+        <p>
+          Each of the below pages tests how Brave performs under different referrer policy settings.
+        </p>
+
+        <ul class="list-group">
+          <li class="list-group-item"><a href="/referrer/default.html">Default (no instruction)</a></li>
+          <li class="list-group-item"><a href="/referrer/unsafe-url.html">More permissive (unsafe-url)</a></li>
+          <li class="list-group-item"><a href="/referrer/no-referrer.html">More restrictive (no-referrer)</a></li>
+          <li class="list-group-item"><a href="/referrer/per-request.html">Per-Request policies</a></li>
+          <li class="list-group-item"><a href="/referrer/navigations.html">Navigations</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <script src="/static/js/site.js"></script>
+</body>
+
+</html>

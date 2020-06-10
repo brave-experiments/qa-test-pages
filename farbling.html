@@ -13,6 +13,14 @@
   <div class="container">
     <div class="row">
       <div class="col">
+
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Farbling</li>
+          </ol>
+        </nav>
+
         <h1>Farbling Tests</h1>
         <p>
           Crossed out items are planned, but are not currently implemented.
@@ -87,11 +95,11 @@
       </div>
 
       <div class="col">
-        <iframe src="/frames/farbling.html" class="embed-responsive"></iframe>
+        <iframe data-src="/frames/farbling.html" class="embed-responsive tall"></iframe>
       </div>
 
       <div class="col">
-        <iframe class="other-origin embed-responsive" src="/frames/farbling.html"></iframe>
+        <iframe data-src="/frames/farbling.html" class="other-origin embed-responsive tall"></iframe>
       </div>
     </div>
   </div>
