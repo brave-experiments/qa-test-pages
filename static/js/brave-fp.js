@@ -268,13 +268,13 @@
     extraComponents: [],
     excludes: {
       // Unreliable on Windows, see https://github.com/Valve/fingerprintjs2/issues/375
-      'enumerateDevices': true,
+      enumerateDevices: true,
       // devicePixelRatio depends on browser zoom, and it's impossible to detect browser zoom
-      'pixelRatio': true,
+      pixelRatio: true,
       // DNT depends on incognito mode for some browsers (Chrome) and it's impossible to detect incognito mode
-      'doNotTrack': true,
+      doNotTrack: true,
       // uses js fonts already
-      'fontsFlash': true
+      fontsFlash: true
     },
     NOT_AVAILABLE: 'not available',
     ERROR: 'error',
@@ -333,7 +333,7 @@
       done(devices.map(function (device) {
         return 'id=' + device.deviceId + ';gid=' + device.groupId + ';' + device.kind + ';' + device.label
       }))
-    })['catch'](function (error) {
+    }).catch(function (error) {
       done(error)
     })
   }
