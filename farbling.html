@@ -53,66 +53,64 @@
 
     <div class="row">
       <div class="col">
-        <h2>Local Use</h2>
+        <h2>Fingerprint Values</h2>
         <p>
-          Calls to fingerprinting APIs in the local, top-level frame
+          The <strong>version</strong> column describes which version of Brave
+          the farbling protection was introduced in.
         </p>
-
-      </div>
-
-      <div class="col">
-        <h2>Local Frame</h2>
-        <p>The values in this frame should be identical to the above values.</p>
-      </div>
-
-      <div class="col">
-        <h2>Remote Frame</h2>
-        <p>The values in this frame should also identical to the above values.</p>
+        <p>The <strong>mode</strong>
+          column captures whether the protection is applied when <em>standard</em>
+          protections are enabled, <em>strict</em> protections are enabled,
+          or <em>both</em>.
+        </p>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col">
-        <dl>
-          <dt>
-            WebGL Drawing
-            <span class="badge badge-pill badge-primary since-1-10">1.10</span>
-          </dt>
-          <dd class="value-webgl">-</dd>
-
-          <dt class="since-1-12 mode-agg">
-            WebGL Vendor and Render
-            <span class="badge badge-pill badge-success since-1-12">1.12</span>
-            <span class="badge badge-pill badge-danger">Agg</span>
-
-          </dt>
-          <dd class="value-webglVendorAndRenderer">-</dd>
-
-          <dt>
-            Canvas
-            <span class="badge badge-pill badge-primary since-1-10">1.10</span>
-          </dt>
-          <dd class="value-canvas">-</dd>
-
-          <dt>
-            Web Audio
-            <span class="badge badge-pill badge-primary since-1-10">1.10</span>
-          </dt>
-          <dd class="value-audio">-</dd>
-
-          <dt class="not-yet">Plugins</dt>
-          <dd class="not-yet value-plugins">-</dd>
-
-          <dt class="not-yet">Enumerate devices</dt>
-          <dd class="not-yet value-enumerateDevices">-</dd>
-        </dl>
+    <div class="row no-gutters">
+      <div class="col-sm-6">
+        <table class="table table-sm">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col">Version</th>
+              <th scope="col">Mode</th>
+              <th scope="col">This Page</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">WebGL Drawing</th>
+              <td>1.11</td>
+              <td>both</td>
+              <td class="value-webgl">-</td>
+            </tr>
+            <tr>
+              <th scope="row">WebGL Vendor and Render</th>
+              <td>1.12</td>
+              <td>strict</td>
+              <td class="value-webglVendorAndRenderer">-</td>
+            </tr>
+            <tr>
+              <th scope="row">Canvas</th>
+              <td>1.11</td>
+              <td>both</td>
+              <td class="value-canvas">-</td>
+            </tr>
+            <tr>
+              <th scope="row">Web Audio</th>
+              <td>1.11</td>
+              <td>both</td>
+              <td class="value-audio">-</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <div class="col">
+      <div class="col-sm-3">
         <iframe data-src="/frames/farbling.html" class="this-origin embed-responsive tall"></iframe>
       </div>
 
-      <div class="col">
+      <div class="col-sm-3">
         <iframe data-src="/frames/farbling.html" class="other-origin embed-responsive tall"></iframe>
       </div>
     </div>

@@ -49,11 +49,16 @@
         for (const anElm of document.getElementsByClassName('value-' + key)) {
           const hashInput = Array.isArray(value) ? value.join('-') : value
           const hashValue = FP2.x64hash128(hashInput, 0)
-          anElm.textContent = hashValue
+          anElm.textContent = hashValue.substring(0, 8)
         }
       }
     })
   }
 
   window.addEventListener('message', onMessage, false)
+
+  const frameTypeElm = document.getElementById('frame-name')
+  const isLocalFrame = window.location.origin === window.parent.location.origin
+  const frameText = isLocalFrame ? 'Local Frame' : 'Remote Frame'
+  frameTypeElm.textContent = frameText
 })()

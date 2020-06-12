@@ -3,7 +3,8 @@
 }
 
 iframe.tall {
-  height: 450px;
+  height: 300px;
+  border: 0px;
 }
 
 .container {
@@ -24,4 +25,8 @@ body.brave-software {
 section:not(:last-child) {
   padding-bottom: 1em;
   margin-bottom: 2em;
+}
+
+.not-yet {
+  display: none;
 }

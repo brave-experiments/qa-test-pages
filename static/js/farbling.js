@@ -55,7 +55,7 @@
         for (const anElm of document.getElementsByClassName('value-' + key)) {
           const hashInput = Array.isArray(value) ? value.join('-') : value
           const hashValue = FP2.x64hash128(hashInput, 0)
-          anElm.textContent = hashValue
+          anElm.textContent = hashValue.substring(0, 8)
         }
       }
     })
