@@ -60,8 +60,7 @@
   const frameTypeElm = document.getElementById('frame-name')
   let isLocalFrame
   try {
-    !!window.parent.location.origin
-    isLocalFrame = true
+    isLocalFrame = !!window.parent.location.origin
   } catch (_) {
     isLocalFrame = false
   }
