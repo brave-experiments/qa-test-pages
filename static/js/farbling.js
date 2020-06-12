@@ -38,6 +38,25 @@
     }
   }
 
+  const displayedHashLength = 8
+
+  const onMessage = msg => {
+    if (msg.data.action !== 'fp-complete') {
+      return
+    }
+
+    const isFromLocal = msg.data.isLocalFrame
+    const cellClass = isFromLocal ? '.local-frame-value' : '.remote-frame-value'
+    for (const [fpName, fpValue] of Object.entries(msg.data.fpValues)) {
+      const anElm = document.querySelector(cellClass + '.value-' + fpName)
+      if (!anElm) {
+        continue
+      }
+      anElm.textContent = fpValue.substring(0, displayedHashLength)
+    }
+  }
+  window.addEventListener('message', onMessage, false)
+
   const startButton = document.getElementById('start')
   const iframeElms = document.getElementsByTagName('iframe')
 
@@ -52,11 +71,13 @@
       startButton.textContent = 'Finished'
       for (const aFPValue of values) {
         const { key, value } = aFPValue
-        for (const anElm of document.getElementsByClassName('value-' + key)) {
-          const hashInput = Array.isArray(value) ? value.join('-') : value
-          const hashValue = FP2.x64hash128(hashInput, 0)
-          anElm.textContent = hashValue.substring(0, 8)
+        const anElm = document.querySelector('.local-value.value-' + key)
+        if (!anElm) {
+          continue
         }
+        const hashInput = Array.isArray(value) ? value.join('-') : value
+        const hashValue = FP2.x64hash128(hashInput, 0)
+        anElm.textContent = hashValue.substring(0, displayedHashLength)
       }
     })
   })

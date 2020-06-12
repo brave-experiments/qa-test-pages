@@ -43,28 +43,30 @@
       return
     }
 
+    let isLocalFrame
+    try {
+      isLocalFrame = !!window.parent.location.origin
+    } catch (_) {
+      isLocalFrame = false
+    }
+
+    const fpValues = Object.create(null)
+
     FP2.get(fp2Options, values => {
       for (const aFPValue of values) {
         const { key, value } = aFPValue
-        for (const anElm of document.getElementsByClassName('value-' + key)) {
-          const hashInput = Array.isArray(value) ? value.join('-') : value
-          const hashValue = FP2.x64hash128(hashInput, 0)
-          anElm.textContent = hashValue.substring(0, 8)
-        }
+        const hashInput = Array.isArray(value) ? value.join('-') : value
+        const hashValue = FP2.x64hash128(hashInput, 0)
+        fpValues[key] = hashValue
       }
+
+      window.parent.postMessage({
+        action: 'fp-complete',
+        fpValues,
+        isLocalFrame
+      }, '*')
     })
   }
 
   window.addEventListener('message', onMessage, false)
-
-  const frameTypeElm = document.getElementById('frame-name')
-  let isLocalFrame
-  try {
-    isLocalFrame = !!window.parent.location.origin
-  } catch (_) {
-    isLocalFrame = false
-  }
-
-  const frameText = isLocalFrame ? 'Local Frame' : 'Remote Frame'
-  frameTypeElm.textContent = frameText
 })()

@@ -66,8 +66,8 @@
       </div>
     </div>
 
-    <div class="row no-gutters">
-      <div class="col-sm-6">
+    <div class="row">
+      <div class="col">
         <table class="table table-sm">
           <thead class="thead-light">
             <tr>
@@ -75,6 +75,8 @@
               <th scope="col">Version</th>
               <th scope="col">Mode</th>
               <th scope="col">This Page</th>
+              <th scope="col">Local Frame</th>
+              <th scope="col">Remote Frame</th>
             </tr>
           </thead>
           <tbody>
@@ -82,36 +84,39 @@
               <th scope="row">WebGL Drawing</th>
               <td>1.11</td>
               <td>both</td>
-              <td class="value-webgl">-</td>
+              <td class="local-value value-webgl">-</td>
+              <td class="local-frame-value value-webgl">-</td>
+              <td class="remote-frame-value value-webgl">-</td>
             </tr>
             <tr>
               <th scope="row">WebGL Vendor and Render</th>
               <td>1.12</td>
               <td>strict</td>
-              <td class="value-webglVendorAndRenderer">-</td>
+              <td class="local-value value-webglVendorAndRenderer">-</td>
+              <td class="local-frame-value value-webglVendorAndRenderer">-</td>
+              <td class="remote-frame-value value-webglVendorAndRenderer">-</td>
             </tr>
             <tr>
               <th scope="row">Canvas</th>
               <td>1.11</td>
               <td>both</td>
-              <td class="value-canvas">-</td>
+              <td class="local-value value-canvas">-</td>
+              <td class="local-frame-value value-canvas">-</td>
+              <td class="remote-frame-value value-canvas">-</td>
             </tr>
             <tr>
               <th scope="row">Web Audio</th>
               <td>1.11</td>
               <td>both</td>
-              <td class="value-audio">-</td>
+              <td class="local-value value-audio">-</td>
+              <td class="local-frame-value value-audio">-</td>
+              <td class="remote-frame-value value-audio">-</td>
             </tr>
           </tbody>
         </table>
-      </div>
 
-      <div class="col-sm-3">
-        <iframe data-src="/frames/farbling.html" class="this-origin embed-responsive tall"></iframe>
-      </div>
-
-      <div class="col-sm-3">
-        <iframe data-src="/frames/farbling.html" class="other-origin embed-responsive tall"></iframe>
+        <iframe data-src="/frames/farbling.html" class="this-origin d-none"></iframe>
+        <iframe data-src="/frames/farbling.html" class="other-origin d-none"></iframe>
       </div>
     </div>
   </div>
