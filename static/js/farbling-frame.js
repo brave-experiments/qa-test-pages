@@ -58,7 +58,14 @@
   window.addEventListener('message', onMessage, false)
 
   const frameTypeElm = document.getElementById('frame-name')
-  const isLocalFrame = window.location.origin === window.parent.location.origin
+  let isLocalFrame
+  try {
+    !!window.parent.location.origin
+    isLocalFrame = true
+  } catch (_) {
+    isLocalFrame = false
+  }
+
   const frameText = isLocalFrame ? 'Local Frame' : 'Remote Frame'
   frameTypeElm.textContent = frameText
 })()
