@@ -11,115 +11,147 @@
 
 <body>
   <div class="container">
-    <div class="row">
-      <div class="col">
+    <section>
+      <div class="row">
+        <div class="col">
 
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Farbling</li>
-            <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
-          </ol>
-        </nav>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Farbling</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
 
-        <h1>Farbling Tests</h1>
-        <p>
-          Crossed out items are planned, but are not currently implemented.
-        </p>
+          <h1>Farbling Tests</h1>
+          <p>
+            Crossed out items are planned, but are not currently implemented.
+          </p>
 
-        <h3>Test instructions</h3>
-        <p>Confirm that:</p>
-        <ul class="list-group">
-          <li class="list-group-item">with shields up, FP values are the same
-            for each individual item (ex. WebGL Drawing) on a given page, but
-            the values are different between the two pages above.</li>
-          <li class="list-group-item">with shields up, if you close and
-            relaunch the browser, and visit the pages again the values are
-            different (they are not retained between sessions).</li>
-          <li class="list-group-item">with shields down, FP values are the
-            same for each individual item on a given page and are the same
-            for both pages</li>
-          <li class="list-group-item">with shields down, if you close and
-            relaunch the browser, and visit the pages again, the values
-            are the same (they are retained between sessions)</li>
-        </ul>
-
-        <p>
-          <button id="start" class="btn btn-primary btn-block btn-large" disabled>Generate fingerprints</button>
-        </p>
+          <h3>Test instructions</h3>
+          <p>Confirm that:</p>
+          <ul class="list-group">
+            <li class="list-group-item">with shields up, FP values are the same
+              for each individual item (ex. WebGL Drawing) on a given page, but
+              the values are different between the two pages above.</li>
+            <li class="list-group-item">with shields up, if you close and
+              relaunch the browser, and visit the pages again the values are
+              different (they are not retained between sessions).</li>
+            <li class="list-group-item">with shields down, FP values are the
+              same for each individual item on a given page and are the same
+              for both pages</li>
+            <li class="list-group-item">with shields down, if you close and
+              relaunch the browser, and visit the pages again, the values
+              are the same (they are retained between sessions)</li>
+          </ul>
+        </div>
       </div>
-    </div>
+    </section>
 
-    <hr>
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Fingerprint Values</h2>
+          <p>
+            The <strong>version</strong> column describes which version of Brave
+            the farbling protection was introduced in.
+          </p>
+          <p>The <strong>mode</strong>
+            column captures whether the protection is applied when <em>standard</em>
+            protections are enabled, <em>strict</em> protections are enabled,
+            or <em>both</em>.
+          </p>
 
-    <div class="row">
-      <div class="col">
-        <h2>Fingerprint Values</h2>
-        <p>
-          The <strong>version</strong> column describes which version of Brave
-          the farbling protection was introduced in.
-        </p>
-        <p>The <strong>mode</strong>
-          column captures whether the protection is applied when <em>standard</em>
-          protections are enabled, <em>strict</em> protections are enabled,
-          or <em>both</em>.
-        </p>
+          <p>
+            <button id="start" class="btn btn-primary btn-block btn-large" disabled>Generate fingerprints</button>
+          </p>
+        </div>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="col">
-        <table class="table table-sm">
-          <thead class="thead-light">
-            <tr>
-              <th scope="col">Feature</th>
-              <th scope="col">Version</th>
-              <th scope="col">Mode</th>
-              <th scope="col">This Page</th>
-              <th scope="col">Local Frame</th>
-              <th scope="col">Remote Frame</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th scope="row">WebGL Drawing</th>
-              <td>1.11</td>
-              <td>both</td>
-              <td class="local-value value-webgl">-</td>
-              <td class="local-frame-value value-webgl">-</td>
-              <td class="remote-frame-value value-webgl">-</td>
-            </tr>
-            <tr>
-              <th scope="row">WebGL Vendor and Render</th>
-              <td>1.12</td>
-              <td>strict</td>
-              <td class="local-value value-webglVendorAndRenderer">-</td>
-              <td class="local-frame-value value-webglVendorAndRenderer">-</td>
-              <td class="remote-frame-value value-webglVendorAndRenderer">-</td>
-            </tr>
-            <tr>
-              <th scope="row">Canvas</th>
-              <td>1.11</td>
-              <td>both</td>
-              <td class="local-value value-canvas">-</td>
-              <td class="local-frame-value value-canvas">-</td>
-              <td class="remote-frame-value value-canvas">-</td>
-            </tr>
-            <tr>
-              <th scope="row">Web Audio</th>
-              <td>1.11</td>
-              <td>both</td>
-              <td class="local-value value-audio">-</td>
-              <td class="local-frame-value value-audio">-</td>
-              <td class="remote-frame-value value-audio">-</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="row">
+        <div class="col">
+          <table class="table table-sm">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">Version</th>
+                <th scope="col">Mode</th>
+                <th scope="col">This Page</th>
+                <th scope="col">Local Frame</th>
+                <th scope="col">Remote Frame</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">WebGL Drawing</th>
+                <td>1.11</td>
+                <td>both</td>
+                <td class="local-value value-webgl">-</td>
+                <td class="local-frame-value value-webgl">-</td>
+                <td class="remote-frame-value value-webgl">-</td>
+              </tr>
+              <tr>
+                <th scope="row">WebGL Vendor and Render</th>
+                <td>1.12</td>
+                <td>strict</td>
+                <td class="local-value value-webglVendorAndRenderer">-</td>
+                <td class="local-frame-value value-webglVendorAndRenderer">-</td>
+                <td class="remote-frame-value value-webglVendorAndRenderer">-</td>
+              </tr>
+              <tr>
+                <th scope="row">Canvas</th>
+                <td>1.11</td>
+                <td>both</td>
+                <td class="local-value value-canvas">-</td>
+                <td class="local-frame-value value-canvas">-</td>
+                <td class="remote-frame-value value-canvas">-</td>
+              </tr>
+              <tr>
+                <th scope="row">Web Audio</th>
+                <td>1.11</td>
+                <td>both</td>
+                <td class="local-value value-audio">-</td>
+                <td class="local-frame-value value-audio">-</td>
+                <td class="remote-frame-value value-audio">-</td>
+              </tr>
+            </tbody>
+          </table>
 
-        <iframe data-src="/frames/farbling.html" class="this-origin d-none"></iframe>
-        <iframe data-src="/frames/farbling.html" class="other-origin d-none"></iframe>
+          <iframe data-src="/frames/farbling.html" class="this-origin d-none"></iframe>
+          <iframe data-src="/frames/farbling.html" class="other-origin d-none"></iframe>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Fingerprint Stress Test</h2>
+          <p>
+            This test is designed to see if previous race conditions in
+            determining if correct farbling seed is used under a variety
+            of conditions.
+          </p>
+
+          <p>
+            <button id="stress-button" class="btn btn-warning btn-block btn-large" disabled>Start stress test</button>
+          </p>
+
+          <table class="table" id="stress-table">
+            <thead>
+              <tr>
+                <th>Fingerprint</th>
+                <th>Condition</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </div>
   <script src="/static/js/site.js"></script>
   <script src="/static/js/brave-fp.js"></script>

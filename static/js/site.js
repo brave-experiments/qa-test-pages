@@ -45,4 +45,17 @@
       }
     }
   }
+
+  const thisOriginUrl = path => {
+    return '//' + thisOrigin + path
+  }
+
+  const otherOriginUrl = path => {
+    return '//' + otherOrigin + path
+  }
+
+  window.BRAVE = {
+    thisOriginUrl,
+    otherOriginUrl,
+  }
 })()
