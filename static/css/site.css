@@ -17,3 +17,7 @@ section:not(:last-child) {
   padding-bottom: 1em;
   margin-bottom: 2em;
 }
+
+.breadcrumb li:last-child a:after {
+  content: " →";
+}
