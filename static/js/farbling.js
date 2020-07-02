@@ -41,7 +41,7 @@
 
   const fpFramePath = '/frames/farbling-stress.html'
   const randIframeUrl = _ => {
-    const randInt = Math.floor(Math.random() * 1000) % 2;
+    const randInt = Math.floor(Math.random() * 1000) % 2
     if (randInt === 0) {
       return braveUtils.thisOriginUrl(fpFramePath)
     } else {
@@ -147,12 +147,12 @@
 
   const startStressTest = _ => {
     stressButton.removeEventListener('click', startStressTest)
-    stressButton.addEventListener('click', stopStressTest)
+    stressButton.addEventListener('click', stopStressTest, false)
     stressButton.textContent = 'Stop stress test'
-    timerId = setInterval(_  => {
+    timerId = setInterval(_ => {
       iframeFingerprintValues(randIframeUrl())
     }, 1000)
   }
-  stressButton.addEventListener('click', startStressTest)
+  stressButton.addEventListener('click', startStressTest, false)
   stressButton.removeAttribute('disabled')
 })()

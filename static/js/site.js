@@ -56,6 +56,6 @@
 
   window.BRAVE = {
     thisOriginUrl,
-    otherOriginUrl,
+    otherOriginUrl
   }
 })()

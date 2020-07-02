@@ -46,9 +46,9 @@
     const thisUrl = window.location.href
 
     FP2.get(fp2Options, values => {
-      let combinedFp = ""
+      let combinedFp = ''
       for (const aFPValue of values) {
-        const { _, value } = aFPValue
+        const value = aFPValue.value
         const hashInput = Array.isArray(value) ? value.join('-') : value
         combinedFp += hashInput
       }
@@ -57,7 +57,7 @@
         action: 'stress-fp-complete',
         url: thisUrl,
         frameId: e.data.frameId,
-        fingerprint: FP2.x64hash128(combinedFp, 0),
+        fingerprint: FP2.x64hash128(combinedFp, 0)
       }, '*')
     })
   }

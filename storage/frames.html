@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Storage Policy | Frames</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="/storage/index.html">Storage</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Frames</li>
+            <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h1>Embedded Frame Storage Tests</h1>
+        <p>
+          This page tests whether storage is being partitioned. Neither of
+          the values you set on this page, should be repeated if you visit
+          the equivalent page on the <a class="other-origin" data-href="/storage/frames.html" href="#">other site</a>.
+        </p>
+
+        <p>
+          If storage is partitioned, all three values below should match when
+          you set a value, but should not be reflected on the
+          <a class="other-origin" data-href="/storage/frames.html" href="#">other site</a>.
+        </p>
+      </div>
+
+      <div class="col">
+        <form>
+          <div class="form-group">
+            <label for="storage-value">Storage value</label>
+            <input type="text" class="form-control" id="storage-value">
+          </div>
+
+          <button id="set-button" type="button" class="btn btn-primary btn-sm">Set storage value</button>
+          <button id="clear-button" type="button" class="btn btn-secondary btn-sm">Clear storage values</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h2>This page</h2>
+        <div id="alert" class="alert alert-danger d-hide" role="alert"></div>
+        <dl>
+          <dt>Key:</dt>
+          <dd><code></code></dd>
+        </dl>
+      </div>
+
+      <div class="col">
+        <h2>Local frame</h2>
+        <iframe data-src="/frames/storage.html" class="this-origin"></iframe>
+      </div>
+
+      <div class="col">
+        <h2>Remote frame</h2>
+        <iframe data-src="/frames/storage.html" class="other-origin"></iframe>
+      </div>
+    </div>
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/storage.js"></script>
+</body>
+
+</html>
