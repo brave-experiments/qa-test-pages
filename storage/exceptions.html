@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Storage Policy | Frames</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="/storage/index.html">Storage</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Exceptions</li>
+            <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Storage API Exceptions</h1>
+          <p>
+            This page tests whether Brave's modifications to the Storage API
+            are working. By default, accessing properties like
+            <code>window.localStorage</code> will throw a
+            <a href="//html.spec.whatwg.org/multipage//webstorage.html#the-localstorage-attribute"><code>SecurityError</code></a>
+            exception when storage is blocked, and will give access to the
+            <code>Storage</code> object when not. Brave modifies this so that
+            <code>window.localStorage</code> and <code>window.sessionStorage</code>
+            should act just like other no existing JavaScript properties, and
+            evaluate to <code>undefined</code>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Possible Values</h2>
+          <p>
+            As of <a href="//github.com/brave/brave-browser/issues/9758">issue #9758</a>
+            being closed in <strong>1.12</strong>, the expected values for each
+            API is given in the table below. The possible values are described
+            below:
+          </p>
+
+          <p>
+            <dl>
+              <dt><span class="badge badge-pill badge-primary">allowed</span></dt>
+              <dt>Accessing the API functioned as normally defined in the spec.</dt>
+
+              <dt><span class="badge badge-pill badge-warning">exception</span></dt>
+              <dt>Touching the API threw an exception.</dt>
+
+              <dt><span class="badge badge-pill badge-info">undefined</span></dt>
+              <dt>The relevant API endpoint didn't exist, and trying to access it
+                evaluated to <code>undefined</code>.</dt>
+            </dl>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Expected Values</h2>
+
+          <h3>Shields Up</h3>
+          <p>
+            The values below reflect what Brave should do with <em>shields up</em>
+            from <strong>1.12</strong> and on.
+          </p>
+
+          <h3>Shields Down</h3>
+          <p>
+            With <em>shields down</em>, all the below values should be
+            <span class="badge badge-pill badge-primary">allowed</span>.
+          </p>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th colspan="2"><code>localStorage</code></th>
+                <th colspan="2"><code>sessionStorage</code></th>
+                <th colspan="2"><code>indexDB</code></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th>Expected</th>
+                <th>Received</th>
+                <th>Expected</th>
+                <th>Received</th>
+                <th>Expected</th>
+                <th>Received</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="storage-row storage-row-first-party">
+                <th scope="row">1st party</th>
+                <td class="localstorage localstorage-expected">
+                  <span class="badge badge-pill badge-primary">allowed</span>
+                </td>
+                <td class="localstorage localstorage-received">-</td>
+                <td class="sessionstorage sessionstorage-expected">
+                  <span class="badge badge-pill badge-primary">allowed</span>
+                </td>
+                <td class="sessionstorage sessionstorage-received">-</td>
+                <td class="indexdb indexdb-expected">
+                  <span class="badge badge-pill badge-primary">allowed</span>
+                </td>
+                <td class="indexdb indexdb-received">-</td>
+              </tr>
+
+              <tr class="storage-row storage-row-first-party-frame">
+                <th scope="row">1st party (frame)</th>
+                <td class="localstorage localstorage-expected">
+                  <span class="badge badge-pill badge-primary">allowed</span>
+                </td>
+                <td class="localstorage localstorage-received">-</td>
+                <td class="sessionstorage sessionstorage-expected">
+                  <span class="badge badge-pill badge-primary">allowed</span>
+                </td>
+                <td class="sessionstorage sessionstorage-received">-</td>
+                <td class="indexdb indexdb-expected">
+                  <span class="badge badge-pill badge-primary">allowed</span>
+                </td>
+                <td class="indexdb indexdb-received">-</td>
+              </tr>
+
+              <tr class="storage-row storage-row-third-party-frame">
+                <th scope="row">3rd party (frame)</th>
+                <td class="localstorage localstorage-expected">
+                  <span class="badge badge-pill badge-info">undefined</span>
+                </td>
+                <td class="localstorage localstorage-received">-</td>
+                <td class="sessionstorage sessionstorage-expected">
+                  <span class="badge badge-pill badge-info">undefined</span>
+                </td>
+                <td class="sessionstorage sessionstorage-received">-</td>
+                <td class="indexdb indexdb-expected">
+                  <span class="badge badge-pill badge-primary">allowed</span>
+                </td>
+                <td class="indexdb indexdb-received">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <iframe data-src="/frames/storage-exceptions.html" class="this-origin d-none"></iframe>
+      <iframe data-src="/frames/storage-exceptions.html" class="other-origin d-none"></iframe>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/storage-exceptions-frame.js"></script>
+  <script src="/static/js/storage-exceptions.js"></script>
+</body>
+
+</html>
