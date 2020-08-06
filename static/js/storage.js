@@ -29,7 +29,7 @@
       aFrame.contentWindow.postMessage({
         type: 'set',
         value: storageValue
-      })
+      }, '*')
     }
   }, false)
 
@@ -37,7 +37,7 @@
     for (const aFrame of frameElms) {
       aFrame.contentWindow.postMessage({
         type: 'clear'
-      })
+      }, '*')
     }
   }, false)
 })()
