@@ -34,7 +34,7 @@
       fonts: true,
       fontsFlash: true,
       audio: true,
-      enumerateDevices: true
+      enumerateDevices: false
     }
   }
 
