@@ -9,7 +9,7 @@
       colorDepth: true,
       deviceMemory: true,
       pixelRatio: true,
-      hardwareConcurrency: true,
+      hardwareConcurrency: false,
       screenResolution: true,
       availableScreenResolution: true,
       timezoneOffset: true,
@@ -109,7 +109,7 @@
         if (!anElm) {
           continue
         }
-        const hashInput = Array.isArray(value) ? value.join('-') : value
+        const hashInput = Array.isArray(value) ? value.join('-') : String(value)
         const hashValue = FP2.x64hash128(hashInput, 0)
         anElm.textContent = hashValue.substring(0, displayedHashLength)
       }

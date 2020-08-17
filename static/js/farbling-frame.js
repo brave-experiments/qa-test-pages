@@ -8,7 +8,7 @@
       colorDepth: true,
       deviceMemory: true,
       pixelRatio: true,
-      hardwareConcurrency: true,
+      hardwareConcurrency: false,
       screenResolution: true,
       availableScreenResolution: true,
       timezoneOffset: true,
@@ -55,7 +55,7 @@
     FP2.get(fp2Options, values => {
       for (const aFPValue of values) {
         const { key, value } = aFPValue
-        const hashInput = Array.isArray(value) ? value.join('-') : value
+        const hashInput = Array.isArray(value) ? value.join('-') : String(value)
         const hashValue = FP2.x64hash128(hashInput, 0)
         fpValues[key] = hashValue
       }

@@ -8,7 +8,7 @@
       colorDepth: true,
       deviceMemory: true,
       pixelRatio: true,
-      hardwareConcurrency: true,
+      hardwareConcurrency: false,
       screenResolution: true,
       availableScreenResolution: true,
       timezoneOffset: true,
@@ -21,7 +21,7 @@
       cpuClass: true,
       platform: true,
       doNotTrack: true,
-      plugins: true,
+      plugins: false,
       canvas: false,
       webgl: false,
       webglVendorAndRenderer: false,
@@ -49,7 +49,7 @@
       let combinedFp = ''
       for (const aFPValue of values) {
         const value = aFPValue.value
-        const hashInput = Array.isArray(value) ? value.join('-') : value
+        const hashInput = Array.isArray(value) ? value.join('-') : String(value)
         combinedFp += hashInput
       }
 
