@@ -57,7 +57,7 @@
         const { key, value } = aFPValue
         const hashInput = Array.isArray(value) ? value.join('-') : String(value)
         const hashValue = FP2.x64hash128(hashInput, 0)
-        fpValues[key] = hashValue
+        fpValues[key] = [hashInput, hashValue]
       }
 
       window.parent.postMessage({

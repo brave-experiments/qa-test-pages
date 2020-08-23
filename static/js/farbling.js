@@ -1,6 +1,8 @@
 (_ => {
   const braveUtils = window.BRAVE
   const FP2 = window.Fingerprint2
+  const jQuery = window.jQuery
+
   const fp2Options = {
     excludes: {
       userAgent: false,
@@ -49,18 +51,48 @@
     }
   }
 
+  const fpElms = new Map()
+  const modalHashText = document.querySelector('#farbling-modal .fp-hash')
+  const modalInputText = document.querySelector('#farbling-modal .fp-input')
+  const modalTitle = document.querySelector('#farbling-modal .modal-title')
+  const modal = jQuery('#farbling-modal')
+  modal.modal({ show: false })
+  modal.find('.modal-footer button').click(_ => {
+    modal.modal('hide')
+  })
+
+  const showModalForElm = event => {
+    const anchorElm = event.target
+    if (fpElms.has(anchorElm) === false) {
+      return
+    }
+    const [fpName, fpInput, fpHash] = fpElms.get(anchorElm)
+    modalTitle.textContent = fpName
+    modalHashText.textContent = fpHash
+    modalInputText.textContent = fpInput
+    modal.modal('show')
+  }
+
   const displayedHashLength = 8
   const stressTableBody = document.querySelector('#stress-table tbody')
   const onMessage = msg => {
     if (msg.data.action === 'fp-complete') {
       const isFromLocal = msg.data.isLocalFrame
       const cellClass = isFromLocal ? '.local-frame-value' : '.remote-frame-value'
-      for (const [fpName, fpValue] of Object.entries(msg.data.fpValues)) {
-        const anElm = document.querySelector(cellClass + '.value-' + fpName)
-        if (!anElm) {
+      for (const [fpName, [fpInput, fpHash]] of Object.entries(msg.data.fpValues)) {
+        const selector = cellClass + '.value-' + fpName
+        const tdElm = document.querySelector(selector)
+        if (!tdElm) {
           continue
         }
-        anElm.textContent = fpValue.substring(0, displayedHashLength)
+
+        tdElm.textContent = ''
+        const anchorElm = document.createElement('a')
+        anchorElm.className = 'badge badge-light'
+        tdElm.appendChild(anchorElm)
+        anchorElm.textContent = fpHash.substring(0, displayedHashLength)
+        anchorElm.addEventListener('click', showModalForElm, false)
+        fpElms.set(anchorElm, [fpName, fpInput, fpHash])
       }
       return
     }
@@ -105,13 +137,20 @@
       startButton.textContent = 'Finished'
       for (const aFPValue of values) {
         const { key, value } = aFPValue
-        const anElm = document.querySelector('.local-value.value-' + key)
-        if (!anElm) {
+        const tdElm = document.querySelector('.local-value.value-' + key)
+        if (!tdElm) {
           continue
         }
-        const hashInput = Array.isArray(value) ? value.join('-') : String(value)
-        const hashValue = FP2.x64hash128(hashInput, 0)
-        anElm.textContent = hashValue.substring(0, displayedHashLength)
+        const fpInput = Array.isArray(value) ? value.join('-') : String(value)
+        const fpHash = FP2.x64hash128(fpInput, 0)
+
+        tdElm.textContent = ''
+        const anchorElm = document.createElement('a')
+        anchorElm.className = 'badge badge-light'
+        tdElm.appendChild(anchorElm)
+        anchorElm.textContent = fpHash.substring(0, displayedHashLength)
+        anchorElm.addEventListener('click', showModalForElm, false)
+        fpElms.set(anchorElm, [key, fpInput, fpHash])
       }
     })
   })
