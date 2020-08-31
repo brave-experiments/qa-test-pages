@@ -331,7 +331,12 @@
     }
     navigator.mediaDevices.enumerateDevices().then(function (devices) {
       done(devices.map(function (device) {
-        return 'id=' + device.deviceId + ';gid=' + device.groupId + ';' + device.kind + ';' + device.label
+        // @pes: Right now Brave only randomizes order, and not device id or group
+        // id, so modifying this test so that it only tests what we want it to
+        // test.  (basically, we farble some things, but not everything so
+        // far, this will need to be changed once we farble labels too.
+        return "kind=" + device.kind + ';label=' + device.label
+        // return 'id=' + device.deviceId + ';gid=' + device.groupId + ';' + device.kind + ';' + device.label
       }))
     }).catch(function (error) {
       done(error)
