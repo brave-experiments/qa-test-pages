@@ -26,7 +26,8 @@
   },
   "standard": {
     "ignore": [
-      "static/js/brave-fp.js"
+      "static/js/brave-fp.js",
+      "static/js/farbling-worker.js"
     ]
   }
 }

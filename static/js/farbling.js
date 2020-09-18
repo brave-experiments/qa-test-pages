@@ -1,7 +1,8 @@
 (_ => {
-  const braveUtils = window.BRAVE
-  const FP2 = window.Fingerprint2
-  const jQuery = window.jQuery
+  const W = window
+  const braveUtils = W.BRAVE
+  const FP2 = W.Fingerprint2
+  const jQuery = W.jQuery
 
   const fp2Options = {
     excludes: {
@@ -77,8 +78,8 @@
   const stressTableBody = document.querySelector('#stress-table tbody')
   const onMessage = msg => {
     if (msg.data.action === 'fp-complete') {
-      const isFromLocal = msg.data.isLocalFrame
-      const cellClass = isFromLocal ? '.local-frame-value' : '.remote-frame-value'
+      const context = msg.data.context
+      const cellClass = `.${context}-value`
       for (const [fpName, [fpInput, fpHash]] of Object.entries(msg.data.fpValues)) {
         const selector = cellClass + '.value-' + fpName
         const tdElm = document.querySelector(selector)
@@ -121,12 +122,15 @@
       document.body.removeChild(iframeElm)
     }
   }
-  window.addEventListener('message', onMessage, false)
+  W.addEventListener('message', onMessage, false)
 
   const startButton = document.getElementById('start')
   const iframeElms = document.getElementsByTagName('iframe')
 
   startButton.addEventListener('click', _ => {
+    const worker = new W.Worker('./static/js/farbling-worker.js')
+    worker.onmessage = onMessage
+
     for (const aFrame of iframeElms) {
       aFrame.contentWindow.postMessage('generate', '*')
     }
@@ -164,7 +168,7 @@
     newFrame.loading = 'eager'
     newFrame.style.display = 'none'
     newFrame.id = frameId
-    window.document.body.appendChild(newFrame)
+    W.document.body.appendChild(newFrame)
     newFrame.src = url
     newFrame.onload = _ => {
       setTimeout(_ => {

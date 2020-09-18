@@ -43,11 +43,11 @@
       return
     }
 
-    let isLocalFrame
+    let context
     try {
-      isLocalFrame = !!window.parent.location.origin
+      context = window.parent.location.origin ? 'local-frame' : 'remote-frame'
     } catch (_) {
-      isLocalFrame = false
+      context = 'remote-frame'
     }
 
     const fpValues = Object.create(null)
@@ -63,7 +63,7 @@
       window.parent.postMessage({
         action: 'fp-complete',
         fpValues,
-        isLocalFrame
+        context
       }, '*')
     })
   }
