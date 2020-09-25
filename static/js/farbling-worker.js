@@ -26,8 +26,8 @@
   if (typeof window !== 'undefined' && typeof define === 'function' && define.amd) { define(definition) } else if (typeof module !== 'undefined' && module.exports) { module.exports = definition() } else if (context.exports) { context.exports = definition() } else { context[name] = definition() }
 })('Fingerprint2', this, function () {
   'use strict'
-  const canvasOptions = {
-    type: "image/png",
+  const convertToBlobOptions = {
+    type: "image/jpeg",
     quality: 0.92
   }
 
@@ -87,7 +87,7 @@
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems)
 
 
-    canvas.convertToBlob(canvasOptions).then(function (blob) {
+    canvas.convertToBlob(convertToBlobOptions).then(function (blob) {
       var fileReader = new FileReader();
       fileReader.onload = (evt) => {
         _webGlFP.push(evt.target.result)
@@ -205,7 +205,7 @@
     ctx.arc(75, 75, 25, 0, Math.PI * 2, true)
     ctx.fill('evenodd')
 
-    canvas.convertToBlob(canvasOptions).then(function (blob) {
+    canvas.convertToBlob(convertToBlobOptions).then(function (blob) {
       const fileReader = new FileReader();
       fileReader.onload = (evt) => {
         result.push('canvas fp:' + evt.target.result)

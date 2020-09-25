@@ -27,6 +27,8 @@
 })('Fingerprint2', this, function () {
   'use strict'
 
+  const toDataUrlOptions = ["image/jpeg", 0.92]
+
   // detect if object is array
   // only implement if no native implementation is available
   if (typeof Array.isArray === 'undefined') {
@@ -962,7 +964,7 @@
     ctx.arc(75, 75, 25, 0, Math.PI * 2, true)
     ctx.fill('evenodd')
 
-    if (canvas.toDataURL) { result.push('canvas fp:' + canvas.toDataURL()) }
+    if (canvas.toDataURL) { result.push('canvas fp:' + canvas.toDataURL(...toDataUrlOptions)) }
     return result
   }
   var getWebglFp = function () {
@@ -1020,7 +1022,7 @@
     gl.uniform2f(program.offsetUniform, 1, 1)
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems)
     try {
-      result.push(gl.canvas.toDataURL())
+      result.push(gl.canvas.toDataURL(...toDataUrlOptions))
     } catch (e) {
       /* .toDataURL may be absent or broken (blocked by extension) */
     }
