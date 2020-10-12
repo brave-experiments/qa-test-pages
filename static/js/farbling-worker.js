@@ -1429,7 +1429,7 @@
 
 const fp2Options = {
   excludes: {
-    userAgent: true,
+    userAgent: false,
     webdriver: true,
     language: true,
     colorDepth: true,
