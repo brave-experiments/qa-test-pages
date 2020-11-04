@@ -513,6 +513,31 @@
     return target
   }
 
+  // @pes
+  var webglParamsKey = function (done, options) {
+    var params = [
+      'MAX_VERTEX_UNIFORM_COMPONENTS',
+      'MAX_VERTEX_UNIFORM_BLOCKS',
+      'MAX_VERTEX_OUTPUT_COMPONENTS',
+      'MAX_VARYING_COMPONENTS',
+      'MAX_TRANSFORM_FEEDBACK_INTERLEAVED_COMPONENTS',
+      'MAX_FRAGMENT_UNIFORM_COMPONENTS',
+      'MAX_FRAGMENT_UNIFORM_BLOCKS',
+      'MAX_FRAGMENT_INPUT_COMPONENTS',
+      'MAX_UNIFORM_BUFFER_BINDINGS',
+      'MAX_COMBINED_UNIFORM_BLOCKS',
+      'MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS',
+      'MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS',
+    ]
+    var canvas = new OffscreenCanvas(300, 150)
+    var gl = canvas.getContext('webgl2')
+    let fpInput = ""
+    for (const aParam of params) {
+      fpInput += aParam + "=" + String(gl.getParameter(gl[aParam])) + "; "
+    }
+    done(fpInput)
+  }
+
   // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/enumerateDevices
   var enumerateDevicesKey = function (done, options) {
     if (!isEnumerateDevicesSupported()) {
@@ -1299,7 +1324,9 @@
     { key: 'fonts', getData: jsFontsKey, pauseBefore: true },
     { key: 'fontsFlash', getData: flashFontsKey, pauseBefore: true },
     { key: 'audio', getData: audioKey },
-    { key: 'enumerateDevices', getData: enumerateDevicesKey }
+    { key: 'enumerateDevices', getData: enumerateDevicesKey },
+    // @pes
+    { key: 'webglParams', getData: webglParamsKey }
   ]
 
   var Fingerprint2 = function (options) {
@@ -1461,7 +1488,8 @@ const fp2Options = {
     fonts: true,
     fontsFlash: true,
     audio: true,
-    enumerateDevices: true
+    enumerateDevices: true,
+    webglParams: false
   }
 }
 
