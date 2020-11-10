@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Cosmetic Filtering | Text Ads</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="/cosmetic-filtering/index.html">Cosmetic Filtering</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Text Ads</li>
+            <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+          </ol>
+        </nav>
+
+        <h1>Cosmetic Filtering Tests: Text Ads</h1>
+        <p>
+          This page tests under which conditions Brave hides or shows page
+          elements that look like text ads.
+        </p>
+
+        <p>
+          Each section lists whether the "ad" should be show when blocking is
+          off, in the default setting, or in the strict setting.
+        </p>
+      </div>
+    </div>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Not a Text Ad</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <p>
+            This ad element has too little text to be considered a text ad.
+          </p>
+          <h3>Expected Results</h3>
+          <ul class="list-inline">
+            <li class="list-inline-item">
+              <strong>Disabled:</strong>
+              <span class="badge badge-pill badge-primary">Shown</span>
+            </li>
+            <li class="list-inline-item">
+              <strong>Default:</strong>
+              <span class="badge badge-pill badge-primary">Shown</span>
+            </li>
+            <li class="list-inline-item"></li>
+              <strong>Aggressive:</strong>
+              <span class="badge badge-pill badge-dark">Hidden</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="border border-primary">
+            <div class="ad--300">
+              Not an ad
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Is a Text Ad</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <p>
+            This ad element has enough text that we consider it a text ad.
+          </p>
+          <h3>Expected Results</h3>
+          <ul class="list-inline">
+            <li class="list-inline-item">
+              <strong>Disabled:</strong>
+              <span class="badge badge-pill badge-primary">Shown</span>
+            </li>
+            <li class="list-inline-item">
+              <strong>Default:</strong>
+              <span class="badge badge-pill badge-dark">Hidden</span>
+            </li>
+            <li class="list-inline-item">
+              <strong>Aggressive:</strong>
+              <span class="badge badge-pill badge-dark">Hidden</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="border border-primary">
+            <div class="ad--468">
+              I'm seeing double here; four Krusties!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Handling Script Tags</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <p>
+            The contents of <code>&lt;script&gt;</code>
+          </p>
+          <h3>Expected Results</h3>
+          <ul class="list-inline">
+            <li class="list-inline-item">
+              <strong>Disabled:</strong>
+              <span class="badge badge-pill badge-primary">Shown</span>
+            </li>
+            <li class="list-inline-item">
+              <strong>Default:</strong>
+              <span class="badge badge-pill badge-dark">Hidden</span>
+            </li>
+            <li class="list-inline-item">
+              <strong>Aggressive:</strong>
+              <span class="badge badge-pill badge-dark">Hidden</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="border border-primary">
+            <div class="ad--b">
+              <span>Brief text</span>
+              <script>
+                // and here is a lot of no op-text, that should
+                // not be considered when evaluating how "text-y" an ad looks.
+              </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+</body>
+
+</html>
