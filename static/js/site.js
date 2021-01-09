@@ -1,4 +1,4 @@
-(_ => {
+(async _ => {
   const braveSoftwareOrigin = 'dev-pages.bravesoftware.com'
   const braveSoftwareComOrigin = 'dev-pages.brave.software'
 
@@ -54,8 +54,24 @@
     return '//' + otherOrigin + path
   }
 
+  const simplePostMessage = async (windowElm, msg) => {
+    const messageNonce = (+Math.random())
+    return new Promise(resolve => {
+      const onResponseCallback = response => {
+        const { nonce, data } = response
+        if (nonce === messageNonce) {
+          windowElm.removeEventListener('message', onResponseCallback)
+          resolve(data)
+        }
+      }
+      windowElm.addEventListener('message', onResponseCallback, false)
+      windowElm.postMessage({ messageNonce, msg }, '*')
+    })
+  }
+
   window.BRAVE = {
     thisOriginUrl,
-    otherOriginUrl
+    otherOriginUrl,
+    simplePostMessage
   }
 })()

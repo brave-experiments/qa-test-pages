@@ -6,7 +6,7 @@
       webdriver: true,
       language: true,
       colorDepth: true,
-      deviceMemory: true,
+      deviceMemory: false,
       pixelRatio: true,
       hardwareConcurrency: false,
       screenResolution: true,
