@@ -26,7 +26,8 @@
   }
   const cookieSettingEnum = {
     BLOCK_THIRD_PARTY: '3p',
-    BLOCK_ALL: 'all'
+    BLOCK_ALL: 'all',
+    ALLOW_ALL: 'allow'
   }
   const frameCaseEnum = {
     CURRENT_FRAME: 0,
@@ -52,7 +53,8 @@
     [testCasesEnum.INITIAL]: {
       [ephemeralStorageEnum.ON]: {
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: testOutcomeEnum.SET,
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
+        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
       },
       [ephemeralStorageEnum.OFF]: {
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
@@ -60,13 +62,15 @@
           [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
           [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
         },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
+        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
       }
     },
     [testCasesEnum.REMOTE_PAGE]: {
       [ephemeralStorageEnum.ON]: {
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: testOutcomeEnum.EMPTY,
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
+        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
       },
       [ephemeralStorageEnum.OFF]: {
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
@@ -74,13 +78,15 @@
           [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.EMPTY,
           [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
         },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
+        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
       }
     },
     [testCasesEnum.SAME_PAGE_SAME_SESSION]: {
       [ephemeralStorageEnum.ON]: {
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: testOutcomeEnum.SET,
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
+        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
       },
       [ephemeralStorageEnum.OFF]: {
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
@@ -88,7 +94,8 @@
           [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
           [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
         },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
+        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
       }
     },
     [testCasesEnum.SAME_PAGE_NEW_SESSION]: {
@@ -110,7 +117,8 @@
             [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY
           }
         },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
+        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
       },
       [ephemeralStorageEnum.OFF]: {
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
@@ -126,7 +134,8 @@
           },
           [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
         },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
+        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
       }
     }
   }
@@ -172,7 +181,7 @@
     },
     [testOutcomeEnum.EXCEPTION]: {
       class: 'bg-warning',
-      text: 'exception'
+      text: 'blocked'
     },
     [testOutcomeEnum.WRONG]: {
       class: 'bg-danger',
@@ -389,7 +398,11 @@
 
   setStorageButton.addEventListener('click', async _ => {
     freezeButtons()
-    W.localStorage[storageTestKey] = storageTestValue
+    try {
+      W.localStorage[storageTestKey] = storageTestValue
+    } catch (_) {
+      // Will throw if storage is blocked in the current frame.
+    }
     for (const aFrameWin of Object.values(testFrameWindows)) {
       await writeStorageInFrame(aFrameWin, storageTestValue)
     }

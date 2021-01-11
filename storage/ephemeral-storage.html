@@ -32,10 +32,10 @@
           <p>
             This page demonstrates how Brave should behave under different storage
             and shield configurations. This same page can be used to test
-            all four relevant Brave configurations:
+            all six relevant Brave configurations:
           </p>
           <p class="text-center">
-            <em>{Cross-site cookies blocked, Cookies blocked}</em> x
+            <em>{Cross-site cookies blocked, Cookies blocked, Cookies allowed}</em> x
             <em>{Ephemeral storage on, Ephemeral storage off}</em>
           </p>
           <p>
@@ -68,6 +68,7 @@
               <select id="cookie-blocking-setting" class="form-control" aria-label="Cookie blocking setting">
                 <option value="3p" selected>Cross-site cookies blocked</option>
                 <option value="all">Cookies blocked</option>
+                <option value="allow">All cookies allowed</option>
               </select>
             </div>
           </form>
@@ -136,7 +137,7 @@
           <h3>Expected Outcome</h3>
           <p>
             The below shows what the above table should look like, under each
-            of the possible four configurations.
+            of the possible fix configurations.
           </p>
         </div>
       </div>

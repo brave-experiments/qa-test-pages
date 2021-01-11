@@ -68,7 +68,10 @@
       if (W.navigator.cookieEnabled === false) {
         result.cookies = false
       } else {
-        C.set(key, value)
+        C.set(key, value, {
+          secure: true,
+          sameSite: 'None'
+        })
         result.cookies = C.get(key) === value
       }
     } catch (_) {
