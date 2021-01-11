@@ -409,7 +409,6 @@
       for (const aFrameWin of Object.values(testFrameWindows)) {
         await clearStorageInFrame(aFrameWin)
       }
-      console.log(forcedResetUrl)
       D.location = forcedResetUrl
     }, 1000)
   }

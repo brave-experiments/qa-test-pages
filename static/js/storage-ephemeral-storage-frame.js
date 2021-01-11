@@ -1,6 +1,7 @@
 (_ => {
   const W = window
   const C = W.Cookies
+  const BU = W.BRAVE
   const exceptionEncoding = '*exception*'
 
   const clearStorage = key => {
@@ -116,7 +117,7 @@
         break
 
       default:
-        console.log(`unexpected action ${payload.action}`)
+        BU.logger(`unexpected action ${payload.action}`)
         return
     }
 

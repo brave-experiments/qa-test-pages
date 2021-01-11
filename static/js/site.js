@@ -84,7 +84,6 @@
         }
         W.removeEventListener('message', onResponseCallback)
 
-        console.log(`resolving with: ${JSON.stringify(payload)}`)
         resolve(payload)
       }
       W.addEventListener('message', onResponseCallback, false)
