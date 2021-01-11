@@ -1,5 +1,6 @@
 (async _ => {
   const W = window
+  const D = document
   const isDebug = false
 
   const braveSoftwareOrigin = 'dev-pages.bravesoftware.com'
@@ -28,7 +29,7 @@
   }
 
   for (const [aClass, anOrigin] of Object.entries(classToOrigin)) {
-    const elms = document.getElementsByClassName(aClass)
+    const elms = D.getElementsByClassName(aClass)
     for (const elm of elms) {
       const elmTagName = elm.tagName.toLowerCase()
       switch (elmTagName) {
@@ -62,6 +63,12 @@
 
   const otherOriginUrl = path => {
     return '//' + otherOrigin + path
+  }
+
+  const switchOriginElm = D.querySelector('.breadcrumb .other-origin')
+  // Frames will run this code, but not have breadcrumbs or links
+  if (switchOriginElm) {
+    switchOriginElm.href = otherOriginUrl(W.location.pathname)
   }
 
   const simplePostMessage = async (windowElm, msg) => {
