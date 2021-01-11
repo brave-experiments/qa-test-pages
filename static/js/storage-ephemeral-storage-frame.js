@@ -6,8 +6,12 @@
   const clearStorage = key => {
     const result = Object.create(null)
     try {
-      C.remove(key)
-      result.cookies = true
+      if (W.navigator.cookieEnabled === false) {
+        result.cookies = exceptionEncoding
+      } else {
+        C.remove(key)
+        result.cookies = true
+      }
     } catch (_) {
       result.cookies = exceptionEncoding
     }
@@ -32,7 +36,12 @@
   const readStorageAction = key => {
     const result = Object.create(null)
     try {
-      result.cookies = C.get(key)
+      if (W.navigator.cookieEnabled === false) {
+        result.cookies = exceptionEncoding
+      } else {
+        const readCookieValue = C.get(key)
+        result.cookies = readCookieValue === undefined ? null : readCookieValue
+      }
     } catch (_) {
       result.cookies = exceptionEncoding
     }
@@ -55,8 +64,12 @@
   const writeStorageAction = (key, value) => {
     const result = Object.create(null)
     try {
-      C.set(key, value)
-      result.cookies = true
+      if (W.navigator.cookieEnabled === false) {
+        result.cookies = false
+      } else {
+        C.set(key, value)
+        result.cookies = C.get(key) === value
+      }
     } catch (_) {
       result.cookies = exceptionEncoding
     }
@@ -79,27 +92,35 @@
   }
 
   const onMessage = msg => {
-    const { nonce, data } = msg
-    const response = { nonce }
+    const payload = msg.data.payload
+    if (msg.data.direction !== 'sending') {
+      return
+    }
 
-    switch (data.action) {
+    const response = {
+      nonce: msg.data.nonce,
+      direction: 'response'
+    }
+
+    switch (payload.action) {
       case 'storage::clear':
-        response.data = clearStorage(data.key)
+        response.payload = clearStorage(payload.key)
         break
 
       case 'storage::read':
-        response.data = readStorageAction(data.key)
+        response.payload = readStorageAction(payload.key)
         break
 
       case 'storage::write':
-        response.data = writeStorageAction(data.key, data.value)
+        response.payload = writeStorageAction(payload.key, payload.value)
         break
 
       default:
+        console.log(`unexpected action ${payload.action}`)
         return
     }
 
-    W.postMessage(response, '*')
+    msg.source.postMessage(response, '*')
   }
 
   W.addEventListener('message', onMessage, false)

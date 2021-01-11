@@ -1,4 +1,7 @@
 (async _ => {
+  const W = window
+  const isDebug = false
+
   const braveSoftwareOrigin = 'dev-pages.bravesoftware.com'
   const braveSoftwareComOrigin = 'dev-pages.brave.software'
 
@@ -46,6 +49,13 @@
     }
   }
 
+  const logger = msg => {
+    if (isDebug !== true) {
+      return
+    }
+    console.log(typeof msg === 'string' ? msg : JSON.stringify(msg))
+  }
+
   const thisOriginUrl = path => {
     return '//' + thisOrigin + path
   }
@@ -55,21 +65,34 @@
   }
 
   const simplePostMessage = async (windowElm, msg) => {
-    const messageNonce = (+Math.random())
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
+      const messageNonce = Math.random().toString()
       const onResponseCallback = response => {
-        const { nonce, data } = response
-        if (nonce === messageNonce) {
-          windowElm.removeEventListener('message', onResponseCallback)
-          resolve(data)
+        const { nonce, direction, payload } = response.data
+        if (direction !== 'response') {
+          return
         }
+        if (nonce !== messageNonce) {
+          return
+        }
+        W.removeEventListener('message', onResponseCallback)
+
+        console.log(`resolving with: ${JSON.stringify(payload)}`)
+        resolve(payload)
       }
-      windowElm.addEventListener('message', onResponseCallback, false)
-      windowElm.postMessage({ messageNonce, msg }, '*')
+      W.addEventListener('message', onResponseCallback, false)
+
+      const outMsg = {
+        nonce: messageNonce,
+        payload: msg,
+        direction: 'sending'
+      }
+      windowElm.postMessage(outMsg, '*')
     })
   }
 
-  window.BRAVE = {
+  W.BRAVE = {
+    logger,
     thisOriginUrl,
     otherOriginUrl,
     simplePostMessage

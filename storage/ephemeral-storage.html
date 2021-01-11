@@ -50,9 +50,34 @@
     <section>
       <div class="row">
         <div class="col">
-          <button id="button-start-test" type="button" class="btn btn-primary btn-lg btn-block">Start Test</button>
-          <button id="button-read-values" type="button" class="btn btn-success btn-lg btn-block">Read Values</button>
-          <button id="button-clean-up" type="button" class="btn btn-secondary btn-lg btn-block">Clean up</button>
+          <form>
+            <div class="form-group">
+              <label for="ephemeral-storage-setting">Ephemeral storage:</label>
+              <select id="ephemeral-storage-setting" class="form-control" aria-label="Ephemeral storage setting">
+                <option value="on" selected>Enabled</option>
+                <option value="off">Disabled</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="col">
+          <form>
+            <div class="form-group">
+              <label for="cookie-blocking-setting">Cookie blocking:</label>
+              <select id="cookie-blocking-setting" class="form-control" aria-label="Cookie blocking setting">
+                <option value="3p" selected>Cross-site cookies blocked</option>
+                <option value="all">Cookies blocked</option>
+              </select>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <button id="button-start-test" type="button" class="btn btn-primary btn-lg btn-block">Start test</button>
+          <button id="button-read-values" type="button" class="btn btn-success btn-lg btn-block">Read values</button>
+          <button id="button-clean-up" type="button" class="btn btn-secondary btn-lg btn-block">Reset test</button>
         </div>
       </div>
 
@@ -110,23 +135,8 @@
           <h3>Expected Outcome</h3>
           <p>
             The below shows what the above table should look like, under each
-            of the possible four configurations are.
+            of the possible four configurations.
           </p>
-          <div class="form-group">
-            <label for="ephemeral-storage-setting">Ephemeral Storage</label>
-            <select id="ephemeral-storage-setting" class="form-select" aria-label="Ephemeral storage setting">
-              <option value="on" selected>Enabled</option>
-              <option value="off">Disabled</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="cookie-blocking-setting">Cookie blocking</label>
-            <select id="cookie-blocking-setting" class="form-select" aria-label="Cookie blocking setting">
-              <option value="3p" selected>Cross-site cookies blocked</option>
-              <option value="all">Cookies blocked</option>
-            </select>
-          </div>
         </div>
       </div>
 
@@ -142,6 +152,7 @@
           <table class="table table-condensed">
             <thead>
               <tr>
+                <th></th>
                 <th>This frame</th>
                 <th>Local frame</th>
                 <th>Remote frame</th>
@@ -149,16 +160,19 @@
             </thead>
             <tbody>
               <tr class="row-cookies">
+                <th colspan="row">cookies</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
               </tr>
               <tr class="row-local-storage">
+                <th colspan="row">local</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
               </tr>
               <tr class="row-session-storage">
+                <th colspan="row">Session</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
@@ -173,11 +187,15 @@
           <h4>Step 2: Remote Page Case</h4>
           <p>
             Open up the version of this page on the other origin.
-            You can <a target="_blank" class="other-origin" data-href="/storage/ephemeral-storage.html" href="#">
+            You can <a target="_blank" class="other-origin ephem-storage-test" data-href="/storage/ephemeral-storage.html" href="#">
             click here to open this page on the other test origin</a>.
-            <strong>Do not</strong> click the <em>Start Test</em> button
-            <strong>Do not</strong> click the <em>Start Test</em> button
-            in the new page, just read the table.
+          </p>
+          <p>
+            <strong>Do not</strong> click the <em>Start Test</em> button.
+          </p>
+          <p>
+            <strong>Do</strong> click the <em>Read values</em> button
+            in the new page and read the table.
           </p>
         </div>
 
@@ -185,6 +203,7 @@
           <table class="table table-condensed">
             <thead>
               <tr>
+                <th></th>
                 <th>This frame</th>
                 <th>Local frame</th>
                 <th>Remote frame</th>
@@ -192,16 +211,19 @@
             </thead>
             <tbody>
               <tr class="row-cookies">
+                <th colspan="row">cookies</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
               </tr>
               <tr class="row-local-storage">
+                <th colspan="row">local</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
               </tr>
               <tr class="row-session-storage">
+                <th colspan="row">Session</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
@@ -216,13 +238,16 @@
           <h4>Step 3: Same Page-Session Case</h4>
           <p>
             Open up another instance of this page, in a new tab or window
-            (You can <a target="_blank" href="/storage/ephemeral-storage.html">
+            (You can <a target="_blank" class="ephem-storage-test" href="/storage/ephemeral-storage.html">
             click here to open a second instance of this page</a>).
+          </p>
+          <p>
             <strong>Do not</strong> click the <em>Start Test</em> button
-            <strong>Do not</strong> click the <em>Start Test</em> button
-            in the new page, just read the table.  Similarly,
-            <strong>do not</strong> close this page. Both versions of this
-            page should be open for this case.
+            in the new page, just read the table.
+          </p>
+          <p>
+            Similarly, <strong>do not</strong> close this page. Both versions of
+            this page should be open for this case.
           </p>
         </div>
 
@@ -230,6 +255,7 @@
           <table class="table table-condensed">
             <thead>
               <tr>
+                <th></th>
                 <th>This frame</th>
                 <th>Local frame</th>
                 <th>Remote frame</th>
@@ -237,16 +263,19 @@
             </thead>
             <tbody>
               <tr class="row-cookies">
+                <th colspan="row">cookies</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
               </tr>
               <tr class="row-local-storage">
+                <th colspan="row">local</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
               </tr>
               <tr class="row-session-storage">
+                <th colspan="row">Session</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
@@ -261,10 +290,27 @@
           <h4>Step 4: New Page-Session Case</h4>
           <p>
             Close all instances of this page (including the one you're
-            reading now), and the open this page again.
+            reading now), and the open this page again.  Visit the page
+            at the below URL:
+          </p>
+
+          <form class="form-inline">
+            <div class="form-group">
+              <label class="mr-2" for="continue-test-url">Test URL:</label>
+               <input id="continue-test-url" readonly class="form-control mr-2">
+            </div>
+            <div class="form-group">
+              <button id="copy-url-button" type="button" class="btn btn-info">Copy to clipboard</button>
+            </div>
+          </form>
+
+          <p>
             <strong>Make sure</strong> you stay in the same session (e.g., don't
-            quit Brave). <strong>Do not</strong> click the
-            <em>Start Test</em> button in the new page, just read the
+            quit Brave).
+          </p>
+
+          <p>
+            <strong>Do not</strong> click the
             <em>Start Test</em> button in the new page, just read the
             table.
           </p>
@@ -274,6 +320,7 @@
           <table class="table table-condensed">
             <thead>
               <tr>
+                <th></th>
                 <th>This frame</th>
                 <th>Local frame</th>
                 <th>Remote frame</th>
@@ -281,16 +328,19 @@
             </thead>
             <tbody>
               <tr class="row-cookies">
+                <th colspan="row">cookies</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
               </tr>
               <tr class="row-local-storage">
+                <th colspan="row">local</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
               </tr>
               <tr class="row-session-storage">
+                <th colspan="row">Session</th>
                 <td class="cell-this-frame">-</td>
                 <td class="cell-local-frame">-</td>
                 <td class="cell-remote-frame">-</td>
