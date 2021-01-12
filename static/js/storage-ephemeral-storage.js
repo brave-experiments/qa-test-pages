@@ -202,8 +202,23 @@
 
   const storageValQueryKey = 'test-value'
   const newPossibleStorageVal = L.href + '::' + (+Math.random())
-  const storageTestValue = queryParams.get(storageValQueryKey) ||
-    newPossibleStorageVal
+  let storageTestValue
+  if (queryParams.get(storageValQueryKey) !== null) {
+    storageTestValue = queryParams.get(storageValQueryKey)
+  } else {
+    let storageTestValueFromStorage = null
+    try {
+      storageTestValueFromStorage = W.localStorage.getItem(storageValQueryKey)
+    } catch (_) {}
+
+    storageTestValue = storageTestValueFromStorage || newPossibleStorageVal
+  }
+
+  try {
+    W.localStorage.setItem(storageValQueryKey, storageTestValue)
+  } catch (_) {
+
+  }
 
   const ephemStorageQueryKey = 'ephemeral-storage-setting'
   const initEphemeralStorageVal = queryParams.get(ephemStorageQueryKey) || 'on'
@@ -398,11 +413,6 @@
 
   setStorageButton.addEventListener('click', async _ => {
     freezeButtons()
-    try {
-      W.localStorage[storageTestKey] = storageTestValue
-    } catch (_) {
-      // Will throw if storage is blocked in the current frame.
-    }
     for (const aFrameWin of Object.values(testFrameWindows)) {
       await writeStorageInFrame(aFrameWin, storageTestValue)
     }
@@ -418,6 +428,9 @@
 
   if (isForcedResetCase === true) {
     freezeButtons()
+    try {
+      W.localStorage.removeItem(storageValQueryKey)
+    } catch (_) {}
     setInterval(async _ => {
       for (const aFrameWin of Object.values(testFrameWindows)) {
         await clearStorageInFrame(aFrameWin)
