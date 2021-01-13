@@ -2,6 +2,7 @@
   const W = window
   const D = W.document
   const L = D.location
+  const O = Object
   const BU = W.BRAVE
   const exceptionEncoding = '*exception*'
 
@@ -12,22 +13,26 @@
     SET: 0,
     EMPTY: 1,
     EXCEPTION: 2,
-    WRONG: 4
+    WRONG: 4,
+    CORRECT: 5,
+    NA: 6
   }
   const testCasesEnum = {
-    INITIAL: 'initial',
-    REMOTE_PAGE: 'remote-page',
-    SAME_PAGE_SAME_SESSION: 'same-page-session',
-    SAME_PAGE_NEW_SESSION: 'new-page-session'
+    INITIAL: 0,
+    REMOTE_PAGE_SAME_SESSION: 1,
+    REMOTE_PAGE_DIFF_SESSION: 2,
+    SAME_PAGE_SAME_SESSION: 3,
+    SAME_PAGE_DIFF_SESSION: 4,
+    SAME_PAGE_RESET_SESSION: 5
   }
   const ephemeralStorageEnum = {
-    ON: 'on',
-    OFF: 'off'
+    ON: 0,
+    OFF: 1
   }
   const cookieSettingEnum = {
-    BLOCK_THIRD_PARTY: '3p',
-    BLOCK_ALL: 'all',
-    ALLOW_ALL: 'allow'
+    BLOCK_THIRD_PARTY: 0,
+    BLOCK_ALL: 1,
+    ALLOW_ALL: 2
   }
   const frameCaseEnum = {
     CURRENT_FRAME: 0,
@@ -38,6 +43,37 @@
     COOKIE: 0,
     LOCAL_STORAGE: 1,
     SESSION_STORAGE: 2
+  }
+
+  const allButSessionCol = {
+    [apiCaseEnum.COOKIE]: testOutcomeEnum.SET,
+    [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.SET,
+    [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY
+  }
+  const allCorrectTable = {
+    [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
+    [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
+    [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.SET
+  }
+  const allEmptyTable = {
+    [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.EMPTY,
+    [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.EMPTY,
+    [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EMPTY
+  }
+  const allEmpty3pBlockTable = {
+    [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.EMPTY,
+    [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.EMPTY,
+    [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
+  }
+  const allButSessionTable = {
+    [frameCaseEnum.CURRENT_FRAME]: allButSessionCol,
+    [frameCaseEnum.LOCAL_FRAME]: allButSessionCol,
+    [frameCaseEnum.REMOTE_FRAME]: allButSessionCol
+  }
+  const allButSession3pBlockingTable = {
+    [frameCaseEnum.CURRENT_FRAME]: allButSessionCol,
+    [frameCaseEnum.LOCAL_FRAME]: allButSessionCol,
+    [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
   }
 
   // If the value is a number (a testOutcomeEnum value) than
@@ -51,91 +87,96 @@
   //   {cookie, localStorage, sessionStorage}
   const expectedOutcomes = {
     [testCasesEnum.INITIAL]: {
-      [ephemeralStorageEnum.ON]: {
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: testOutcomeEnum.SET,
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
-        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
-      },
       [ephemeralStorageEnum.OFF]: {
+        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
           [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
           [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
           [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
         },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
-        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.ON]: {
+        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allCorrectTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
-    [testCasesEnum.REMOTE_PAGE]: {
-      [ephemeralStorageEnum.ON]: {
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: testOutcomeEnum.EMPTY,
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
-        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
-      },
+
+    [testCasesEnum.REMOTE_PAGE_SAME_SESSION]: {
       [ephemeralStorageEnum.OFF]: {
+        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
           [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.EMPTY,
           [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.EMPTY,
           [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
         },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
-        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.ON]: {
+        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
-    [testCasesEnum.SAME_PAGE_SAME_SESSION]: {
-      [ephemeralStorageEnum.ON]: {
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: testOutcomeEnum.SET,
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
-        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
-      },
+
+    [testCasesEnum.REMOTE_PAGE_DIFF_SESSION]: {
       [ephemeralStorageEnum.OFF]: {
+        [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmpty3pBlockTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.ON]: {
+        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      }
+    },
+
+    [testCasesEnum.SAME_PAGE_SAME_SESSION]: {
+      [ephemeralStorageEnum.OFF]: {
+        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
           [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
           [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
           [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
         },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
-        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.ON]: {
+        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allCorrectTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
-    [testCasesEnum.SAME_PAGE_NEW_SESSION]: {
-      [ephemeralStorageEnum.ON]: {
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
-          [frameCaseEnum.CURRENT_FRAME]: {
-            [apiCaseEnum.COOKIE]: testOutcomeEnum.SET,
-            [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.SET,
-            [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY
-          },
-          [frameCaseEnum.LOCAL_FRAME]: {
-            [apiCaseEnum.COOKIE]: testOutcomeEnum.SET,
-            [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.SET,
-            [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY
-          },
-          [frameCaseEnum.REMOTE_FRAME]: {
-            [apiCaseEnum.COOKIE]: testOutcomeEnum.EMPTY,
-            [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.EMPTY,
-            [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY
-          }
-        },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
-        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
-      },
+
+    [testCasesEnum.SAME_PAGE_DIFF_SESSION]: {
       [ephemeralStorageEnum.OFF]: {
+        [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allButSession3pBlockingTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.ON]: {
+        [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allButSessionTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      }
+    },
+
+    [testCasesEnum.SAME_PAGE_RESET_SESSION]: {
+      [ephemeralStorageEnum.OFF]: {
+        [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allButSession3pBlockingTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.ON]: {
+        [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
-          [frameCaseEnum.CURRENT_FRAME]: {
-            [apiCaseEnum.COOKIE]: testOutcomeEnum.SET,
-            [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.SET,
-            [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY
-          },
-          [frameCaseEnum.LOCAL_FRAME]: {
-            [apiCaseEnum.COOKIE]: testOutcomeEnum.SET,
-            [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.SET,
-            [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY
-          },
-          [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
+          [frameCaseEnum.CURRENT_FRAME]: allButSessionCol,
+          [frameCaseEnum.LOCAL_FRAME]: allButSessionCol,
+          [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EMPTY
         },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION,
-        [cookieSettingEnum.ALLOW_ALL]: testOutcomeEnum.SET
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     }
   }
@@ -186,118 +227,164 @@
     [testOutcomeEnum.WRONG]: {
       class: 'bg-danger',
       text: 'wrong'
+    },
+    [testOutcomeEnum.CORRECT]: {
+      class: 'bg-success',
+      text: '✔️'
+    },
+    [testOutcomeEnum.NA]: {
+      class: 'bg-info',
+      text: 'N/A'
     }
   }
 
   const styleCellForExpectedValue = (cellElm, val) => {
     const cellStyle = resultCellStyles[val]
     cellElm.classList.remove('bg-success', 'bg-light', 'bg-warning',
-      'bg-danger')
+      'bg-danger', 'bg-info')
     cellElm.textContent = cellStyle.text
     cellElm.classList.add(cellStyle.class)
   }
 
-  const storageTestKey = 'brave-ephemeral-storage-test'
   const queryParams = (new URL(L)).searchParams
 
-  const storageValQueryKey = 'test-value'
-  const newPossibleStorageVal = L.href + '::' + (+Math.random())
+  const storageTestKey = 'storage-test'
   let storageTestValue
-  if (queryParams.get(storageValQueryKey) !== null) {
-    storageTestValue = queryParams.get(storageValQueryKey)
+  let isMainTestFrame
+  if (queryParams.get(storageTestKey) !== null) {
+    isMainTestFrame = false
+    storageTestValue = queryParams.get(storageTestKey)
   } else {
-    let storageTestValueFromStorage = null
-    try {
-      storageTestValueFromStorage = W.localStorage.getItem(storageValQueryKey)
-    } catch (_) {}
-
-    storageTestValue = storageTestValueFromStorage || newPossibleStorageVal
+    isMainTestFrame = true
+    storageTestValue = L.href + '::' + (+Math.random())
   }
 
-  try {
-    W.localStorage.setItem(storageValQueryKey, storageTestValue)
-  } catch (_) {
-
-  }
+  const nestedFrameTestKey = 'nested-frame-storage-key'
+  const nestedFrameTestValue = Math.random().toString()
 
   const ephemStorageQueryKey = 'ephemeral-storage-setting'
-  const initEphemeralStorageVal = queryParams.get(ephemStorageQueryKey) || 'on'
+  const initEphemeralStorageVal = queryParams.get(ephemStorageQueryKey) || 'ON'
   storageSettingSelect.value = initEphemeralStorageVal
 
   const cookieBlockingQueryKey = 'cookie-blocking-setting'
-  const initCookieBlockingVal = queryParams.get(cookieBlockingQueryKey) || '3p'
+  const initCookieBlockingVal = queryParams.get(cookieBlockingQueryKey) || 'BLOCK_THIRD_PARTY'
   cookieBlockingSelect.value = initCookieBlockingVal
 
   const isForcedResetQueryKey = 'reset-url'
   const forcedResetUrl = queryParams.get(isForcedResetQueryKey)
   const isForcedResetCase = !!forcedResetUrl
 
-  const continueTestUrlElm = D.getElementById('continue-test-url')
+  const continueTestThisUrlElms = Array.from(D.querySelectorAll('.continue-test-url.this-origin-input'))
+  const continueTestRemoteUrlElms = Array.from(D.querySelectorAll('.continue-test-url.remote-origin-input'))
   const updateTestUrlText = _ => {
     const destUrl = new URL(L)
     const destUrlParams = destUrl.searchParams
-    destUrlParams.set(storageValQueryKey, storageTestValue)
+    destUrlParams.set(storageTestKey, storageTestValue)
     destUrlParams.set(ephemStorageQueryKey, storageSettingSelect.value)
     destUrlParams.set(cookieBlockingQueryKey, cookieBlockingSelect.value)
-    continueTestUrlElm.value = destUrl.toString()
+
+    const continueTestUrl = destUrl.pathname + '?' + destUrlParams.toString()
+    const thisOriginUrl = destUrl.protocol + BU.thisOriginUrl(continueTestUrl)
+    for (const aUrlInputElm of continueTestThisUrlElms) {
+      aUrlInputElm.value = thisOriginUrl.toString()
+    }
+
+    const remoteOriginUrl = destUrl.protocol + BU.otherOriginUrl(continueTestUrl)
+    for (const aUrlInputElm of continueTestRemoteUrlElms) {
+      aUrlInputElm.value = remoteOriginUrl.toString()
+    }
   }
 
-  const copyUrlButton = D.getElementById('copy-url-button')
-  const onUrlButtonClick = async _ => {
-    const initialText = copyUrlButton.textContent
-    copyUrlButton.setAttribute('disabled', 'disabled')
+  const copyUrlButtons = Array.from(D.querySelectorAll('.copy-url-button'))
+  const onUrlButtonClick = async event => {
+    const copyButton = event.target
+    const initialText = copyButton.textContent
+    copyButton.setAttribute('disabled', 'disabled')
 
-    await navigator.clipboard.writeText(continueTestUrlElm.value)
-    copyUrlButton.textContent = 'Copied!'
+    const urlElm = copyButton.classList.contains('this-origin-button')
+      ? continueTestThisUrlElms[0]
+      : continueTestRemoteUrlElms[0]
+
+    await navigator.clipboard.writeText(urlElm.value)
+    copyButton.textContent = 'Copied!'
 
     setInterval(_ => {
-      copyUrlButton.textContent = initialText
-      copyUrlButton.removeAttribute('disabled')
+      copyButton.textContent = initialText
+      copyButton.removeAttribute('disabled')
     }, 3000)
   }
-  copyUrlButton.addEventListener('click', onUrlButtonClick, false)
+  for (const aButton of copyUrlButtons) {
+    aButton.addEventListener('click', onUrlButtonClick, false)
+  }
 
-  const elmsForTestCases = {
-    [testCasesEnum.INITIAL]: D.getElementById('row-initial-case'),
-    [testCasesEnum.REMOTE_PAGE]: D.getElementById('row-remote-page-case'),
-    [testCasesEnum.SAME_PAGE_SAME_SESSION]:
-      D.getElementById('row-same-page-session-case'),
-    [testCasesEnum.SAME_PAGE_NEW_SESSION]:
-      D.getElementById('row-new-page-session-case')
-  }
-  const classNamesForFrameCases = {
-    [frameCaseEnum.CURRENT_FRAME]: 'cell-this-frame',
-    [frameCaseEnum.LOCAL_FRAME]: 'cell-local-frame',
-    [frameCaseEnum.REMOTE_FRAME]: 'cell-remote-frame'
-  }
-  const classNamesForAPICases = {
-    [apiCaseEnum.COOKIE]: 'row-cookies',
-    [apiCaseEnum.LOCAL_STORAGE]: 'row-local-storage',
-    [apiCaseEnum.SESSION_STORAGE]: 'row-session-storage'
-  }
+  const cellForTestCaseApiAndFrame = (_ => {
+    const idsForTestCases = {
+      [testCasesEnum.INITIAL]: 'initial',
+      [testCasesEnum.REMOTE_PAGE_SAME_SESSION]: 'remote-page-same-session',
+      [testCasesEnum.REMOTE_PAGE_DIFF_SESSION]: 'remote-page-diff-session',
+      [testCasesEnum.SAME_PAGE_SAME_SESSION]: 'same-page-same-session',
+      [testCasesEnum.SAME_PAGE_DIFF_SESSION]: 'same-page-diff-session',
+      [testCasesEnum.SAME_PAGE_RESET_SESSION]: 'same-page-reset-session'
+    }
+    const classNamesForAPICases = {
+      [apiCaseEnum.COOKIE]: 'row-cookies',
+      [apiCaseEnum.LOCAL_STORAGE]: 'row-local-storage',
+      [apiCaseEnum.SESSION_STORAGE]: 'row-session-storage'
+    }
+    const classNamesForFrameCases = {
+      [frameCaseEnum.CURRENT_FRAME]: 'cell-this-frame',
+      [frameCaseEnum.LOCAL_FRAME]: 'cell-local-frame',
+      [frameCaseEnum.REMOTE_FRAME]: 'cell-remote-frame'
+    }
+    const elmCache = {}
+
+    return (testCaseOpt, apiCaseOpt, frameCaseOpt) => {
+      const key = `${testCaseOpt}::${apiCaseOpt}::${frameCaseOpt}`
+      const cacheVal = elmCache[key]
+      if (cacheVal !== undefined) {
+        return cacheVal
+      }
+
+      const testCaseId = idsForTestCases[testCaseOpt]
+      const apiCaseClass = classNamesForAPICases[apiCaseOpt]
+      const frameCaseClass = classNamesForFrameCases[frameCaseOpt]
+
+      const sel = `#${testCaseId} tr.${apiCaseClass} td.${frameCaseClass}`
+      const cellElm = D.querySelector(sel)
+      elmCache[key] = cellElm
+      return cellElm
+    }
+  })()
 
   const updateOutcomeTables = _ => {
-    const ephemeralStorageOpt = storageSettingSelect.value
-    const cookieSettingOpt = cookieBlockingSelect.value
+    const ephemeralStorageOpt = ephemeralStorageEnum[storageSettingSelect.value]
+    const cookieSettingOpt = cookieSettingEnum[cookieBlockingSelect.value]
 
-    for (const [testCaseOption, rowElm] of Object.entries(elmsForTestCases)) {
-      const tableSelector = '#' + rowElm.id + ' table'
-      const tableElm = rowElm.querySelector(tableSelector)
-
-      for (const [apiCaseOpt, apiCaseClassName] of Object.entries(classNamesForAPICases)) {
-        const rowSelector = tableSelector + ' tr.' + apiCaseClassName
-        const tRowElm = tableElm.querySelector(rowSelector)
-
-        for (const [frameCaseOpt, frameCaseClassName] of Object.entries(classNamesForFrameCases)) {
-          const cellSelector = rowSelector + ' td.' + frameCaseClassName
-          const cellElm = tRowElm.querySelector(cellSelector)
-
-          const expectedVal = expectedTestCaseValue(testCaseOption,
+    for (const testCaseOpt of O.values(testCasesEnum)) {
+      for (const apiCaseOpt of O.values(apiCaseEnum)) {
+        for (const frameCaseOpt of O.values(frameCaseEnum)) {
+          const cellElm = cellForTestCaseApiAndFrame(testCaseOpt, apiCaseOpt,
+            frameCaseOpt)
+          const expectedVal = expectedTestCaseValue(testCaseOpt,
             ephemeralStorageOpt, cookieSettingOpt, frameCaseOpt, apiCaseOpt)
           styleCellForExpectedValue(cellElm, expectedVal)
         }
       }
     }
+
+    const nestedCellElms = D.querySelectorAll('#section-steps .cell-nested-frame')
+    for (const aCell of Array.from(nestedCellElms)) {
+      styleCellForExpectedValue(aCell, testOutcomeEnum.NA)
+    }
+
+    const initialCellElms = D.querySelectorAll('#initial .cell-nested-frame')
+    const cellStyle = cookieSettingOpt === cookieSettingEnum.BLOCK_ALL
+      ? testOutcomeEnum.EXCEPTION
+      : testOutcomeEnum.CORRECT
+    for (const aCell of Array.from(initialCellElms)) {
+      styleCellForExpectedValue(aCell, cellStyle)
+    }
+
     updateTestUrlText()
   }
 
@@ -310,7 +397,7 @@
     event.cancelBubble = true
     const destUrl = new URL(event.target.href)
     const destParams = destUrl.searchParams
-    destParams.set(storageValQueryKey, storageTestValue)
+    destParams.set(storageTestKey, storageTestValue)
     destParams.set(ephemStorageQueryKey, storageSettingSelect.value)
     destParams.set(cookieBlockingQueryKey, cookieBlockingSelect.value)
     W.open(destUrl.toString())
@@ -320,10 +407,11 @@
     aElm.addEventListener('click', onEphemStorageTestElmClick, false)
   }
 
+  const remoteFrameWin = D.querySelector('iframe.other-origin').contentWindow
   const testFrameWindows = {
     'this-frame': W,
     'local-frame': D.querySelector('iframe.this-origin').contentWindow,
-    'remote-frame': D.querySelector('iframe.other-origin').contentWindow
+    'remote-frame': remoteFrameWin
   }
 
   const updateResultCell = (cellElm, val) => {
@@ -339,44 +427,77 @@
     }
     const cellStyle = resultCellStyles[cellComparison]
     cellElm.classList.remove('bg-success', 'bg-light', 'bg-warning',
-      'bg-danger')
+      'bg-danger', 'bg-info')
 
     cellElm.textContent = cellStyle.text
     cellElm.classList.add(cellStyle.class)
   }
 
-  const readStorageInFrame = async frameElm => {
-    return await BU.simplePostMessage(frameElm, {
+  const readStorageInFrame = async (windowElm, key) => {
+    return await BU.simplePostMessage(windowElm, {
       action: 'storage::read',
-      key: storageTestKey
+      key
     })
   }
 
+  const clearStorageInFrame = async (frameWin, key) => {
+    return await BU.simplePostMessage(frameWin, {
+      action: 'storage::clear',
+      key
+    })
+  }
+
+  const writeStorageInFrame = async (frameWin, key, value) => {
+    return await BU.simplePostMessage(frameWin, {
+      action: 'storage::write',
+      key,
+      value
+    })
+  }
+
+  const testNestedFrameStorage = async frameWin => {
+    const nestedFrameStorage = await BU.simplePostMessage(frameWin, {
+      action: 'storage::nested-frame',
+      key: nestedFrameTestKey
+    })
+    const testResults = O.create(null)
+    for (const [nestedStorageKey, nestedStorageVal] of O.entries(nestedFrameStorage)) {
+      if (nestedStorageVal === exceptionEncoding) {
+        testResults[nestedStorageKey] = testOutcomeEnum.EXCEPTION
+      } else {
+        testResults[nestedStorageKey] = nestedStorageVal === nestedFrameTestValue
+          ? testOutcomeEnum.CORRECT
+          : testOutcomeEnum.WRONG
+      }
+    }
+    return testResults
+  }
+
   const updateStorageTable = async _ => {
-    for (const [frameName, frameWin] of Object.entries(testFrameWindows)) {
-      const frameStoreVals = await readStorageInFrame(frameWin)
-      for (const [storageKey, storageValue] of Object.entries(frameStoreVals)) {
+    for (const [frameName, frameWin] of O.entries(testFrameWindows)) {
+      const frameStoreVals = await readStorageInFrame(frameWin, storageTestKey)
+      for (const [storageKey, storageValue] of O.entries(frameStoreVals)) {
         const cellSel = `#storage-rs tr.row-${storageKey} td.cell-${frameName}`
         const cellElm = D.querySelector(cellSel)
         updateResultCell(cellElm, storageValue)
       }
     }
-  }
 
-  const clearStorageInFrame = async frameWin => {
-    await BU.simplePostMessage(frameWin, {
-      action: 'storage::clear',
-      key: storageTestKey
-    })
-  }
-
-  const writeStorageInFrame = async (frameWin, value) => {
-    const msg = {
-      action: 'storage::write',
-      key: storageTestKey,
-      value
+    const nestedFrameCells = D.querySelectorAll('#storage-rs td.cell-nested-frame')
+    for (const aCell of Array.from(nestedFrameCells)) {
+      styleCellForExpectedValue(aCell, testOutcomeEnum.NA)
     }
-    return await BU.simplePostMessage(frameWin, msg)
+
+    if (isMainTestFrame === false) {
+      return
+    }
+
+    const nestedStorageRs = await testNestedFrameStorage(remoteFrameWin)
+    for (const [storageKey, storageRs] of O.entries(nestedStorageRs)) {
+      const cellSel = `#storage-rs tr.row-${storageKey} td.cell-nested-frame`
+      const cellElm = D.querySelector(cellSel)
+      styleCellForExpectedValue(cellElm, storageRs)
+    }
   }
 
   const clearStorageButton = D.getElementById('button-clean-up')
@@ -396,25 +517,34 @@
     }
   }
 
+  const clearStorageInFrameTree = async _ => {
+    for (const aFrameWin of O.values(testFrameWindows)) {
+      await clearStorageInFrame(aFrameWin, storageTestKey)
+    }
+    try {
+      W.localStorage.removeItem(nestedFrameTestKey)
+    } catch (_) {}
+  }
+
   clearStorageButton.addEventListener('click', async _ => {
     freezeButtons()
-    for (const aFrameWin of Object.values(testFrameWindows)) {
-      await clearStorageInFrame(aFrameWin)
-    }
-
+    await clearStorageInFrameTree()
     const path = L.pathname
     const otherOriginResetUrl = L.protocol + BU.otherOriginUrl(path)
     const destUrl = new URL(otherOriginResetUrl)
     const destParams = destUrl.searchParams
-    destParams.set(storageValQueryKey, storageTestValue)
+    destParams.set(storageTestKey, storageTestValue)
     destParams.set(isForcedResetQueryKey, L.protocol + BU.thisOriginUrl(path))
     D.location = destUrl.toString()
   }, false)
 
   setStorageButton.addEventListener('click', async _ => {
     freezeButtons()
-    for (const aFrameWin of Object.values(testFrameWindows)) {
-      await writeStorageInFrame(aFrameWin, storageTestValue)
+    for (const aFrameWin of O.values(testFrameWindows)) {
+      await writeStorageInFrame(aFrameWin, storageTestKey, storageTestValue)
+    }
+    if (isMainTestFrame === true) {
+      await writeStorageInFrame(W, nestedFrameTestKey, nestedFrameTestValue)
     }
     await updateStorageTable()
     unfreezeButtons()
@@ -428,13 +558,8 @@
 
   if (isForcedResetCase === true) {
     freezeButtons()
-    try {
-      W.localStorage.removeItem(storageValQueryKey)
-    } catch (_) {}
     setInterval(async _ => {
-      for (const aFrameWin of Object.values(testFrameWindows)) {
-        await clearStorageInFrame(aFrameWin)
-      }
+      await clearStorageInFrameTree()
       D.location = forcedResetUrl
     }, 1000)
   }
