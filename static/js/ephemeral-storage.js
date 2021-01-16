@@ -434,30 +434,19 @@
   }
 
   const readStorageInFrame = async (windowElm, key) => {
-    return await BU.simplePostMessage(windowElm, {
-      action: 'storage::read',
-      key
-    })
+    return await BU.sendPostMsg(windowElm, 'storage::read', { key })
   }
 
   const clearStorageInFrame = async (frameWin, key) => {
-    return await BU.simplePostMessage(frameWin, {
-      action: 'storage::clear',
-      key
-    })
+    return await BU.sendPostMsg(frameWin, 'storage::clear', { key })
   }
 
   const writeStorageInFrame = async (frameWin, key, value) => {
-    return await BU.simplePostMessage(frameWin, {
-      action: 'storage::write',
-      key,
-      value
-    })
+    return await BU.sendPostMsg(frameWin, 'storage::write', { key, value })
   }
 
   const testNestedFrameStorage = async frameWin => {
-    const nestedFrameStorage = await BU.simplePostMessage(frameWin, {
-      action: 'storage::nested-frame',
+    const nestedFrameStorage = await BU.sendPostMsg(frameWin, 'storage::nested-frame', {
       key: nestedFrameTestKey
     })
     const testResults = O.create(null)

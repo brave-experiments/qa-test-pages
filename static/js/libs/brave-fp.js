@@ -26,195 +26,8 @@
   if (typeof window !== 'undefined' && typeof define === 'function' && define.amd) { define(definition) } else if (typeof module !== 'undefined' && module.exports) { module.exports = definition() } else if (context.exports) { context.exports = definition() } else { context[name] = definition() }
 })('Fingerprint2', this, function () {
   'use strict'
-  const convertToBlobOptions = {
-    type: "image/jpeg",
-    quality: 0.92
-  }
 
-  var _webGlFP = []
-  var buildWebglFp = function (callback) {
-    var canvas = new OffscreenCanvas(300, 150)
-    var gl = canvas.getContext('webgl')
-
-    var fa2s = function (fa) {
-      gl.clearColor(0.0, 0.0, 0.0, 1.0)
-      gl.enable(gl.DEPTH_TEST)
-      gl.depthFunc(gl.LEQUAL)
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-      return '[' + fa[0] + ', ' + fa[1] + ']'
-    }
-    var maxAnisotropy = function (gl) {
-      var ext = gl.getExtension('EXT_texture_filter_anisotropic') || gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic') || gl.getExtension('MOZ_EXT_texture_filter_anisotropic')
-      if (ext) {
-        var anisotropy = gl.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT)
-        if (anisotropy === 0) {
-          anisotropy = 2
-        }
-        return anisotropy
-      } else {
-        return null
-      }
-    }
-
-    // WebGL fingerprinting is a combination of techniques, found in MaxMind antifraud script & Augur fingerprinting.
-    // First it draws a gradient object with shaders and convers the image to the Base64 string.
-    // Then it enumerates all WebGL extensions & capabilities and appends them to the Base64 string, resulting in a huge WebGL string, potentially very unique on each device
-    // Since iOS supports webgl starting from version 8.1 and 8.1 runs on several graphics chips, the results may be different across ios devices, but we need to verify it.
-    var vShaderTemplate = 'attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}'
-    var fShaderTemplate = 'precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}'
-    var vertexPosBuffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer)
-    var vertices = new Float32Array([-0.2, -0.9, 0, 0.4, -0.26, 0, 0, 0.732134444, 0])
-    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
-    vertexPosBuffer.itemSize = 3
-    vertexPosBuffer.numItems = 3
-    var program = gl.createProgram()
-    var vshader = gl.createShader(gl.VERTEX_SHADER)
-    gl.shaderSource(vshader, vShaderTemplate)
-    gl.compileShader(vshader)
-    var fshader = gl.createShader(gl.FRAGMENT_SHADER)
-    gl.shaderSource(fshader, fShaderTemplate)
-    gl.compileShader(fshader)
-    gl.attachShader(program, vshader)
-    gl.attachShader(program, fshader)
-    gl.linkProgram(program)
-    gl.useProgram(program)
-    program.vertexPosAttrib = gl.getAttribLocation(program, 'attrVertex')
-    program.offsetUniform = gl.getUniformLocation(program, 'uniformOffset')
-    gl.enableVertexAttribArray(program.vertexPosArray)
-    gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, gl.FLOAT, !1, 0, 0)
-    gl.uniform2f(program.offsetUniform, 1, 1)
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems)
-
-
-    canvas.convertToBlob(convertToBlobOptions).then(function (blob) {
-      var fileReader = new FileReader();
-      fileReader.onload = (evt) => {
-        _webGlFP.push(evt.target.result)
-        _webGlFP.push('extensions:' + (gl.getSupportedExtensions() || []).join(';'))
-        _webGlFP.push('webgl aliased line width range:' + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)))
-        _webGlFP.push('webgl aliased point size range:' + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)))
-        _webGlFP.push('webgl alpha bits:' + gl.getParameter(gl.ALPHA_BITS))
-        _webGlFP.push('webgl antialiasing:' + (gl.getContextAttributes().antialias ? 'yes' : 'no'))
-        _webGlFP.push('webgl blue bits:' + gl.getParameter(gl.BLUE_BITS))
-        _webGlFP.push('webgl depth bits:' + gl.getParameter(gl.DEPTH_BITS))
-        _webGlFP.push('webgl green bits:' + gl.getParameter(gl.GREEN_BITS))
-        _webGlFP.push('webgl max anisotropy:' + maxAnisotropy(gl))
-        _webGlFP.push('webgl max combined texture image units:' + gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS))
-        _webGlFP.push('webgl max cube map texture size:' + gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE))
-        _webGlFP.push('webgl max fragment uniform vectors:' + gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS))
-        _webGlFP.push('webgl max render buffer size:' + gl.getParameter(gl.MAX_RENDERBUFFER_SIZE))
-        _webGlFP.push('webgl max texture image units:' + gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS))
-        _webGlFP.push('webgl max texture size:' + gl.getParameter(gl.MAX_TEXTURE_SIZE))
-        _webGlFP.push('webgl max varying vectors:' + gl.getParameter(gl.MAX_VARYING_VECTORS))
-        _webGlFP.push('webgl max vertex attribs:' + gl.getParameter(gl.MAX_VERTEX_ATTRIBS))
-        _webGlFP.push('webgl max vertex texture image units:' + gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS))
-        _webGlFP.push('webgl max vertex uniform vectors:' + gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS))
-        _webGlFP.push('webgl max viewport dims:' + fa2s(gl.getParameter(gl.MAX_VIEWPORT_DIMS)))
-        _webGlFP.push('webgl red bits:' + gl.getParameter(gl.RED_BITS))
-        _webGlFP.push('webgl renderer:' + gl.getParameter(gl.RENDERER))
-        _webGlFP.push('webgl shading language version:' + gl.getParameter(gl.SHADING_LANGUAGE_VERSION))
-        _webGlFP.push('webgl stencil bits:' + gl.getParameter(gl.STENCIL_BITS))
-        _webGlFP.push('webgl vendor:' + gl.getParameter(gl.VENDOR))
-        _webGlFP.push('webgl version:' + gl.getParameter(gl.VERSION))
-
-        try {
-          // Add the unmasked vendor and unmasked renderer if the debug_renderer_info extension is available
-          var extensionDebugRendererInfo = gl.getExtension('WEBGL_debug_renderer_info')
-          if (extensionDebugRendererInfo) {
-            _webGlFP.push('webgl unmasked vendor:' + gl.getParameter(extensionDebugRendererInfo.UNMASKED_VENDOR_WEBGL))
-            _webGlFP.push('webgl unmasked renderer:' + gl.getParameter(extensionDebugRendererInfo.UNMASKED_RENDERER_WEBGL))
-          }
-        } catch (e) { /* squelch */ }
-
-        if (!gl.getShaderPrecisionFormat) {
-          loseWebglContext(gl)
-          callback()
-        }
-
-        each(['FLOAT', 'INT'], function (numType) {
-          each(['VERTEX', 'FRAGMENT'], function (shader) {
-            each(['HIGH', 'MEDIUM', 'LOW'], function (numSize) {
-              each(['precision', 'rangeMin', 'rangeMax'], function (key) {
-                var format = gl.getShaderPrecisionFormat(gl[shader + '_SHADER'], gl[numSize + '_' + numType])[key]
-                if (key !== 'precision') {
-                  key = 'precision ' + key
-                }
-                var line = ['webgl ', shader.toLowerCase(), ' shader ', numSize.toLowerCase(), ' ', numType.toLowerCase(), ' ', key, ':', format].join('')
-                _webGlFP.push(line)
-              })
-            })
-          })
-        })
-        loseWebglContext(gl)
-        callback()
-        return
-      };
-      fileReader.readAsDataURL(blob)
-    })
-  }
-
-  let _canvasFP
-  let buildCanvasFp = function (callback) {
-    var result = []
-    // Very simple now, need to make it more complex (geo shapes etc)
-    var canvas = new OffscreenCanvas(2000, 200)
-    var ctx = canvas.getContext('2d')
-    // detect browser support of canvas winding
-    // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
-    // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
-    ctx.rect(0, 0, 10, 10)
-    ctx.rect(2, 2, 6, 6)
-    result.push('canvas winding:' + ((ctx.isPointInPath(5, 5, 'evenodd') === false) ? 'yes' : 'no'))
-
-    ctx.textBaseline = 'alphabetic'
-    ctx.fillStyle = '#f60'
-    ctx.fillRect(125, 1, 62, 20)
-    ctx.fillStyle = '#069'
-    // https://github.com/Valve/fingerprintjs2/issues/66
-    ctx.font = '11pt no-real-font-123'
-    ctx.fillText('Cwm fjordbank glyphs vext quiz, \ud83d\ude03', 2, 15)
-    ctx.fillStyle = 'rgba(102, 204, 0, 0.2)'
-    ctx.font = '18pt Arial'
-    ctx.fillText('Cwm fjordbank glyphs vext quiz, \ud83d\ude03', 4, 45)
-
-    // canvas blending
-    // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
-    // http://jsfiddle.net/NDYV8/16/
-    ctx.globalCompositeOperation = 'multiply'
-    ctx.fillStyle = 'rgb(255,0,255)'
-    ctx.beginPath()
-    ctx.arc(50, 50, 50, 0, Math.PI * 2, true)
-    ctx.closePath()
-    ctx.fill()
-    ctx.fillStyle = 'rgb(0,255,255)'
-    ctx.beginPath()
-    ctx.arc(100, 50, 50, 0, Math.PI * 2, true)
-    ctx.closePath()
-    ctx.fill()
-    ctx.fillStyle = 'rgb(255,255,0)'
-    ctx.beginPath()
-    ctx.arc(75, 100, 50, 0, Math.PI * 2, true)
-    ctx.closePath()
-    ctx.fill()
-    ctx.fillStyle = 'rgb(255,0,255)'
-    // canvas winding
-    // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
-    // http://jsfiddle.net/NDYV8/19/
-    ctx.arc(75, 75, 75, 0, Math.PI * 2, true)
-    ctx.arc(75, 75, 25, 0, Math.PI * 2, true)
-    ctx.fill('evenodd')
-
-    canvas.convertToBlob(convertToBlobOptions).then(function (blob) {
-      const fileReader = new FileReader();
-      fileReader.onload = (evt) => {
-        result.push('canvas fp:' + evt.target.result)
-        _canvasFP = result
-        callback()
-      };
-      fileReader.readAsDataURL(blob)
-    })
-  }
+  const toDataUrlOptions = ['image/jpeg', 0.92]
 
   // detect if object is array
   // only implement if no native implementation is available
@@ -527,13 +340,13 @@
       'MAX_UNIFORM_BUFFER_BINDINGS',
       'MAX_COMBINED_UNIFORM_BLOCKS',
       'MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS',
-      'MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS',
+      'MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS'
     ]
-    var canvas = new OffscreenCanvas(300, 150)
+    var canvas = document.createElement('canvas')
     var gl = canvas.getContext('webgl2')
-    let fpInput = ""
+    let fpInput = ''
     for (const aParam of params) {
-      fpInput += aParam + "=" + String(gl.getParameter(gl[aParam])) + "; "
+      fpInput += aParam + '=' + String(gl.getParameter(gl[aParam])) + '; '
     }
     done(fpInput)
   }
@@ -549,7 +362,7 @@
         // id, so modifying this test so that it only tests what we want it to
         // test.  (basically, we farble some things, but not everything so
         // far, this will need to be changed once we farble labels too.
-        return "kind=" + device.kind + ';label=' + device.label
+        return 'kind=' + device.kind + ';label=' + device.label
         // return 'id=' + device.deviceId + ';gid=' + device.groupId + ';' + device.kind + ';' + device.label
       }))
     }).catch(function (error) {
@@ -562,7 +375,66 @@
   }
   // Inspired by and based on https://github.com/cozylife/audio-fingerprint
   var audioKey = function (done, options) {
-    done()
+    var audioOptions = options.audio
+    if (audioOptions.excludeIOS11 && navigator.userAgent.match(/OS 11.+Version\/11.+Safari/)) {
+      // See comment for excludeUserAgent and https://stackoverflow.com/questions/46363048/onaudioprocess-not-called-on-ios11#46534088
+      return done(options.EXCLUDED)
+    }
+
+    var AudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext
+
+    if (AudioContext == null) {
+      return done(options.NOT_AVAILABLE)
+    }
+
+    var context = new AudioContext(1, 44100, 44100)
+
+    var oscillator = context.createOscillator()
+    oscillator.type = 'triangle'
+    oscillator.frequency.setValueAtTime(10000, context.currentTime)
+
+    var compressor = context.createDynamicsCompressor()
+    each([
+      ['threshold', -50],
+      ['knee', 40],
+      ['ratio', 12],
+      ['reduction', -20],
+      ['attack', 0],
+      ['release', 0.25]
+    ], function (item) {
+      if (compressor[item[0]] !== undefined && typeof compressor[item[0]].setValueAtTime === 'function') {
+        compressor[item[0]].setValueAtTime(item[1], context.currentTime)
+      }
+    })
+
+    oscillator.connect(compressor)
+    compressor.connect(context.destination)
+    oscillator.start(0)
+    context.startRendering()
+
+    var audioTimeoutId = setTimeout(function () {
+      console.warn('Audio fingerprint timed out. Please report bug at https://github.com/Valve/fingerprintjs2 with your user agent: "' + navigator.userAgent + '".')
+      context.oncomplete = function () { }
+      context = null
+      return done('audioTimeout')
+    }, audioOptions.timeout)
+
+    context.oncomplete = function (event) {
+      var fingerprint
+      try {
+        clearTimeout(audioTimeoutId)
+        fingerprint = event.renderedBuffer.getChannelData(0)
+          .slice(4500, 5000)
+          .reduce(function (acc, val) { return acc + Math.abs(val) }, 0)
+          .toString()
+        oscillator.disconnect()
+        compressor.disconnect()
+      } catch (error) {
+        done(error)
+        return
+      }
+      done(fingerprint)
+    }
   }
   var UserAgent = function (done) {
     done(navigator.userAgent)
@@ -1061,10 +933,181 @@
   // https://www.browserleaks.com/canvas#how-does-it-work
 
   var getCanvasFp = function (options) {
-    return _canvasFP
+    var result = []
+    // Very simple now, need to make it more complex (geo shapes etc)
+    var canvas = document.createElement('canvas')
+    canvas.width = 2000
+    canvas.height = 200
+    canvas.style.display = 'inline'
+    var ctx = canvas.getContext('2d')
+    // detect browser support of canvas winding
+    // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+    // https://github.com/Modernizr/Modernizr/blob/master/feature-detects/canvas/winding.js
+    ctx.rect(0, 0, 10, 10)
+    ctx.rect(2, 2, 6, 6)
+    result.push('canvas winding:' + ((ctx.isPointInPath(5, 5, 'evenodd') === false) ? 'yes' : 'no'))
+
+    ctx.textBaseline = 'alphabetic'
+    ctx.fillStyle = '#f60'
+    ctx.fillRect(125, 1, 62, 20)
+    ctx.fillStyle = '#069'
+    // https://github.com/Valve/fingerprintjs2/issues/66
+    if (options.dontUseFakeFontInCanvas) {
+      ctx.font = '11pt Arial'
+    } else {
+      ctx.font = '11pt no-real-font-123'
+    }
+    ctx.fillText('Cwm fjordbank glyphs vext quiz, \ud83d\ude03', 2, 15)
+    ctx.fillStyle = 'rgba(102, 204, 0, 0.2)'
+    ctx.font = '18pt Arial'
+    ctx.fillText('Cwm fjordbank glyphs vext quiz, \ud83d\ude03', 4, 45)
+
+    // canvas blending
+    // http://blogs.adobe.com/webplatform/2013/01/28/blending-features-in-canvas/
+    // http://jsfiddle.net/NDYV8/16/
+    ctx.globalCompositeOperation = 'multiply'
+    ctx.fillStyle = 'rgb(255,0,255)'
+    ctx.beginPath()
+    ctx.arc(50, 50, 50, 0, Math.PI * 2, true)
+    ctx.closePath()
+    ctx.fill()
+    ctx.fillStyle = 'rgb(0,255,255)'
+    ctx.beginPath()
+    ctx.arc(100, 50, 50, 0, Math.PI * 2, true)
+    ctx.closePath()
+    ctx.fill()
+    ctx.fillStyle = 'rgb(255,255,0)'
+    ctx.beginPath()
+    ctx.arc(75, 100, 50, 0, Math.PI * 2, true)
+    ctx.closePath()
+    ctx.fill()
+    ctx.fillStyle = 'rgb(255,0,255)'
+    // canvas winding
+    // http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/
+    // http://jsfiddle.net/NDYV8/19/
+    ctx.arc(75, 75, 75, 0, Math.PI * 2, true)
+    ctx.arc(75, 75, 25, 0, Math.PI * 2, true)
+    ctx.fill('evenodd')
+
+    if (canvas.toDataURL) { result.push('canvas fp:' + canvas.toDataURL(...toDataUrlOptions)) }
+    return result
   }
   var getWebglFp = function () {
-    return _webGlFP
+    var gl
+    var fa2s = function (fa) {
+      gl.clearColor(0.0, 0.0, 0.0, 1.0)
+      gl.enable(gl.DEPTH_TEST)
+      gl.depthFunc(gl.LEQUAL)
+      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+      return '[' + fa[0] + ', ' + fa[1] + ']'
+    }
+    var maxAnisotropy = function (gl) {
+      var ext = gl.getExtension('EXT_texture_filter_anisotropic') || gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic') || gl.getExtension('MOZ_EXT_texture_filter_anisotropic')
+      if (ext) {
+        var anisotropy = gl.getParameter(ext.MAX_TEXTURE_MAX_ANISOTROPY_EXT)
+        if (anisotropy === 0) {
+          anisotropy = 2
+        }
+        return anisotropy
+      } else {
+        return null
+      }
+    }
+
+    gl = getWebglCanvas()
+    if (!gl) { return null }
+    // WebGL fingerprinting is a combination of techniques, found in MaxMind antifraud script & Augur fingerprinting.
+    // First it draws a gradient object with shaders and convers the image to the Base64 string.
+    // Then it enumerates all WebGL extensions & capabilities and appends them to the Base64 string, resulting in a huge WebGL string, potentially very unique on each device
+    // Since iOS supports webgl starting from version 8.1 and 8.1 runs on several graphics chips, the results may be different across ios devices, but we need to verify it.
+    var result = []
+    var vShaderTemplate = 'attribute vec2 attrVertex;varying vec2 varyinTexCoordinate;uniform vec2 uniformOffset;void main(){varyinTexCoordinate=attrVertex+uniformOffset;gl_Position=vec4(attrVertex,0,1);}'
+    var fShaderTemplate = 'precision mediump float;varying vec2 varyinTexCoordinate;void main() {gl_FragColor=vec4(varyinTexCoordinate,0,1);}'
+    var vertexPosBuffer = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexPosBuffer)
+    var vertices = new Float32Array([-0.2, -0.9, 0, 0.4, -0.26, 0, 0, 0.732134444, 0])
+    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW)
+    vertexPosBuffer.itemSize = 3
+    vertexPosBuffer.numItems = 3
+    var program = gl.createProgram()
+    var vshader = gl.createShader(gl.VERTEX_SHADER)
+    gl.shaderSource(vshader, vShaderTemplate)
+    gl.compileShader(vshader)
+    var fshader = gl.createShader(gl.FRAGMENT_SHADER)
+    gl.shaderSource(fshader, fShaderTemplate)
+    gl.compileShader(fshader)
+    gl.attachShader(program, vshader)
+    gl.attachShader(program, fshader)
+    gl.linkProgram(program)
+    gl.useProgram(program)
+    program.vertexPosAttrib = gl.getAttribLocation(program, 'attrVertex')
+    program.offsetUniform = gl.getUniformLocation(program, 'uniformOffset')
+    gl.enableVertexAttribArray(program.vertexPosArray)
+    gl.vertexAttribPointer(program.vertexPosAttrib, vertexPosBuffer.itemSize, gl.FLOAT, !1, 0, 0)
+    gl.uniform2f(program.offsetUniform, 1, 1)
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, vertexPosBuffer.numItems)
+    try {
+      result.push(gl.canvas.toDataURL(...toDataUrlOptions))
+    } catch (e) {
+      /* .toDataURL may be absent or broken (blocked by extension) */
+    }
+    result.push('extensions:' + (gl.getSupportedExtensions() || []).join(';'))
+    result.push('webgl aliased line width range:' + fa2s(gl.getParameter(gl.ALIASED_LINE_WIDTH_RANGE)))
+    result.push('webgl aliased point size range:' + fa2s(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)))
+    result.push('webgl alpha bits:' + gl.getParameter(gl.ALPHA_BITS))
+    result.push('webgl antialiasing:' + (gl.getContextAttributes().antialias ? 'yes' : 'no'))
+    result.push('webgl blue bits:' + gl.getParameter(gl.BLUE_BITS))
+    result.push('webgl depth bits:' + gl.getParameter(gl.DEPTH_BITS))
+    result.push('webgl green bits:' + gl.getParameter(gl.GREEN_BITS))
+    result.push('webgl max anisotropy:' + maxAnisotropy(gl))
+    result.push('webgl max combined texture image units:' + gl.getParameter(gl.MAX_COMBINED_TEXTURE_IMAGE_UNITS))
+    result.push('webgl max cube map texture size:' + gl.getParameter(gl.MAX_CUBE_MAP_TEXTURE_SIZE))
+    result.push('webgl max fragment uniform vectors:' + gl.getParameter(gl.MAX_FRAGMENT_UNIFORM_VECTORS))
+    result.push('webgl max render buffer size:' + gl.getParameter(gl.MAX_RENDERBUFFER_SIZE))
+    result.push('webgl max texture image units:' + gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS))
+    result.push('webgl max texture size:' + gl.getParameter(gl.MAX_TEXTURE_SIZE))
+    result.push('webgl max varying vectors:' + gl.getParameter(gl.MAX_VARYING_VECTORS))
+    result.push('webgl max vertex attribs:' + gl.getParameter(gl.MAX_VERTEX_ATTRIBS))
+    result.push('webgl max vertex texture image units:' + gl.getParameter(gl.MAX_VERTEX_TEXTURE_IMAGE_UNITS))
+    result.push('webgl max vertex uniform vectors:' + gl.getParameter(gl.MAX_VERTEX_UNIFORM_VECTORS))
+    result.push('webgl max viewport dims:' + fa2s(gl.getParameter(gl.MAX_VIEWPORT_DIMS)))
+    result.push('webgl red bits:' + gl.getParameter(gl.RED_BITS))
+    result.push('webgl renderer:' + gl.getParameter(gl.RENDERER))
+    result.push('webgl shading language version:' + gl.getParameter(gl.SHADING_LANGUAGE_VERSION))
+    result.push('webgl stencil bits:' + gl.getParameter(gl.STENCIL_BITS))
+    result.push('webgl vendor:' + gl.getParameter(gl.VENDOR))
+    result.push('webgl version:' + gl.getParameter(gl.VERSION))
+
+    try {
+      // Add the unmasked vendor and unmasked renderer if the debug_renderer_info extension is available
+      var extensionDebugRendererInfo = gl.getExtension('WEBGL_debug_renderer_info')
+      if (extensionDebugRendererInfo) {
+        result.push('webgl unmasked vendor:' + gl.getParameter(extensionDebugRendererInfo.UNMASKED_VENDOR_WEBGL))
+        result.push('webgl unmasked renderer:' + gl.getParameter(extensionDebugRendererInfo.UNMASKED_RENDERER_WEBGL))
+      }
+    } catch (e) { /* squelch */ }
+
+    if (!gl.getShaderPrecisionFormat) {
+      loseWebglContext(gl)
+      return result
+    }
+
+    each(['FLOAT', 'INT'], function (numType) {
+      each(['VERTEX', 'FRAGMENT'], function (shader) {
+        each(['HIGH', 'MEDIUM', 'LOW'], function (numSize) {
+          each(['precision', 'rangeMin', 'rangeMax'], function (key) {
+            var format = gl.getShaderPrecisionFormat(gl[shader + '_SHADER'], gl[numSize + '_' + numType])[key]
+            if (key !== 'precision') {
+              key = 'precision ' + key
+            }
+            var line = ['webgl ', shader.toLowerCase(), ' shader ', numSize.toLowerCase(), ' ', numType.toLowerCase(), ' ', key, ':', format].join('')
+            result.push(line)
+          })
+        })
+      })
+    })
+    loseWebglContext(gl)
+    return result
   }
   var getWebglVendorAndRenderer = function () {
     /* This a subset of the WebGL fingerprint with a lot of entropy, while being reasonably browser-independent */
@@ -1240,10 +1283,19 @@
     return errFirefox && browser !== 'Firefox' && browser !== 'Other'
   }
   var isCanvasSupported = function () {
-    return true
+    var elem = document.createElement('canvas')
+    return !!(elem.getContext && elem.getContext('2d'))
   }
   var isWebGlSupported = function () {
-    return true
+    // code taken from Modernizr
+    if (!isCanvasSupported()) {
+      return false
+    }
+
+    var glContext = getWebglCanvas()
+    var isSupported = !!window.WebGLRenderingContext && !!glContext
+    loseWebglContext(glContext)
+    return isSupported
   }
   var isIE = function () {
     if (navigator.appName === 'Microsoft Internet Explorer') {
@@ -1276,7 +1328,7 @@
     window.swfobject.embedSWF(options.fonts.swfPath, id, '1', '1', '9.0.0', false, flashvars, flashparams, {})
   }
   var getWebglCanvas = function () {
-    var canvas = new OffscreenCanvas(300, 150)
+    var canvas = document.createElement('canvas')
     var gl = null
     try {
       gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
@@ -1333,7 +1385,7 @@
     throw new Error("'new Fingerprint()' is deprecated, see https://github.com/Valve/fingerprintjs2#upgrade-guide-from-182-to-200")
   }
 
-  let afterCanvas = function (options, callback) {
+  Fingerprint2.get = function (options, callback) {
     if (!callback) {
       callback = options
       options = {}
@@ -1388,13 +1440,6 @@
     }
 
     chainComponents(false)
-  }
-  Fingerprint2.get = function (options, callback) {
-    buildCanvasFp(function () {
-      buildWebglFp(function () {
-        afterCanvas(options, callback)
-      })
-    })
   }
 
   Fingerprint2.getPromise = function (options) {
@@ -1452,59 +1497,4 @@
   Fingerprint2.x64hash128 = x64hash128
   Fingerprint2.VERSION = '2.1.0'
   return Fingerprint2
-})
-
-const fp2Options = {
-  excludes: {
-    userAgent: false,
-    webdriver: true,
-    language: true,
-    colorDepth: true,
-    deviceMemory: false,
-    pixelRatio: true,
-    hardwareConcurrency: false,
-    screenResolution: true,
-    availableScreenResolution: true,
-    timezoneOffset: true,
-    timezone: true,
-    sessionStorage: true,
-    localStorage: true,
-    indexedDb: true,
-    addBehavior: true,
-    openDatabase: true,
-    cpuClass: true,
-    platform: true,
-    doNotTrack: true,
-    plugins: true,
-    canvas: false,
-    webgl: false,
-    webglVendorAndRenderer: false,
-    adBlock: true,
-    hasLiedLanguages: true,
-    hasLiedResolution: true,
-    hasLiedOs: true,
-    hasLiedBrowser: true,
-    touchSupport: true,
-    fonts: true,
-    fontsFlash: true,
-    audio: true,
-    enumerateDevices: true,
-    webglParams: false
-  }
-}
-
-const fpValues = Object.create(null)
-Fingerprint2.get(fp2Options, values => {
-  for (const aFPValue of values) {
-    const { key, value } = aFPValue
-    const hashInput = Array.isArray(value) ? value.join('-') : String(value)
-    const hashValue = Fingerprint2.x64hash128(hashInput, 0)
-    fpValues[key] = [hashInput, hashValue]
-  }
-
-  postMessage({
-    action: 'fp-complete',
-    context: 'worker',
-    fpValues,
-  })
 })

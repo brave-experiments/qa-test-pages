@@ -71,7 +71,7 @@
     switchOriginElm.href = otherOriginUrl(W.location.pathname)
   }
 
-  const simplePostMessage = async (windowElm, msg) => {
+  const sendPostMsg = async (windowElm, action, msg) => {
     return new Promise((resolve) => {
       const messageNonce = Math.random().toString()
       const onResponseCallback = response => {
@@ -91,16 +91,43 @@
       const outMsg = {
         nonce: messageNonce,
         payload: msg,
-        direction: 'sending'
+        direction: 'sending',
+        action
       }
       windowElm.postMessage(outMsg, '*')
     })
+  }
+
+  const receivePostMsg = async handler => {
+    const onMessage = async msg => {
+      const { action, payload, direction, nonce } = msg.data
+      if (direction !== 'sending') {
+        return
+      }
+
+      const receivedResult = await handler(action, payload)
+      if (receivedResult === undefined) {
+        logger(`No result for action: ${action}`)
+        return
+      }
+
+      const response = {
+        direction: 'response',
+        payload: receivedResult,
+        nonce
+      }
+
+      msg.source.postMessage(response, '*')
+    }
+
+    W.addEventListener('message', onMessage, false)
   }
 
   W.BRAVE = {
     logger,
     thisOriginUrl,
     otherOriginUrl,
-    simplePostMessage
+    sendPostMsg,
+    receivePostMsg
   }
 })()

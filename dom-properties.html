@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | DOM Properties</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <section>
+      <div class="row">
+        <div class="col">
+
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">DOM Properties</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+
+          <h1>DOM Property Tests</h1>
+          <p>
+            <strong>Test instructions:</strong>
+            Confirm that each of the DOM properties are present and return
+            their expected values with shields up and down:
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <button id="button-start-test" type="button" class="btn btn-primary btn-lg btn-block">Run test</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th class="text-center" colspan="2">Expected Values</th>
+                <th class="text-center" colspan="3">Received Values</th>
+              </tr>
+              <tr>
+                <th></th>
+                <th>Shields Up</th>
+                <th>Shields Down</th>
+                <th>Current Frame</th>
+                <th>Local Frame</th>
+                <th>Remote Frame</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr id="row-isbrave">
+                <th scope="row">
+                  <code>isBrave</code>
+                </th>
+                <td><code>true</code></td>
+                <td><code>true</code></td>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+              </tr>
+              <tr id="row-gpc">
+                <th scope="row">
+                  <a href="https://globalprivacycontrol.github.io/gpc-spec/">GPC</a>
+                </th>
+                <td><code>true</code></td>
+                <td><code>true</code></td>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+  <iframe data-src="/frames/dom-properties.html" class="this-origin d-none"></iframe>
+  <iframe data-src="/frames/dom-properties.html" class="other-origin d-none"></iframe>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/frames/dom-properties.js"></script>
+  <script src="/static/js/dom-properties.js"></script>
+</body>
+
+</html>

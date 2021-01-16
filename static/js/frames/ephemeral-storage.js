@@ -123,48 +123,26 @@
     nestedFrame.src = BU.otherOriginUrl(W.location.pathname)
   }
 
-  const onMessage = async msg => {
-    const payload = msg.data.payload
-    if (msg.data.direction !== 'sending') {
-      return
-    }
-
-    const response = {
-      nonce: msg.data.nonce,
-      direction: 'response'
-    }
-
-    switch (payload.action) {
+  const onMessage = async (action, msg) => {
+    switch (action) {
       case 'storage::clear':
-        response.payload = clearStorage(payload.key)
-        break
+        return clearStorage(msg.key)
 
       case 'storage::read':
-        response.payload = readStorageAction(payload.key)
-        break
+        return readStorageAction(msg.key)
 
       case 'storage::write':
-        response.payload = writeStorageAction(payload.key, payload.value)
-        break
+        return writeStorageAction(msg.key, msg.value)
 
       case 'storage::nested-frame':
         if (nestedFrame === undefined) {
           BU.logger(`unexpected storage::nested-frame: ${W.location.toString()}`)
           return
         }
-        response.payload = await BU.simplePostMessage(nestedFrame.contentWindow, {
-          action: 'storage::read',
-          key: payload.key
+        return await BU.sendPostMsg(nestedFrame.contentWindow, 'storage::read', {
+          key: msg.key
         })
-        break
-
-      default:
-        BU.logger(`unexpected action ${payload.action}`)
-        return
     }
-
-    msg.source.postMessage(response, '*')
   }
-
-  W.addEventListener('message', onMessage, false)
+  BU.receivePostMsg(onMessage)
 })()

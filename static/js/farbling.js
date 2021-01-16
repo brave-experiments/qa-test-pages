@@ -128,7 +128,7 @@
   const iframeElms = document.getElementsByTagName('iframe')
 
   startButton.addEventListener('click', _ => {
-    const worker = new W.Worker('./static/js/farbling-worker.js')
+    const worker = new W.Worker('./static/js/workers/farbling.js')
     worker.onmessage = onMessage
 
     for (const aFrame of iframeElms) {
