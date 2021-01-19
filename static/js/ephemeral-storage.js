@@ -127,7 +127,7 @@
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       },
       [ephemeralStorageEnum.ON]: {
-        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
+        [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
