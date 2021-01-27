@@ -3,6 +3,7 @@
   const C = W.Cookies
   const D = W.document
   const BU = W.BRAVE
+  const IDB = W.idbKeyval
   const exceptionEncoding = '*exception*'
 
   const isImmediateRemoteChildFrame = _ => {
@@ -25,7 +26,7 @@
     }
   }
 
-  const clearStorage = key => {
+  const clearStorage = async key => {
     const result = Object.create(null)
     try {
       if (W.navigator.cookieEnabled === false) {
@@ -52,10 +53,17 @@
       result['session-storage'] = exceptionEncoding
     }
 
+    try {
+      await IDB.del(key)
+      result['index-db'] = true
+    } catch (_) {
+      result['index-db'] = exceptionEncoding
+    }
+
     return result
   }
 
-  const readStorageAction = key => {
+  const readStorageAction = async key => {
     const result = Object.create(null)
     try {
       if (W.navigator.cookieEnabled === false) {
@@ -80,10 +88,16 @@
       result['session-storage'] = exceptionEncoding
     }
 
+    try {
+      result['index-db'] = await IDB.get(key)
+    } catch (_) {
+      result['index-db'] = exceptionEncoding
+    }
+
     return result
   }
 
-  const writeStorageAction = (key, value) => {
+  const writeStorageAction = async (key, value) => {
     const result = Object.create(null)
     try {
       if (W.navigator.cookieEnabled === false) {
@@ -113,6 +127,13 @@
       result['session-storage'] = exceptionEncoding
     }
 
+    try {
+      await IDB.set(key, value)
+      result['index-db'] = true
+    } catch (_) {
+      result['index-db'] = exceptionEncoding
+    }
+
     return result
   }
 
@@ -126,13 +147,13 @@
   const onMessage = async (action, msg) => {
     switch (action) {
       case 'storage::clear':
-        return clearStorage(msg.key)
+        return await clearStorage(msg.key)
 
       case 'storage::read':
-        return readStorageAction(msg.key)
+        return await readStorageAction(msg.key)
 
       case 'storage::write':
-        return writeStorageAction(msg.key, msg.value)
+        return await writeStorageAction(msg.key, msg.value)
 
       case 'storage::nested-frame':
         if (nestedFrame === undefined) {

@@ -42,23 +42,48 @@
   const apiCaseEnum = {
     COOKIE: 0,
     LOCAL_STORAGE: 1,
-    SESSION_STORAGE: 2
+    SESSION_STORAGE: 2,
+    INDEX_DB: 3
   }
 
-  const allButSessionCol = {
+  const allSetButSessionCol = {
     [apiCaseEnum.COOKIE]: testOutcomeEnum.SET,
     [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.SET,
-    [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY
+    [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY,
+    [apiCaseEnum.INDEX_DB]: testOutcomeEnum.SET
   }
-  const allCorrectTable = {
+  const allSetButSessionOrIDBCol = {
+    [apiCaseEnum.COOKIE]: testOutcomeEnum.SET,
+    [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.SET,
+    [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY,
+    [apiCaseEnum.INDEX_DB]: testOutcomeEnum.EXCEPTION
+  }
+  const allSetButIDBCol = {
+    [apiCaseEnum.COOKIE]: testOutcomeEnum.SET,
+    [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.SET,
+    [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.SET,
+    [apiCaseEnum.INDEX_DB]: testOutcomeEnum.EXCEPTION
+  }
+  const allEmptyButIDBCol = {
+    [apiCaseEnum.COOKIE]: testOutcomeEnum.EMPTY,
+    [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.EMPTY,
+    [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY,
+    [apiCaseEnum.INDEX_DB]: testOutcomeEnum.EXCEPTION
+  }
+  const allSetTable = {
     [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
     [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
     [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.SET
   }
-  const allEmptyTable = {
+  const allEmptyButRemoteIdbTable = {
     [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.EMPTY,
     [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.EMPTY,
-    [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EMPTY
+    [frameCaseEnum.REMOTE_FRAME]: allEmptyButIDBCol
+  }
+  const allSetButRemoteIdbTable = {
+    [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
+    [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
+    [frameCaseEnum.REMOTE_FRAME]: allSetButIDBCol
   }
   const allEmpty3pBlockTable = {
     [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.EMPTY,
@@ -66,13 +91,13 @@
     [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
   }
   const allButSessionTable = {
-    [frameCaseEnum.CURRENT_FRAME]: allButSessionCol,
-    [frameCaseEnum.LOCAL_FRAME]: allButSessionCol,
-    [frameCaseEnum.REMOTE_FRAME]: allButSessionCol
+    [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
+    [frameCaseEnum.LOCAL_FRAME]: allSetButSessionCol,
+    [frameCaseEnum.REMOTE_FRAME]: allSetButSessionCol
   }
   const allButSession3pBlockingTable = {
-    [frameCaseEnum.CURRENT_FRAME]: allButSessionCol,
-    [frameCaseEnum.LOCAL_FRAME]: allButSessionCol,
+    [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
+    [frameCaseEnum.LOCAL_FRAME]: allSetButSessionCol,
     [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION
   }
 
@@ -88,7 +113,7 @@
   const expectedOutcomes = {
     [testCasesEnum.INITIAL]: {
       [ephemeralStorageEnum.OFF]: {
-        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
+        [cookieSettingEnum.ALLOW_ALL]: allSetTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
           [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
           [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
@@ -97,15 +122,15 @@
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       },
       [ephemeralStorageEnum.ON]: {
-        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allCorrectTable,
+        [cookieSettingEnum.ALLOW_ALL]: allSetTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allSetButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
 
     [testCasesEnum.REMOTE_PAGE_SAME_SESSION]: {
       [ephemeralStorageEnum.OFF]: {
-        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
+        [cookieSettingEnum.ALLOW_ALL]: allSetTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
           [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.EMPTY,
           [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.EMPTY,
@@ -114,8 +139,8 @@
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       },
       [ephemeralStorageEnum.ON]: {
-        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyTable,
+        [cookieSettingEnum.ALLOW_ALL]: allSetTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
@@ -128,14 +153,14 @@
       },
       [ephemeralStorageEnum.ON]: {
         [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
 
     [testCasesEnum.SAME_PAGE_SAME_SESSION]: {
       [ephemeralStorageEnum.OFF]: {
-        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
+        [cookieSettingEnum.ALLOW_ALL]: allSetTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
           [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
           [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
@@ -144,8 +169,8 @@
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       },
       [ephemeralStorageEnum.ON]: {
-        [cookieSettingEnum.ALLOW_ALL]: allCorrectTable,
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allCorrectTable,
+        [cookieSettingEnum.ALLOW_ALL]: allSetTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allSetButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
@@ -158,7 +183,11 @@
       },
       [ephemeralStorageEnum.ON]: {
         [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allButSessionTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
+          [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
+          [frameCaseEnum.LOCAL_FRAME]: allSetButSessionCol,
+          [frameCaseEnum.REMOTE_FRAME]: allSetButSessionOrIDBCol
+        },
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
@@ -172,9 +201,9 @@
       [ephemeralStorageEnum.ON]: {
         [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
-          [frameCaseEnum.CURRENT_FRAME]: allButSessionCol,
-          [frameCaseEnum.LOCAL_FRAME]: allButSessionCol,
-          [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EMPTY
+          [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
+          [frameCaseEnum.LOCAL_FRAME]: allSetButSessionCol,
+          [frameCaseEnum.REMOTE_FRAME]: allEmptyButIDBCol
         },
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
@@ -329,7 +358,8 @@
     const classNamesForAPICases = {
       [apiCaseEnum.COOKIE]: 'row-cookies',
       [apiCaseEnum.LOCAL_STORAGE]: 'row-local-storage',
-      [apiCaseEnum.SESSION_STORAGE]: 'row-session-storage'
+      [apiCaseEnum.SESSION_STORAGE]: 'row-session-storage',
+      [apiCaseEnum.INDEX_DB]: 'row-index-db'
     }
     const classNamesForFrameCases = {
       [frameCaseEnum.CURRENT_FRAME]: 'cell-this-frame',
@@ -510,9 +540,7 @@
     for (const aFrameWin of O.values(testFrameWindows)) {
       await clearStorageInFrame(aFrameWin, storageTestKey)
     }
-    try {
-      W.localStorage.removeItem(nestedFrameTestKey)
-    } catch (_) {}
+    await clearStorageInFrame(W, nestedFrameTestKey)
   }
 
   clearStorageButton.addEventListener('click', async _ => {
