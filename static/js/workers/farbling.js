@@ -153,7 +153,8 @@
   }
 
   let _canvasFP
-  const buildCanvasFp = function (callback) {
+  let _canvasFPByChannel = {}
+  const buildCanvasFp = function (callback, channelIndex) {
     var result = []
     // Very simple now, need to make it more complex (geo shapes etc)
     var canvas = new OffscreenCanvas(2000, 200)
@@ -203,11 +204,30 @@
     ctx.arc(75, 75, 25, 0, Math.PI * 2, true)
     ctx.fill('evenodd')
 
+    if (channelIndex !== undefined) {
+      let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      const pixels = imageData.data
+      const numPixels = pixels.length
+      for (let i = 0; i < numPixels; i += 4) {
+        for (let j = 0; j < 4; j += 1) {
+          if (j === channelIndex) {
+            continue
+          }
+          pixels[i + j] = 255
+        }
+      }
+      ctx.putImageData(imageData, 0, 0)
+    }
+
     canvas.convertToBlob(convertToBlobOptions).then(function (blob) {
       const fileReader = new FileReader()
       fileReader.onload = (evt) => {
         result.push('canvas fp:' + evt.target.result)
-        _canvasFP = result
+        if (channelIndex !== undefined) {
+          _canvasFPByChannel[channelIndex] = result
+        } else {
+          _canvasFP = result
+        }
         callback()
       }
       fileReader.readAsDataURL(blob)
@@ -639,9 +659,12 @@
   var doNotTrackKey = function (done, options) {
     done(getDoNotTrack(options))
   }
-  var canvasKey = function (done, options) {
+  var canvasKeyChannel = function (channelIndex, done, options) {
+    return canvasKey(done, options, channelIndex)
+  }
+  var canvasKey = function (done, options, channelIndex) {
     if (isCanvasSupported()) {
-      done(getCanvasFp(options))
+      done(getCanvasFp(options, channelIndex))
       return
     }
     done(options.NOT_AVAILABLE)
@@ -1058,8 +1081,11 @@
   }
   // https://www.browserleaks.com/canvas#how-does-it-work
 
-  var getCanvasFp = function (options) {
-    return _canvasFP
+  var getCanvasFp = function (options, channelIndex) {
+    if (channelIndex === undefined) {
+      return _canvasFP
+    }
+    return _canvasFPByChannel[channelIndex]
   }
   var getWebglFp = function () {
     return _webGlFP
@@ -1311,6 +1337,9 @@
     { key: 'doNotTrack', getData: doNotTrackKey },
     { key: 'plugins', getData: pluginsComponent },
     { key: 'canvas', getData: canvasKey },
+    { key: 'canvas-red', getData: canvasKeyChannel.bind(undefined, 0) },
+    { key: 'canvas-green', getData: canvasKeyChannel.bind(undefined, 1) },
+    { key: 'canvas-blue', getData: canvasKeyChannel.bind(undefined, 2) },
     { key: 'webgl', getData: webglKey },
     { key: 'webglVendorAndRenderer', getData: webglVendorAndRendererKey },
     { key: 'adBlock', getData: adBlockKey },
@@ -1389,9 +1418,15 @@
   }
   Fingerprint2.get = function (options, callback) {
     buildCanvasFp(function () {
-      buildWebglFp(function () {
-        afterCanvas(options, callback)
-      })
+      buildCanvasFp(function() {
+        buildCanvasFp(function() {
+          buildCanvasFp(function() {
+            buildWebglFp(function () {
+              afterCanvas(options, callback)
+            })
+          }, 2)
+        }, 1)
+      }, 0)
     })
   }
 
@@ -1423,7 +1458,7 @@
               return [p[0], p[1], mimeTypes].join('::')
             })
           })
-        } else if (['canvas', 'webgl'].indexOf(component.key) !== -1 && Array.isArray(component.value)) {
+        } else if (['canvas', 'webgl', 'canvas-red', 'canvas-green', 'canvas-blue'].indexOf(component.key) !== -1 && Array.isArray(component.value)) {
           // sometimes WebGL returns error in headless browsers (during CI testing for example)
           // so we need to join only if the values are array
           newComponents.push({ key: component.key, value: component.value.join('~') })
@@ -1487,7 +1522,10 @@ const fp2Options = {
     fontsFlash: true,
     audio: true,
     enumerateDevices: true,
-    webglParams: false
+    webglParams: false,
+    'canvas-red': false,
+    'canvas-green': false,
+    'canvas-blue': false
   }
 }
 

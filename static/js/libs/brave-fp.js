@@ -513,9 +513,12 @@
   var doNotTrackKey = function (done, options) {
     done(getDoNotTrack(options))
   }
-  var canvasKey = function (done, options) {
+  var canvasKeyChannel = function (channelIndex, done, options) {
+    return canvasKey(done, options, channelIndex)
+  }
+  var canvasKey = function (done, options, channelIndex) {
     if (isCanvasSupported()) {
-      done(getCanvasFp(options))
+      done(getCanvasFp(options, channelIndex))
       return
     }
     done(options.NOT_AVAILABLE)
@@ -932,7 +935,7 @@
   }
   // https://www.browserleaks.com/canvas#how-does-it-work
 
-  var getCanvasFp = function (options) {
+  var getCanvasFp = function (options, channelIndex) {
     var result = []
     // Very simple now, need to make it more complex (geo shapes etc)
     var canvas = document.createElement('canvas')
@@ -989,7 +992,24 @@
     ctx.arc(75, 75, 25, 0, Math.PI * 2, true)
     ctx.fill('evenodd')
 
-    if (canvas.toDataURL) { result.push('canvas fp:' + canvas.toDataURL(...toDataUrlOptions)) }
+    if (canvas.toDataURL) {
+      if (channelIndex !== undefined) {
+        let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        const pixels = imageData.data
+        const numPixels = pixels.length
+        for (let i = 0; i < numPixels; i += 4) {
+          for (let j = 0; j < 4; j += 1) {
+            if (j === channelIndex) {
+              continue
+            }
+            pixels[i + j] = 255
+          }
+        }
+        ctx.putImageData(imageData, 0, 0)
+      }
+      result.push('canvas fp:' + canvas.toDataURL(...toDataUrlOptions))
+    }
+
     return result
   }
   var getWebglFp = function () {
@@ -1365,6 +1385,9 @@
     { key: 'doNotTrack', getData: doNotTrackKey },
     { key: 'plugins', getData: pluginsComponent },
     { key: 'canvas', getData: canvasKey },
+    { key: 'canvas-red', getData: canvasKeyChannel.bind(undefined, 0) },
+    { key: 'canvas-green', getData: canvasKeyChannel.bind(undefined, 1) },
+    { key: 'canvas-blue', getData: canvasKeyChannel.bind(undefined, 2) },
     { key: 'webgl', getData: webglKey },
     { key: 'webglVendorAndRenderer', getData: webglVendorAndRendererKey },
     { key: 'adBlock', getData: adBlockKey },
@@ -1470,7 +1493,7 @@
               return [p[0], p[1], mimeTypes].join('::')
             })
           })
-        } else if (['canvas', 'webgl'].indexOf(component.key) !== -1 && Array.isArray(component.value)) {
+        } else if (['canvas', 'webgl', 'canvas-red', 'canvas-green', 'canvas-blue'].indexOf(component.key) !== -1 && Array.isArray(component.value)) {
           // sometimes WebGL returns error in headless browsers (during CI testing for example)
           // so we need to join only if the values are array
           newComponents.push({ key: component.key, value: component.value.join('~') })

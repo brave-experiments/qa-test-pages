@@ -38,7 +38,10 @@
       fonts: true,
       fontsFlash: true,
       audio: false,
-      enumerateDevices: false
+      enumerateDevices: false,
+      'canvas-red': false,
+      'canvas-green': false,
+      'canvas-blue': false
     }
   }
 
