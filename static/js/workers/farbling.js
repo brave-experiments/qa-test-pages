@@ -205,16 +205,17 @@
     ctx.fill('evenodd')
 
     if (channelIndex !== undefined) {
-      let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
       const pixels = imageData.data
       const numPixels = pixels.length
       for (let i = 0; i < numPixels; i += 4) {
-        for (let j = 0; j < 4; j += 1) {
+        for (let j = 0; j < 3; j += 1) {
           if (j === channelIndex) {
             continue
           }
-          pixels[i + j] = 255
+          pixels[i + j] = 0
         }
+        data[i + 3] = 255
       }
       ctx.putImageData(imageData, 0, 0)
     }
