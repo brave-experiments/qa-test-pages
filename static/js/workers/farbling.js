@@ -215,7 +215,7 @@
           }
           pixels[i + j] = 0
         }
-        data[i + 3] = 255
+        pixels[i + 3] = 255
       }
       ctx.putImageData(imageData, 0, 0)
     }
