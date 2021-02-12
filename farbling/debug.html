@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Farbling | Debug</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/farbling/index.html">Farbling</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Debug</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Farbling Debugging</h1>
+
+          <form>
+            <div class="form-group">
+              <label for="test-select">Web API</label>
+              <select class="form-control" id="test-select">
+                <option value="local:toDataURL">Local Frame - toDataURL</option>
+                <option value="local:toBlob">Local Frame - toBlob</option>
+                <option value="local:getImageData">Local Frame - getImageData</option>
+                <option value="worker:convertToBlob">Worker - convertToBlob</option>
+                <option value="worker:getImageData">Worker - getImageData</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <button id="run-test-button" class="btn btn-info btn-block btn-large" disabled>Run test</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <img id="pre-image" src="/static/images/brave-image.png" alt="Brave logo" class="img-thumbnail">
+        </div>
+        <div class="col">
+          <canvas id="post-canvas" class="img-thumbnail"></canvas>
+          <img id="post-image" src="#" alt="Post test logo" class="img-thumbnail">
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/farbling-debug.js"></script>
+</body>
+
+</html>

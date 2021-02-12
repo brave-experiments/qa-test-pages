@@ -131,7 +131,7 @@
   const iframeElms = document.getElementsByTagName('iframe')
 
   startButton.addEventListener('click', _ => {
-    const worker = new W.Worker('./static/js/workers/farbling.js')
+    const worker = new W.Worker('./static/js/workers/farbling-fingerprinting.js')
     worker.onmessage = onMessage
 
     for (const aFrame of iframeElms) {
@@ -162,6 +162,16 @@
     })
   })
   startButton.removeAttribute('disabled')
+
+  /**
+    const singleTestButton = document.getElementById('individual-fp-test-btn')
+    const singleTestSel = document.getElementById('individual-fp-test-select')
+    const onSingleTestClick = async _ => {
+      singleTestButton.setAttribute('disabled', true)
+      singleTestButton.removeAttribute('disabled')
+    }
+    singleTestButton.removeAttribute('disabled')
+  */
 
   let frameCounter = 1
   const iframeFingerprintValues = url => {

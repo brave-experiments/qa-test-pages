@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Brave QA Tests | Farbling</title>
+  <title>Brave QA Tests | Farbling | Fingerprinting</title>
   <link rel="icon" href="/static/images/brave-favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/static/css/bootstrap.min.css">
@@ -12,19 +12,25 @@
 
 <body>
   <div class="container">
-    <section>
+    <header>
       <div class="row">
         <div class="col">
-
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Farbling</li>
+              <li class="breadcrumb-item"><a href="/farbling/index.html">Farbling</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Fingerprinting</li>
               <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
             </ol>
           </nav>
+        </div>
+      </div>
+    </header>
 
-          <h1>Farbling Tests</h1>
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Farbling Fingerprinting Tests</h1>
           <p>
             Crossed out items are planned, but are not currently implemented.
           </p>
@@ -224,6 +230,59 @@
       </div>
     </section>
 
+    <section id="individual-fp-test-section">
+      <div class="row">
+        <div class="col">
+          <h2>Individual Fingerprint Test</h2>
+          <form>
+            <div class="form-group">
+              <label for="individual-fp-test-select">Fingerprint Test</label>
+              <select class="form-control" id="individual-fp-test-select">
+                <option value="webgl">WebGL Drawing</option>
+                <option value="webglVendorAndRenderer">WebGL Vendor and Render</option>
+                <option value="webglParams">WebGL2 Params</option>
+                <option value="userAgent">User Agent</option>
+                <option value="canvas">Canvas</option>
+                <option value="canvas-red"> ∟ red channel</option>
+                <option value="canvas-green"> ∟ green channel</option>
+                <option value="canvas-blue"> ∟ blue channel</option>
+                <option value="audio">Web Audio</option>
+                <option value="plugins">Plugins</option>
+                <option value="hardwareConcurrency">Hardware Concurrency</option>
+                <option value="enumerateDevices">Enumerate Devices</option>
+                <option value="deviceMemory">Device Memory</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <button id="individual-fp-test-btn" class="btn btn-info btn-block btn-large" disabled>Run individual test</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <table class="table table-sm">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">This Page</th>
+                <th scope="col">Local Frame</th>
+                <th scope="col">Remote Frame</th>
+                <th scope="col">Worker</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="local-value">-</td>
+                <td class="local-frame-value">-</td>
+                <td class="remote-frame-value">-</td>
+                <td class="worker-value">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <section>
       <div class="row">
         <div class="col">
@@ -285,7 +344,7 @@
   <script src="/static/js/libs/bootstrap.min.js"></script>
   <script src="/static/js/libs/brave-fp.js"></script>
   <script src="/static/js/site.js"></script>
-  <script src="/static/js/farbling.js"></script>
+  <script src="/static/js/farbling-fingerprinting.js"></script>
 </body>
 
 </html>

@@ -13,70 +13,80 @@
 
 <body>
   <div class="container">
-    <div class="row">
-      <div class="col">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
-            <li class="breadcrumb-item"><a href="/referrer/index.html">Referrer</a></li>
-            <li class="breadcrumb-item active" aria-current="page">No-Referrer</li>
-            <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
-          </ol>
-        </nav>
-
-        <h1>Referrer policy tests: <code>no-referrer</code></h1>
-        <p>
-          This page tests how Brave performs when the site specifies a very
-          restrictive option (i.e., <code>no-referrer</code>). Brave should
-          treat respect the <code>no-referrer</code> setting when` Shields
-          are up,
-        </p>
-
-        <h2>Expected Behavior</h2>
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Shields Setting</th>
-              <th>Cross-Origin?</th>
-              <th>Expected Value</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Up</td>
-              <td>No</td>
-              <td>No value</td>
-            </tr>
-            <tr>
-              <td>Up</td>
-              <td>Yes</td>
-              <td>No value</td>
-            </tr>
-            <tr>
-              <td>Down</td>
-              <td>No</td>
-              <td>No value</td>
-            </tr>
-            <tr>
-              <td>Down</td>
-              <td>Yes</td>
-              <td>No value</td>
-            </tr>
-          </tbody>
-        </table>
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/referrer/index.html">Referrer</a></li>
+              <li class="breadcrumb-item active" aria-current="page">No-Referrer</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
       </div>
-    </div>
+    </header>
 
-    <div class="row">
-      <div class="col">
-        <h2>Same Origin Request</h2>
-        <iframe data-src="/frames/referrer.html" class="embed-responsive this-origin"></iframe>
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Referrer policy tests: <code>no-referrer</code></h1>
+          <p>
+            This page tests how Brave performs when the site specifies a very
+            restrictive option (i.e., <code>no-referrer</code>). Brave should
+            treat respect the <code>no-referrer</code> setting when` Shields
+            are up,
+          </p>
+
+          <h2>Expected Behavior</h2>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Shields Setting</th>
+                <th>Cross-Origin?</th>
+                <th>Expected Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Up</td>
+                <td>No</td>
+                <td>No value</td>
+              </tr>
+              <tr>
+                <td>Up</td>
+                <td>Yes</td>
+                <td>No value</td>
+              </tr>
+              <tr>
+                <td>Down</td>
+                <td>No</td>
+                <td>No value</td>
+              </tr>
+              <tr>
+                <td>Down</td>
+                <td>Yes</td>
+                <td>No value</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="col">
-        <h2>Cross Origin Request</h2>
-        <iframe data-src="/frames/referrer.html" class="embed-responsive other-origin"></iframe>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Same Origin Request</h2>
+          <iframe data-src="/frames/referrer.html" class="embed-responsive this-origin"></iframe>
+        </div>
+        <div class="col">
+          <h2>Cross Origin Request</h2>
+          <iframe data-src="/frames/referrer.html" class="embed-responsive other-origin"></iframe>
+        </div>
       </div>
-    </div>
+    </section>
   </div>
   <script src="/static/js/site.js"></script>
 </body>

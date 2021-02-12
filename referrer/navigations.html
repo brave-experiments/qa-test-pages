@@ -12,81 +12,89 @@
 
 <body>
   <div class="container">
-    <div class="row">
-      <div class="col">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
-            <li class="breadcrumb-item"><a href="/referrer/index.html">Referrer</a></li>
-            <li class="breadcrumb-item active" aria-current="page">No-Referrer</li>
-            <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
-          </ol>
-        </nav>
-
-        <h1>Referrer policy tests: Navigations</h1>
-        <p>
-          This page tests how Brave applies referrer policy to navigations.
-          For each of these tests, make sure you follow each link in the same
-          tab; please do no open in new tabs or anything like that.
-        </p>
-
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Link</th>
-              <th>Policy</th>
-              <th>Cross-Site?</th>
-              <th>Expected Shields Up Behavior</th>
-              <th>Expected Shields Down Behavior</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><a href="" data-href="/referrer/receiver.html" class="this-origin">Link</a></td>
-              <td>none</td>
-              <td>no</td>
-              <td>this page's URL</td>
-              <td>this page's URL</td>
-            </tr>
-            <tr>
-              <td><a href="" data-href="/referrer/receiver.html" class="other-origin">Link</a></td>
-              <td>none</td>
-              <td>yes</td>
-              <td>this page's domain</td>
-              <td>this page's domain</td>
-            </tr>
-            <tr>
-              <td><a href="" data-href="/referrer/receiver.html" class="this-origin" referrerpolicy="unsafe-url">Link</a></td>
-              <td>unsafe-url</td>
-              <td>no</td>
-              <td>this page's URL</td>
-              <td>this page's URL</td>
-            </tr>
-            <tr>
-              <td><a href="" data-href="/referrer/receiver.html" class="other-origin" referrerpolicy="unsafe-url">Link</a></td>
-              <td>unsafe-url</td>
-              <td>yes</td>
-              <td>this page's domain</td>
-              <td>this page's URL</td>
-            </tr>
-            <tr>
-              <td><a href="" data-href="/referrer/receiver.html" class="this-origin" referrerpolicy="strict-origin">Link</a></td>
-              <td>strict-origin</td>
-              <td>no</td>
-              <td>this page's domain</td>
-              <td>this page's domain</td>
-            </tr>
-            <tr>
-              <td><a href="" data-href="/referrer/receiver.html" class="other-origin" referrerpolicy="strict-origin">Link</a></td>
-              <td>strict-origin</td>
-              <td>yes</td>
-              <td>this page's domain</td>
-              <td>this page's domain</td>
-            </tr>
-          </tbody>
-        </table>
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/referrer/index.html">Referrer</a></li>
+              <li class="breadcrumb-item active" aria-current="page">No-Referrer</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
       </div>
-    </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Referrer policy tests: Navigations</h1>
+          <p>
+            This page tests how Brave applies referrer policy to navigations.
+            For each of these tests, make sure you follow each link in the same
+            tab; please do no open in new tabs or anything like that.
+          </p>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Link</th>
+                <th>Policy</th>
+                <th>Cross-Site?</th>
+                <th>Expected Shields Up Behavior</th>
+                <th>Expected Shields Down Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><a href="" data-href="/frames/referrer-receiver.html" class="this-origin">Link</a></td>
+                <td>none</td>
+                <td>no</td>
+                <td>this page's URL</td>
+                <td>this page's URL</td>
+              </tr>
+              <tr>
+                <td><a href="" data-href="/frames/referrer-receiver.html" class="other-origin">Link</a></td>
+                <td>none</td>
+                <td>yes</td>
+                <td>this page's domain</td>
+                <td>this page's domain</td>
+              </tr>
+              <tr>
+                <td><a href="" data-href="/frames/referrer-receiver.html" class="this-origin" referrerpolicy="unsafe-url">Link</a></td>
+                <td>unsafe-url</td>
+                <td>no</td>
+                <td>this page's URL</td>
+                <td>this page's URL</td>
+              </tr>
+              <tr>
+                <td><a href="" data-href="/frames/referrer-receiver.html" class="other-origin" referrerpolicy="unsafe-url">Link</a></td>
+                <td>unsafe-url</td>
+                <td>yes</td>
+                <td>this page's domain</td>
+                <td>this page's URL</td>
+              </tr>
+              <tr>
+                <td><a href="" data-href="/frames/referrer-receiver.html" class="this-origin" referrerpolicy="strict-origin">Link</a></td>
+                <td>strict-origin</td>
+                <td>no</td>
+                <td>this page's domain</td>
+                <td>this page's domain</td>
+              </tr>
+              <tr>
+                <td><a href="" data-href="/frames/referrer-receiver.html" class="other-origin" referrerpolicy="strict-origin">Link</a></td>
+                <td>strict-origin</td>
+                <td>yes</td>
+                <td>this page's domain</td>
+                <td>this page's domain</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </div>
   <script src="/static/js/site.js"></script>
 </body>

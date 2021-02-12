@@ -153,7 +153,7 @@
   }
 
   let _canvasFP
-  let _canvasFPByChannel = {}
+  const _canvasFPByChannel = {}
   const buildCanvasFp = function (callback, channelIndex) {
     var result = []
     // Very simple now, need to make it more complex (geo shapes etc)
@@ -1419,9 +1419,9 @@
   }
   Fingerprint2.get = function (options, callback) {
     buildCanvasFp(function () {
-      buildCanvasFp(function() {
-        buildCanvasFp(function() {
-          buildCanvasFp(function() {
+      buildCanvasFp(function () {
+        buildCanvasFp(function () {
+          buildCanvasFp(function () {
             buildWebglFp(function () {
               afterCanvas(options, callback)
             })
