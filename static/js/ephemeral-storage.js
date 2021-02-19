@@ -14,7 +14,6 @@
     EMPTY: 1,
     EXCEPTION: 2,
     WRONG: 4,
-    CORRECT: 5,
     NA: 6
   }
   const testCasesEnum = {
@@ -257,10 +256,6 @@
       class: 'bg-danger',
       text: 'wrong'
     },
-    [testOutcomeEnum.CORRECT]: {
-      class: 'bg-success',
-      text: '✔️'
-    },
     [testOutcomeEnum.NA]: {
       class: 'bg-info',
       text: 'N/A'
@@ -410,7 +405,7 @@
     const initialCellElms = D.querySelectorAll('#initial .cell-nested-frame')
     const cellStyle = cookieSettingOpt === cookieSettingEnum.BLOCK_ALL
       ? testOutcomeEnum.EXCEPTION
-      : testOutcomeEnum.CORRECT
+      : testOutcomeEnum.SET
     for (const aCell of Array.from(initialCellElms)) {
       styleCellForExpectedValue(aCell, cellStyle)
     }
@@ -444,18 +439,20 @@
     'remote-frame': remoteFrameWin
   }
 
-  const updateResultCell = (cellElm, val) => {
-    let cellComparison
+  const resultToOutcome = (val) => {
     if (val === exceptionEncoding) {
-      cellComparison = testOutcomeEnum.EXCEPTION
+      return testOutcomeEnum.EXCEPTION
     } else if (val === storageTestValue) {
-      cellComparison = testOutcomeEnum.SET
+      return testOutcomeEnum.SET
     } else if (!val) {
-      cellComparison = testOutcomeEnum.EMPTY
+      return testOutcomeEnum.EMPTY
     } else {
-      cellComparison = testOutcomeEnum.WRONG
+      return testOutcomeEnum.WRONG
     }
-    const cellStyle = resultCellStyles[cellComparison]
+  }
+
+  const updateResultCell = (cellElm, outcome) => {
+    const cellStyle = resultCellStyles[outcome]
     cellElm.classList.remove('bg-success', 'bg-light', 'bg-warning',
       'bg-danger', 'bg-info')
 
@@ -485,37 +482,70 @@
         testResults[nestedStorageKey] = testOutcomeEnum.EXCEPTION
       } else {
         testResults[nestedStorageKey] = nestedStorageVal === nestedFrameTestValue
-          ? testOutcomeEnum.CORRECT
+          ? testOutcomeEnum.SET
           : testOutcomeEnum.WRONG
       }
     }
     return testResults
   }
 
-  const updateStorageTable = async _ => {
+  /* Returns data of the form:
+     {
+       'cookies': {
+         'this-frame': testOutcomeEnum.SET,
+         'local-frame': testOutcomeEnum.SET,
+         'remote-frame': testOutcomeEnum.SET,
+         'nested-frame': testOutcomeEnum.SET,
+       }
+       'local-storage': { ... }
+       'session-storage': { ... }
+       'index-db': { ... }
+     }
+  */
+  const generateStorageReport = async _ => {
+    const emptyResult = _ => ({
+      'this-frame': testOutcomeEnum.EMPTY,
+      'local-frame': testOutcomeEnum.EMPTY,
+      'remote-frame': testOutcomeEnum.EMPTY,
+      'nested-frame': testOutcomeEnum.EMPTY,
+    })
+    const report = {
+      'cookies': emptyResult(),
+      'local-storage': emptyResult(),
+      'session-storage': emptyResult(),
+      'index-db': emptyResult(),
+    }
+
     for (const [frameName, frameWin] of O.entries(testFrameWindows)) {
       const frameStoreVals = await readStorageInFrame(frameWin, storageTestKey)
       for (const [storageKey, storageValue] of O.entries(frameStoreVals)) {
-        const cellSel = `#storage-rs tr.row-${storageKey} td.cell-${frameName}`
-        const cellElm = D.querySelector(cellSel)
-        updateResultCell(cellElm, storageValue)
+        report[storageKey][frameName] = resultToOutcome(storageValue)
       }
     }
 
-    const nestedFrameCells = D.querySelectorAll('#storage-rs td.cell-nested-frame')
-    for (const aCell of Array.from(nestedFrameCells)) {
-      styleCellForExpectedValue(aCell, testOutcomeEnum.NA)
+    for (const storageType in report) {
+      report[storageType]['nested-frame'] = testOutcomeEnum.NA
     }
 
     if (isMainTestFrame === false) {
-      return
+      return report
     }
 
     const nestedStorageRs = await testNestedFrameStorage(remoteFrameWin)
     for (const [storageKey, storageRs] of O.entries(nestedStorageRs)) {
-      const cellSel = `#storage-rs tr.row-${storageKey} td.cell-nested-frame`
-      const cellElm = D.querySelector(cellSel)
-      styleCellForExpectedValue(cellElm, storageRs)
+      report[storageKey]['nested-frame'] = storageRs
+    }
+
+    return report
+  }
+
+  const updateStorageTable = (report) => {
+    for (const [storageKey, reportRow] of O.entries(report)) {
+      for (const [frameName, outcome] of O.entries(reportRow)) {
+        const cellSel = `#storage-rs tr.row-${storageKey} td.cell-${frameName}`
+        const cellElm = D.querySelector(cellSel)
+        updateResultCell(cellElm, outcome)
+      }
     }
   }
 
@@ -543,7 +573,7 @@
     await clearStorageInFrame(W, nestedFrameTestKey)
   }
 
-  clearStorageButton.addEventListener('click', async _ => {
+  const clearStorageAction = async _ => {
     freezeButtons()
     await clearStorageInFrameTree()
     const path = L.pathname
@@ -553,9 +583,9 @@
     destParams.set(storageTestKey, storageTestValue)
     destParams.set(isForcedResetQueryKey, L.protocol + BU.thisOriginUrl(path))
     D.location = destUrl.toString()
-  }, false)
+  }
 
-  setStorageButton.addEventListener('click', async _ => {
+  const setStorageAction = async _ => {
     freezeButtons()
     for (const aFrameWin of O.values(testFrameWindows)) {
       await writeStorageInFrame(aFrameWin, storageTestKey, storageTestValue)
@@ -563,15 +593,21 @@
     if (isMainTestFrame === true) {
       await writeStorageInFrame(W, nestedFrameTestKey, nestedFrameTestValue)
     }
-    await updateStorageTable()
+    const report = await generateStorageReport()
+    updateStorageTable(report)
     unfreezeButtons()
-  }, false)
+  }
 
-  readValuesButton.addEventListener('click', async _ => {
+  const readValuesAction = async _ => {
     freezeButtons()
-    await updateStorageTable()
+    const report = await generateStorageReport()
+    updateStorageTable(report)
     unfreezeButtons()
-  }, false)
+  }
+
+  clearStorageButton.addEventListener('click', clearStorageAction, false)
+  setStorageButton.addEventListener('click', setStorageAction, false)
+  readValuesButton.addEventListener('click', readValuesAction, false)
 
   if (isForcedResetCase === true) {
     freezeButtons()
