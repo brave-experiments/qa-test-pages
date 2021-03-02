@@ -22,12 +22,15 @@
   "devDependencies": {
     "@linthtml/linthtml": "^0.4.1",
     "http-server": "^0.12.3",
-    "standard": "^14.3.4"
+    "standard": "^16.0.3"
   },
   "standard": {
     "ignore": [
       "static/js/libs/*",
       "static/js/workers/farbling-fingerprinting.js"
     ]
+  },
+  "dependencies": {
+    "argparse": "^1.0.10"
   }
 }

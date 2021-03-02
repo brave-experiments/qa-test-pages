@@ -2,6 +2,11 @@
   const W = window
   const D = W.document
 
+  const convertOptions = {
+    type: 'image/png',
+    quality: 1
+  }
+
   const preImage = D.getElementById('pre-image')
   const postImage = D.getElementById('post-image')
   const postCanvas = D.getElementById('post-canvas')
@@ -82,7 +87,7 @@
 
     switch (webApi) {
       case 'toDataURL': {
-        const dataUrl = canvas.toDataURL()
+        const dataUrl = canvas.toDataURL(convertOptions.type, convertOptions.quality)
         setImageResult(dataUrl)
       }
         break
@@ -90,7 +95,7 @@
       case 'toBlob':
         canvas.toBlob(async blob => {
           setImageResult(await blobToDataUrl(blob))
-        })
+        }, convertOptions.type, convertOptions.quality)
         break
 
       case 'getImageData':

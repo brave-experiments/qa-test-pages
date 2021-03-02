@@ -1,3 +1,10 @@
+/* eslint-env worker */
+
+const convertOptions = {
+  type: 'image/png',
+  quality: 1
+}
+
 self.onmessage = async msg => {
   const { data } = msg
   const { imageData, webApi, height, width } = data
@@ -9,7 +16,7 @@ self.onmessage = async msg => {
   const result = Object.create(null)
   switch (webApi) {
     case 'convertToBlob':
-      result.imageData = URL.createObjectURL(await canvas.convertToBlob())
+      result.imageData = URL.createObjectURL(await canvas.convertToBlob(convertOptions))
       result.type = 'image'
       break
 

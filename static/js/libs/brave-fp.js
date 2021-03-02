@@ -27,7 +27,7 @@
 })('Fingerprint2', this, function () {
   'use strict'
 
-  const toDataUrlOptions = ['image/jpeg', 0.92]
+  const toDataUrlOptions = ['image/png', 1]
 
   // detect if object is array
   // only implement if no native implementation is available

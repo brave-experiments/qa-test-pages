@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Storage | Cookies</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/storage/index.html">Storage</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Cookies</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Cookie Policy</h1>
+          <button id="button-start-test" type="button" class="btn btn-primary btn-lg btn-block">Start test</button>
+          <button id="button-cleanup" type="button" class="btn btn-warning btn-lg btn-block">Cleanup</button>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Test</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Secure Cookie (to insecure)</th>
+                <td id="cell-secure-cookie-to-insecure-result"></td>
+              </tr>
+              <tr>
+                <th scope="row">Secure Cookie (to secure)</th>
+                <td id="cell-secure-cookie-to-secure-result"></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/libs/js.cookie.min.js"></script>
+  <script src="/static/js/cookies.js"></script>
+</body>
+
+</html>

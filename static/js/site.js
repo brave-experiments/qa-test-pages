@@ -61,6 +61,14 @@
     return '//' + thisOrigin + path
   }
 
+  const thisOriginUrlInsecure = path => {
+    return 'http:' + thisOriginUrl(path)
+  }
+
+  const thisOriginUrlSecure = path => {
+    return 'https:' + thisOriginUrl(path)
+  }
+
   const otherOriginUrl = path => {
     return '//' + otherOrigin + path
   }
@@ -123,9 +131,15 @@
     W.addEventListener('message', onMessage, false)
   }
 
+  if (W.isSecureContext === false) {
+    D.location = 'https:' + thisOriginUrl(D.location.pathname)
+  }
+
   W.BRAVE = {
     logger,
     thisOriginUrl,
+    thisOriginUrlInsecure,
+    thisOriginUrlSecure,
     otherOriginUrl,
     sendPostMsg,
     receivePostMsg

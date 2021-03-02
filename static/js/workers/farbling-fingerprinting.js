@@ -1,3 +1,5 @@
+/* eslint-env worker */
+
 /*
 * Fingerprintjs2 2.1.0 - Modern & flexible browser fingerprint library v2
 * https://github.com/Valve/fingerprintjs2
@@ -27,8 +29,8 @@
 })('Fingerprint2', this, function () {
   'use strict'
   const convertToBlobOptions = {
-    type: 'image/jpeg',
-    quality: 0.92
+    type: 'image/png',
+    quality: 1
   }
 
   var _webGlFP = []
