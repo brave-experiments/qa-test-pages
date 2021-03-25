@@ -507,13 +507,13 @@
       'this-frame': testOutcomeEnum.EMPTY,
       'local-frame': testOutcomeEnum.EMPTY,
       'remote-frame': testOutcomeEnum.EMPTY,
-      'nested-frame': testOutcomeEnum.EMPTY,
+      'nested-frame': testOutcomeEnum.EMPTY
     })
     const report = {
-      'cookies': emptyResult(),
+      cookies: emptyResult(),
       'local-storage': emptyResult(),
       'session-storage': emptyResult(),
-      'index-db': emptyResult(),
+      'index-db': emptyResult()
     }
 
     for (const [frameName, frameWin] of O.entries(testFrameWindows)) {

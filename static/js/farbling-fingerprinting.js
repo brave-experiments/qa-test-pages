@@ -163,16 +163,6 @@
   })
   startButton.removeAttribute('disabled')
 
-  /**
-    const singleTestButton = document.getElementById('individual-fp-test-btn')
-    const singleTestSel = document.getElementById('individual-fp-test-select')
-    const onSingleTestClick = async _ => {
-      singleTestButton.setAttribute('disabled', true)
-      singleTestButton.removeAttribute('disabled')
-    }
-    singleTestButton.removeAttribute('disabled')
-  */
-
   let frameCounter = 1
   const iframeFingerprintValues = url => {
     const newFrame = document.createElement('iframe')

@@ -9,7 +9,6 @@
   const startButtonElm = D.getElementById('button-start-test')
   const cleanupButtonElm = D.getElementById('button-cleanup')
 
-  const cookieName = 'secure-only-cookie'
   const swUrl = './cookies-service-worker.js'
   startButtonElm.setAttribute('disabled', true)
 
@@ -19,7 +18,7 @@
       url: BU.thisOriginUrlInsecure('/storage/test.txt?cookie-test=secure-to-insecure')
     },
     'secure-to-secure': {
-      'id': 'cell-secure-cookie-to-secure-result',
+      id: 'cell-secure-cookie-to-secure-result',
       url: BU.thisOriginUrlSecure('/storage/test.txt?cookie-test=secure-to-secure')
     }
   }

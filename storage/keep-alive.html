@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Storage | Keep Alive</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/storage/index.html">Storage</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Keep alive</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Ephemeral Storage Keep Alive</h1>
+          <p>
+            This page tests whether storage partitions are persisted for a
+            short period of time after navigating away from the page.
+            The feature is controlled by the <code>Ephemeral Storage Keep
+            Alive</code> flag.
+          </p>
+          <p>
+            Before running these tests, make sure to close any other windows
+            or tabs you might have open for the QA test domains.  Having
+            other versions of this page open will change the behavior of the
+            test.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Current storage state</h2>
+          <table class="table" id="table-current-state">
+            <tbody>
+              <tr>
+                <th scope="row">This frame</th>
+                <td class="cell-this-frame">-</td>
+              </tr>
+              <tr>
+                <th scope="row">Local frame</th>
+                <td class="cell-local-frame">-</td>
+              </tr>
+              <tr>
+                <th scope="row">Remote frame</th>
+                <td class="cell-remote-frame">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col">
+          <div class="mb-4">
+            <h3>Should "Keep Alive" Test</h3>
+            <p>
+              After clicking this button, you'll be taken to another page,
+              and then returned to this page. Expected results are:
+            </p>
+            <ul class="list-group">
+              <li class="list-group-item"><strong>this frame</strong>: <span class="badge badge-pill badge-success">set</span></li>
+              <li class="list-group-item"><strong>local frame</strong>: <span class="badge badge-pill badge-success">set</span></li>
+              <li class="list-group-item"><strong>remote frame</strong>: <span class="badge badge-pill badge-success">set</span></li>
+            </ul>
+            <button id="button-keep-alive-test" type="button" class="btn btn-primary btn-lg btn-block">Start test</button>
+          </div>
+
+          <div class="mb-4">
+            <h3>Should Not "Keep Alive" Test</h3>
+            <p>
+              After clicking this button, you'll be taken to another page,
+              and then returned to this page.  Expected results are:
+            </p>
+            <ul class="list-group">
+              <li class="list-group-item"><strong>this frame</strong>: <span class="badge badge-pill badge-success">set</span></li>
+              <li class="list-group-item"><strong>local frame</strong>: <span class="badge badge-pill badge-success">set</span></li>
+              <li class="list-group-item"><strong>remote frame</strong>: <span class="badge badge-pill bg-info">empty</span></li>
+            </ul>
+            <button id="button-do-not-keep-alive-test" type="button" class="btn btn-primary btn-lg btn-block">Start test</button>
+          </div>
+
+          <div class="mb-4">
+            <button id="button-reset" type="button" class="btn btn-secondary btn-lg btn-block">Reset tests</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <iframe data-src="/frames/ephemeral-storage.html" class="this-origin d-none"></iframe>
+  <iframe data-src="/frames/ephemeral-storage.html" class="other-origin d-none"></iframe>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/libs/js.cookie.min.js"></script>
+  <script src="/static/js/libs/index-min.js"></script>
+  <script src="/static/js/frames/ephemeral-storage.js"></script>
+  <script src="/static/js/storage-keep-alive.js"></script>
+</body>
+
+</html>
