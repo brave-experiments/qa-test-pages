@@ -51,12 +51,13 @@
 
   const refreshStorageTable = async _ => {
     for (const [frameName, frameRef] of Object.entries(testWindows)) {
-      const storedVal = await readStorageInFrame(frameRef, testKey)['local-storage']
+      const storedValues = await readStorageInFrame(frameRef, testKey)
+      const localStorageVal = storedValues['local-storage']
       const cellElm = D.querySelector(`#table-current-state .cell-${frameName}`)
-      if (storedVal === expectedTestValue) {
+      if (localStorageVal === expectedTestValue) {
         cellElm.classList.add('bg-success')
         cellElm.textContent = 'set'
-      } else if (storedVal === undefined) {
+      } else if (localStorageVal === undefined || localStorageVal === null) {
         cellElm.classList.add('bg-info')
         cellElm.textContent = 'empty'
       } else {
