@@ -71,20 +71,28 @@
   const doNotKeepAliveBtnElm = D.getElementById('button-do-not-keep-alive-test')
   const resetBtnElm = D.getElementById('button-reset')
 
-  // If we're visiting this page directly (i.e., not as the result of being
-  // bounced here as part of the test), then set up storage as expected.
-  if (isPreTest === true) {
-    await clearStorageInFrame(testWindows['this-frame'], testKey)
-    await writeStorageInFrame(testWindows['remote-frame'], testKey)
-  } else {
-    await refreshStorageTable()
-  }
+  keepAliveBtnElm.setAttribute('disabled', 'disabled')
+  doNotKeepAliveBtnElm.setAttribute('disabled', 'disabled')
 
   const shortBounceCallback = navigateToBounceUrl.bind(undefined, 5)
   const longBounceCallback = navigateToBounceUrl.bind(undefined, 35)
 
   keepAliveBtnElm.addEventListener('click', shortBounceCallback, false)
   doNotKeepAliveBtnElm.addEventListener('click', longBounceCallback, false)
+
+  W.addEventListener('load', async _ => {
+    // If we're visiting this page directly (i.e., not as the result of being
+    // bounced here as part of the test), then set up storage as expected.
+    if (isPreTest === true) {
+      await clearStorageInFrame(testWindows['this-frame'], testKey)
+      await writeStorageInFrame(testWindows['remote-frame'], testKey)
+    } else {
+      await refreshStorageTable()
+    }
+
+    keepAliveBtnElm.removeAttribute('disabled')
+    doNotKeepAliveBtnElm.removeAttribute('disabled')
+  }, false)
 
   resetBtnElm.addEventListener('click', event => {
     event.preventDefault()
