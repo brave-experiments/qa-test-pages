@@ -26,7 +26,9 @@
     return await BU.sendPostMsg(frameWin, 'storage::clear', { key })
   }
 
-  const navigateToBounceUrl = async (numSecs, event) => {
+  const numSecElm = D.getElementById('num-seconds-input')
+
+  const navigateToBounceUrl = async (intOrElm, event) => {
     event.preventDefault()
     event.cancelBubble = true
 
@@ -39,6 +41,8 @@
     const destUrl = new URL(otherOriginBounceUrl)
     const destParams = destUrl.searchParams
     destParams.set('destination', currentPageUrl)
+
+    const numSecs = Number.isInteger(intOrElm) ? intOrElm : intOrElm.value
     destParams.set('sec', numSecs)
     destParams.set('value', testValue)
 
@@ -69,13 +73,14 @@
 
   const keepAliveBtnElm = D.getElementById('button-keep-alive-test')
   const doNotKeepAliveBtnElm = D.getElementById('button-do-not-keep-alive-test')
+
   const resetBtnElm = D.getElementById('button-reset')
 
   keepAliveBtnElm.setAttribute('disabled', 'disabled')
   doNotKeepAliveBtnElm.setAttribute('disabled', 'disabled')
 
   const shortBounceCallback = navigateToBounceUrl.bind(undefined, 5)
-  const longBounceCallback = navigateToBounceUrl.bind(undefined, 35)
+  const longBounceCallback = navigateToBounceUrl.bind(undefined, numSecElm)
 
   keepAliveBtnElm.addEventListener('click', shortBounceCallback, false)
   doNotKeepAliveBtnElm.addEventListener('click', longBounceCallback, false)

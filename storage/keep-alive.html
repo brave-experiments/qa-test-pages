@@ -85,9 +85,16 @@
 
           <div class="mb-4">
             <h3>Should Not "Keep Alive" Test</h3>
+            <form class="form-inline">
+              <div class="form-group">
+                <label for="num-seconds-input">Name: </label>
+                <input type="number" class="form-control mb-2 mr-sm-2" id="num-seconds-input" value="35" min="1" step="1">
+              </div>
+            </form>
             <p>
-              After clicking this button, you'll be taken to another page,
-              and then returned to this page.  Expected results are:
+              After clicking this button, you'll be taken to another page for
+              a few seconds and then returned to this page.
+              With the 35 second default, expected results are:
             </p>
             <ul class="list-group">
               <li class="list-group-item"><strong>this frame</strong>: <span class="badge badge-pill badge-success">set</span></li>
