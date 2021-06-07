@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | CNAME Uncloaking</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">CNAME Uncloaking</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>CNAME Uncloaking Tests</h1>
+          <p>
+            <strong>Test instructions:</strong>
+            Visit this page on <a href="//test-cname.brave.software/cname-uncloaking.html">test-cname.brave.software</a>
+            and confirm that the status of a CNAME cloaked network request is
+            consistent with the following expected behavior:
+          </p>
+          <button id="button-start-test" type="button" class="btn btn-primary btn-lg btn-block">Run test</button>
+        </div>
+      </div>
+      <p id="test-result"></p>
+      <div>
+        <h3>Initial Setup</h3>
+        <p>First, add the following line to <code>brave://adblock</code>:</p>
+        <pre>||dev-pages.brave.software/static/images/test.jpg</pre>
+        <p>A default Brave installation should then cause the request to be <span class="badge bg-danger">blocked</span>.</p>
+        <h3>Disabling conditions</h3>
+        <p>
+          <em>Any</em> of the following conditions should cause the request to
+          be <span class="badge bg-success">allowed</span>. Network analysis should also reveal that no additional
+          DNS queries are made alongside the request.
+        </p>
+        <ul>
+          <li>Shields down</li>
+          <li><code>#brave-adblock-cname-uncloaking</code> feature flag disabled in <code>brave://flags</code></li>
+          <li>Tor session</li>
+          <li>Proxy/VPN WebExtension installed and active</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/cname-uncloaking.js"></script>
+</body>
+
+</html>
