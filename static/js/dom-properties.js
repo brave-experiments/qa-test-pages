@@ -3,15 +3,6 @@
   const D = W.document
   const BU = W.BRAVE
 
-  const localFrame = D.querySelector('iframe.this-origin')
-  const remoteFrame = D.querySelector('iframe.other-origin')
-
-  const testFrameWins = {
-    'this-frame': W,
-    'local-frame': localFrame.contentWindow,
-    'remote-frame': remoteFrame.contentWindow
-  }
-
   const testDomPropsInWin = async win => {
     return await BU.sendPostMsg(win, 'dom-properties::read')
   }
@@ -28,7 +19,7 @@
     const initialText = elm.textContent
     elm.setAttribute('disabled', 'disabled')
     elm.textContent = 'Running test'
-    for (const [frameDesc, frameWin] of Object.entries(testFrameWins)) {
+    for (const [frameDesc, frameWin] of BU.getTestWindowNamesAndValues()) {
       const testRs = await testDomPropsInWin(frameWin)
       for (const [testName, testValue] of Object.entries(testRs)) {
         updateTestResults(frameDesc, testName, testValue)

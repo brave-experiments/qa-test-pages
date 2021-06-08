@@ -5,12 +5,6 @@
   const BU = W.BRAVE
 
   const testKey = 'keep-alive-storage-test-key'
-  const testWindows = {
-    'this-frame': W,
-    'local-frame': D.querySelector('iframe.this-origin').contentWindow,
-    'remote-frame': D.querySelector('iframe.other-origin').contentWindow
-  }
-
   const bouncePageUrl = '/storage/bounce.html'
   const currentPageUrl = L.protocol + BU.thisOriginUrl(L.pathname)
 
@@ -34,8 +28,8 @@
 
     const testValue = Math.random()
 
-    await writeStorageInFrame(testWindows['this-frame'], testKey, testValue)
-    await writeStorageInFrame(testWindows['remote-frame'], testKey, testValue)
+    await writeStorageInFrame(BU.getTestWindow('this-frame'), testKey, testValue)
+    await writeStorageInFrame(BU.getTestWindow('remote-frame'), testKey, testValue)
 
     const otherOriginBounceUrl = L.protocol + BU.otherOriginUrl(bouncePageUrl)
     const destUrl = new URL(otherOriginBounceUrl)
@@ -54,7 +48,7 @@
   const isPreTest = expectedTestValue === null
 
   const refreshStorageTable = async _ => {
-    for (const [frameName, frameRef] of Object.entries(testWindows)) {
+    for (const [frameName, frameRef] of BU.getTestWindowNamesAndValues()) {
       const storedValues = await readStorageInFrame(frameRef, testKey)
       const localStorageVal = storedValues['local-storage']
       const cellElm = D.querySelector(`#table-current-state .cell-${frameName}`)
@@ -89,8 +83,8 @@
     // If we're visiting this page directly (i.e., not as the result of being
     // bounced here as part of the test), then set up storage as expected.
     if (isPreTest === true) {
-      await clearStorageInFrame(testWindows['this-frame'], testKey)
-      await writeStorageInFrame(testWindows['remote-frame'], testKey)
+      await clearStorageInFrame(BU.getTestWindow('this-frame'), testKey)
+      await writeStorageInFrame(BU.getTestWindow('remote-frame'), testKey)
     } else {
       await refreshStorageTable()
     }

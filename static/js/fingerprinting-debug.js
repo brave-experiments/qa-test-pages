@@ -63,7 +63,7 @@
     }
   }
 
-  const worker = new W.Worker('/static/js/workers/farbling-debug.js')
+  const worker = new W.Worker('/static/js/workers/fingerprinting-debug.js')
   worker.onmessage = onWorkerMsg
 
   const blobToDataUrl = blob => {

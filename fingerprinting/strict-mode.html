@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Fingerprinting | Strict-Mode Changes </title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/fingerprinting/index.html">Fingerprinting</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Strict-Mode Changes</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Strict-Mode Tests</h1>
+
+          <p>
+            <button id="start" disabled class="btn btn-primary btn-block btn-large">Generate values</button>
+          </p>
+
+          <table class="table ">
+            <thead>
+              <tr>
+                <th scope="col">API</th>
+                <th scope="col">This Frame</th>
+                <th scope="col">Local Frame</th>
+                <th scope="col">Remote Frame</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-webgl-get-supported-extensions">
+                <th scope="row">WebGL - <code>getSupportedExtensions</code></th>
+                <td class="cell-this-frame"><a class="badge badge-light"></a></td>
+                <td class="cell-local-frame"><a class="badge badge-light"></a></td>
+                <td class="cell-remote-frame"><a class="badge badge-light"></a></td>
+              </tr>
+              <tr class="row-webgl-get-extension-debug">
+                <th scope="row">WebGL - <code>getExtension("WEBGL_debug_renderer_info")</code></th>
+                <td class="cell-this-frame"><a class="badge badge-light"></a></td>
+                <td class="cell-local-frame"><a class="badge badge-light"></a></td>
+                <td class="cell-remote-frame"><a class="badge badge-light"></a></td>
+              </tr>
+              <tr class="row-webgl-get-extension-other">
+                <th scope="row">WebGL - <code>getExtension("WEBGL_lose_context")</code></th>
+                <td class="cell-this-frame"><a class="badge badge-light"></a></td>
+                <td class="cell-local-frame"><a class="badge badge-light"></a></td>
+                <td class="cell-remote-frame"><a class="badge badge-light"></a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    <div id='modal' class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <p>
+                <strong>Hash: </strong>
+                <span class="fp-hash"></span>
+              </p>
+
+              <div class="form-group">
+                <strong>Value: </strong>
+                <textarea readonly rows="10" class="form-control fp-input"></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/static/js/libs/jquery-3.2.1.slim.min.js"></script>
+  <script src="/static/js/libs/popper.min.js"></script>
+  <script src="/static/js/libs/bootstrap.min.js"></script>
+  <script src="/static/js/libs/brave-fp.js"></script>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/frames/fingerprinting-strict-mode.js"></script>
+  <script src="/static/js/fingerprinting-strict-mode.js"></script>
+</body>
+
+</html>

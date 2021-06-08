@@ -45,7 +45,7 @@
     }
   }
 
-  const fpFramePath = '/frames/farbling-stress.html'
+  const fpFramePath = '/frames/fingerprinting-farbling-stress.html'
   const randIframeUrl = _ => {
     const randInt = Math.floor(Math.random() * 1000) % 2
     if (randInt === 0) {
@@ -131,7 +131,7 @@
   const iframeElms = document.getElementsByTagName('iframe')
 
   startButton.addEventListener('click', _ => {
-    const worker = new W.Worker('./static/js/workers/farbling-fingerprinting.js')
+    const worker = new W.Worker('./static/js/workers/fingerprinting-farbling.js')
     worker.onmessage = onMessage
 
     for (const aFrame of iframeElms) {

@@ -50,6 +50,22 @@
     }
   }
 
+  const objectToSerializableObject = rs => {
+    try {
+      return JSON.parse(JSON.stringify(rs))
+    } catch (_) {
+      try {
+        return rs.toString()
+      } catch (_) {
+        const stringSafeRs = Object.create(null)
+        for (const [key, value] of Object.items(rs)) {
+          stringSafeRs[key] = String(value)
+        }
+        return JSON.parse(JSON.stringify(stringSafeRs))
+      }
+    }
+  }
+
   const logger = msg => {
     if (isDebug !== true) {
       return
@@ -114,6 +130,7 @@
       }
 
       const receivedResult = await handler(action, payload)
+
       if (receivedResult === undefined) {
         logger(`No result for action: ${action}`)
         return
@@ -121,7 +138,7 @@
 
       const response = {
         direction: 'response',
-        payload: receivedResult,
+        payload: objectToSerializableObject(receivedResult),
         nonce
       }
 
@@ -135,7 +152,89 @@
     D.location = 'https:' + thisOriginUrl(D.location.pathname)
   }
 
+  // Frequently we have three window's we want to run tests against,
+  // the local window, a frame with the same origin, and a remote frame.
+  // Instead of copy-pasting so much, make a fail-friendly guess here.
+  const getFrameMapping = (_ => {
+    const frameMapping = Object.create(null)
+    let hasFired = false
+    return _ => {
+      if (hasFired === true) {
+        return frameMapping
+      }
+      const localFrame = D.querySelector('iframe.this-origin')
+      const remoteFrame = D.querySelector('iframe.other-origin')
+      frameMapping['this-frame'] = W
+      frameMapping['local-frame'] = localFrame?.contentWindow
+      frameMapping['remote-frame'] = remoteFrame?.contentWindow
+      hasFired = true
+      return frameMapping
+    }
+  })()
+
+  const getTestWindow = windowRefName => {
+    return getFrameMapping()[windowRefName]
+  }
+
+  const getTestWindowNamesAndValues = _ => {
+    return Object.entries(getFrameMapping())
+  }
+
+  let hasInjectedFrames = false
+  const _insertTestFrames = async (frameUrl, scriptUrls) => {
+    if (hasInjectedFrames === true) {
+      throw new Error('Cannot call "insertTestFrames" twice on the same page.')
+    }
+    hasInjectedFrames = true
+
+    const allFramesLoadedPromiseHandler = (resolve) => {
+      let numFramesLoaded = 0
+      const onFrameLoad = async event => {
+        const iframeElm = event.target
+        if (scriptUrls !== undefined) {
+          for (const aUrl of scriptUrls) {
+            await sendPostMsg(iframeElm.contentWindow, 'script-inject::url', {
+              value: aUrl
+            })
+          }
+        }
+        numFramesLoaded += 1
+        if (numFramesLoaded === 1) {
+          return resolve()
+        }
+      }
+
+      const frameClassToFuncMap = {
+        'this-origin': thisOriginUrl,
+        'other-origin': otherOriginUrl
+      }
+
+      for (const [frameClass, urlFunc] of Object.entries(frameClassToFuncMap)) {
+        const frameElm = D.createElement('iframe')
+        frameElm.addEventListener('load', onFrameLoad, false)
+        frameElm.classList.add(frameClass)
+        frameElm.src = urlFunc(frameUrl)
+        frameElm.style.display = 'none'
+        D.body.appendChild(frameElm)
+      }
+    }
+
+    return new Promise(allFramesLoadedPromiseHandler)
+  }
+
+  const insertTestFrames = async frameUrl => {
+    return await _insertTestFrames(frameUrl)
+  }
+
+  const insertTestFramesWithScript = async scriptUrls => {
+    return await _insertTestFrames('/frames/script-injection.html', scriptUrls)
+  }
+
   W.BRAVE = {
+    getTestWindow,
+    getTestWindowNamesAndValues,
+    insertTestFrames,
+    insertTestFramesWithScript,
     logger,
     thisOriginUrl,
     thisOriginUrlInsecure,
