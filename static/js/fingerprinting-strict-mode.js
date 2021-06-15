@@ -22,6 +22,9 @@
     'webgl-get-extension-other': {
       api: 'webgl-get-extension',
       args: ['WEBGL_lose_context']
+    },
+    'dark-mode-detection': {
+      api: 'dark-mode-detection'
     }
   }
 

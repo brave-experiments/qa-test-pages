@@ -22,6 +22,14 @@
         }
       }
 
+      case 'dark-mode-detection': {
+        if (W.matchMedia === undefined) {
+          return null
+        }
+        const isDarkMode = W.matchMedia('(prefers-color-scheme: dark)').matches
+        return isDarkMode ? 'detected dark mode' : 'dark mode not detected'
+      }
+
       default:
         throw new Error(`Unexpected api called from makeAPICall: ${apiName}`)
     }
