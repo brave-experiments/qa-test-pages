@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Filtering | Network requests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/filtering/index.html">Filtering</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Network requests</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+
+          <h1>Network Requests</h1>
+          <p>
+            This page tests different blocking policies in Brave.
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>First-Party Sub Requests</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <p>By default, Brave does not block First-Party subrequests,
+            even if there is a block rule for them.
+          </p>
+
+          <h3>Trackers &amp; ads blocked (standard)</h3>
+          <p>
+            There should be a helpful image in the next column.  No
+            resources should be blocked in shields.
+          </p>
+
+          <h3>Trackers &amp; ads blocked (aggressive)</h3>
+          <p>
+            There should not be an image in the next column.  The request
+            for <code>/static/images/test.jpg?335962573013224749</code>
+            should be blocked.
+          </p>
+        </div>
+        <div class="col">
+          <div class="border border-primary">
+            <img src="/static/images/test?335962573013224749" class="img-thumbnail">
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+</body>
+
+</html>
