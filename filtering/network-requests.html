@@ -35,31 +35,62 @@
       <div class="row">
         <div class="col">
           <h2>First-Party Sub Requests</h2>
+
+          <p>
+            By default, Brave does not block first-party subrequests,
+            even if there is a block rule for them.
+          </p>
         </div>
       </div>
 
       <div class="row">
         <div class="col">
-          <p>By default, Brave does not block First-Party subrequests,
-            even if there is a block rule for them.
-          </p>
-
-          <h3>Trackers &amp; ads blocked (standard)</h3>
           <p>
+            <strong>Trackers &amp; ads blocked (standard)</strong>:
             There should be a helpful image in the next column.  No
             resources should be blocked in shields.
           </p>
 
-          <h3>Trackers &amp; ads blocked (aggressive)</h3>
           <p>
-            There should not be an image in the next column.  The request
+            <strong>Trackers &amp; ads blocked (aggressive)</strong>:
+            There should <em>not</em> be an image in the next column.  A
+            request for <code>/static/images/test.jpg?335962573013224749</code>
+            should be blocked.
+          </p>
+        </div>
+        <div class="col">
+          <div class="border border-primary">
+            <img src="/static/images/test.jpg?335962573013224749" class="img-thumbnail">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Third-Party Sub Requests</h2>
+
+          <p>
+            By default, Brave blocks whatever third-party subrequests
+            the lists tell us to.
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <p>
+            <strong>Trackers &amp; ads blocked (standard)</strong> and
+            <strong>Trackers &amp; ads blocked (aggressive)</strong>:
+            There should <em>not</em> be an image in the next column.  A request
             for <code>/static/images/test.jpg?335962573013224749</code>
             should be blocked.
           </p>
         </div>
         <div class="col">
           <div class="border border-primary">
-            <img src="/static/images/test?335962573013224749" class="img-thumbnail">
+            <img data-src="/static/images/test.jpg?335962573013224749" class="other-origin img-thumbnail">
           </div>
         </div>
       </div>
