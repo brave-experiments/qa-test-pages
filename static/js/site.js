@@ -10,16 +10,25 @@
   const bodyElm = document.body
   let otherOrigin
 
+  const showElementsWithClass = className => {
+    const elementsWithClassName = D.getElementsByClassName(className)
+    for (const elm of elementsWithClassName) {
+      elm.style.display = 'block'
+    }
+  }
+
   switch (thisOrigin) {
     case braveSoftwareOrigin:
       otherOrigin = braveSoftwareComOrigin
       bodyElm.className += ' brave-software-com'
+      showElementsWithClass('show-on-brave-software-com')
       break
 
     case braveSoftwareComOrigin:
     default: // Test server configs
       otherOrigin = braveSoftwareOrigin
       bodyElm.className += ' brave-software'
+      showElementsWithClass('show-on-brave-software')
       break
   }
 
