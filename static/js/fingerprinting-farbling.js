@@ -1,6 +1,8 @@
-(_ => {
+(async _ => {
   const W = window
   const braveUtils = W.BRAVE
+  const N = W.navigator
+  const SW = N.serviceWorker
   const FP2 = W.Fingerprint2
   const jQuery = W.jQuery
 
@@ -43,6 +45,13 @@
       'canvas-green': false,
       'canvas-blue': false
     }
+  }
+
+  const swUrl = './fingerprinting-farbling-service-worker.js'
+  if ((await SW.getRegistrations()).length === 0) {
+    await SW.register(swUrl)
+    W.location.reload()
+    return
   }
 
   const fpFramePath = '/frames/fingerprinting-farbling-stress.html'
@@ -126,11 +135,14 @@
     }
   }
   W.addEventListener('message', onMessage, false)
+  SW.addEventListener('message', onMessage, false)
 
   const startButton = document.getElementById('start')
   const iframeElms = document.getElementsByTagName('iframe')
 
   startButton.addEventListener('click', _ => {
+    SW.controller.postMessage('generate')
+
     const worker = new W.Worker('./static/js/workers/fingerprinting-farbling.js')
     worker.onmessage = onMessage
 

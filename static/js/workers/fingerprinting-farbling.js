@@ -1,4 +1,4 @@
-/* eslint-env worker */
+/* eslint-env worker,serviceworker */
 
 /*
 * Fingerprintjs2 2.1.0 - Modern & flexible browser fingerprint library v2
@@ -1532,6 +1532,13 @@ const fp2Options = {
   }
 }
 
+let isServiceWorker
+try {
+  isServiceWorker = !!self.clients
+} catch (e) {
+  isServiceWorker = false
+}
+
 const fpValues = Object.create(null)
 Fingerprint2.get(fp2Options, values => {
   for (const aFPValue of values) {
@@ -1541,9 +1548,27 @@ Fingerprint2.get(fp2Options, values => {
     fpValues[key] = [hashInput, hashValue]
   }
 
-  postMessage({
-    action: 'fp-complete',
-    context: 'worker',
-    fpValues
-  })
+  if (isServiceWorker === false) {
+    postMessage({
+      action: 'fp-complete',
+      context: 'worker',
+      fpValues
+    })
+  }
 })
+
+if (isServiceWorker === true) {
+  self.addEventListener('message', async event => {
+    if (event.data !== 'generate') {
+      console.error(`Unexpected message: ${event.data}`)
+      return
+    }
+
+    const client = await clients.get(event.source.id)
+    client.postMessage({
+      action: 'fp-complete',
+      context: 'serviceworker',
+      fpValues
+    })
+  })
+}
