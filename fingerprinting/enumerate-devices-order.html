@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Fingerprinting | Enumerate devices order</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/fingerprinting/index.html">Fingerprinting</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Enumerate devices order</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Enumerate Devices Order</h1>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <ul>
+            <li>
+              <strong>Disabled:</strong>
+              Items in both lists should appear in the same order on
+              both test domains (see
+              <a class="other-origin" data-href="/fingerprinting/enumerate-devices-order.html" href="#">other site</a>)
+            </li>
+            <li>
+              <strong>Default:</strong>
+              The default item should always appear first, other items should
+              appear in randomized order, and so <em>sometimes</em> will appear
+              in different orders on both both test domains (see <a class="other-origin" data-href="/fingerprinting/enumerate-devices-order.html" href="#">other site</a>)
+            </li>
+          </ul>
+
+          <div id="enumerate-devices-section">
+            <button id="start" class="btn btn-primary btn-block btn-large" disabled>Query devices</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/fingerprinting-enumerate-devices-order.js"></script>
+</body>
+
+</html>
