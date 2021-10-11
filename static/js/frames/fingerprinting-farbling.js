@@ -35,7 +35,8 @@
       fontsFlash: true,
       audio: false,
       enumerateDevices: false,
-      webglParams: false
+      webglParams: false,
+      speechSynthesisVoices: false
     }
   }
 

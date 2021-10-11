@@ -43,12 +43,13 @@
       enumerateDevices: false,
       'canvas-red': false,
       'canvas-green': false,
-      'canvas-blue': false
+      'canvas-blue': false,
+      speechSynthesisVoices: false
     }
   }
 
   const swUrl = './fingerprinting-farbling-service-worker.js'
-  if ((await SW.getRegistrations()).length === 0) {
+  if (SW.controller === null || (await SW.getRegistrations()).length === 0) {
     await SW.register(swUrl)
     W.location.reload()
     return

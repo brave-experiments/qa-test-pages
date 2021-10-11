@@ -1364,6 +1364,37 @@
     }
   }
 
+  var speechSynthesisKey = function (done, options) {
+    if (window.speechSynthesis === undefined) {
+      done('no voices')
+      return
+    }
+    var voicesFormatted = function (voices) {
+      return voices.map(x => `${x.name} (${x.voiceURI})`).join('\n')
+    }
+    var speechTimeout = 1000
+    var speechSynthesisTimerId
+
+    var onVoicesChanged = function () {
+      clearTimeout(speechSynthesisTimerId)
+      var voices = window.speechSynthesis.getVoices()
+      done(voicesFormatted(voices))
+    }
+
+    speechSynthesisTimerId = setTimeout(function () {
+      window.speechSynthesis.removeEventListener('voiceschanged', onVoicesChanged)
+      return done('no voices')
+    }, speechTimeout)
+
+    var voices = window.speechSynthesis.getVoices();
+    if (voices.length !== 0) {
+      clearTimeout(speechSynthesisTimerId)
+      done(voicesFormatted(voices))
+    } else {
+      window.speechSynthesis.addEventListener('voiceschanged', onVoicesChanged)
+    }
+  }
+
   var components = [
     { key: 'userAgent', getData: UserAgent },
     { key: 'webdriver', getData: webdriver },
@@ -1386,9 +1417,6 @@
     { key: 'doNotTrack', getData: doNotTrackKey },
     { key: 'plugins', getData: pluginsComponent },
     { key: 'canvas', getData: canvasKey },
-    { key: 'canvas-red', getData: canvasKeyChannel.bind(undefined, 0) },
-    { key: 'canvas-green', getData: canvasKeyChannel.bind(undefined, 1) },
-    { key: 'canvas-blue', getData: canvasKeyChannel.bind(undefined, 2) },
     { key: 'webgl', getData: webglKey },
     { key: 'webglVendorAndRenderer', getData: webglVendorAndRendererKey },
     { key: 'adBlock', getData: adBlockKey },
@@ -1402,7 +1430,11 @@
     { key: 'audio', getData: audioKey },
     { key: 'enumerateDevices', getData: enumerateDevicesKey },
     // @pes
-    { key: 'webglParams', getData: webglParamsKey }
+    { key: 'webglParams', getData: webglParamsKey },
+    { key: 'canvas-red', getData: canvasKeyChannel.bind(undefined, 0) },
+    { key: 'canvas-green', getData: canvasKeyChannel.bind(undefined, 1) },
+    { key: 'canvas-blue', getData: canvasKeyChannel.bind(undefined, 2) },
+    { key: 'speechSynthesisVoices', getData: speechSynthesisKey }
   ]
 
   var Fingerprint2 = function (options) {
