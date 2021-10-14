@@ -4,12 +4,13 @@
   const BU = W.BRAVE
 
   const startButtonElm = D.getElementById('start')
-  const getRefererElm = D.getElementById('observed-referer')
+  const referrerSectionElm = D.getElementById('observed-referer-section')
+  const refererElm = D.getElementById('observed-referer')
 
   if (W.location.toString().includes('?complete') === true) {
-    getRefererElm.classList.remove('d-none')
+    referrerSectionElm.classList.remove('d-none')
     const refererHost = D.referrer || (new URL(D.referrer)).host
-    getRefererElm.textContent = refererHost
+    refererElm.textContent = refererHost
   }
 
   const onClick = _ => {
