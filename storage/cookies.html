@@ -36,18 +36,32 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Test</th>
+                <th></th>
+                <th colspan="2" class="text-center">Secure Request</th>
+                <th colspan="2" class="text-center">Insecure Request</th>
+              </tr>
+              <tr>
+                <th>Cookie Setting</th>
                 <th>Result</th>
+                <th>Expected</th>
+                <th>Result</th>
+                <th>Expected</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <th scope="row">Secure Cookie (to insecure)</th>
-                <td id="cell-secure-cookie-to-insecure-result"></td>
+                <th scope="row">Secure</th>
+                <td id="cell-secure-to-secure-result">-</td>
+                <td><span class="badge badge-pill badge-success">sent</span></td>
+                <td id="cell-secure-to-insecure-result">-</td>
+                <td><span class="badge badge-pill badge-warning">not sent</span></td>
               </tr>
               <tr>
-                <th scope="row">Secure Cookie (to secure)</th>
-                <td id="cell-secure-cookie-to-secure-result"></td>
+                <th scope="row">Non-Secure Cookie</th>
+                <td id="cell-insecure-to-secure-result">-</td>
+                <td><span class="badge badge-pill badge-success">sent</span></td>
+                <td id="cell-insecure-to-insecure-result">-</td>
+                <td><span class="badge badge-pill badge-success">sent</span></td>
               </tr>
             </tbody>
           </table>
@@ -58,7 +72,7 @@
   </div>
   <script src="/static/js/site.js"></script>
   <script src="/static/js/libs/js.cookie.min.js"></script>
-  <script src="/static/js/cookies.js"></script>
+  <script src="/static/js/storage-cookies.js"></script>
 </body>
 
 </html>

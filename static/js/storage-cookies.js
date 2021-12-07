@@ -12,14 +12,21 @@
   const swUrl = './cookies-service-worker.js'
   startButtonElm.setAttribute('disabled', true)
 
-  const cookieTests = {
-    'secure-to-insecure': {
-      id: 'cell-secure-cookie-to-insecure-result',
-      url: BU.thisOriginUrlInsecure('/storage/test.txt?cookie-test=secure-to-insecure')
-    },
-    'secure-to-secure': {
-      id: 'cell-secure-cookie-to-secure-result',
-      url: BU.thisOriginUrlSecure('/storage/test.txt?cookie-test=secure-to-secure')
+  const cookieStates = ['secure', 'insecure']
+  const originStates = {
+    secure: BU.thisOriginUrlSecure,
+    insecure: BU.thisOriginUrlInsecure
+  }
+  const cookieTests = {}
+
+  for (const aCookieState of cookieStates) {
+    for (const [anOriginState, aUrlFunc] of Object.entries(originStates)) {
+      const testKey = `${aCookieState}-to-${anOriginState}`
+      const testUrl = `/storage/test.txt?cookie-test=${testKey}`
+      cookieTests[testKey] = {
+        id: `cell-${testKey}-result`,
+        url: aUrlFunc(testUrl)
+      }
     }
   }
 
