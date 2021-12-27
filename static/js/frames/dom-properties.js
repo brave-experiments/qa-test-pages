@@ -6,7 +6,8 @@
   const readDomProperties = _ => {
     return {
       isbrave: !!(N.brave && N.brave.isBrave),
-      gpc: N.globalPrivacyControl
+      gpc: N.globalPrivacyControl,
+      connection: !!(N.connection)
     }
   }
 
