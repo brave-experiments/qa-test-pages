@@ -32,27 +32,55 @@
         <div class="col">
           <h1>Debouncing</h1>
 
-          <div class="d-none" id="observed-referer-section">
-            <h2>Observed Referrer</h2>
-            <blockquote class="blockquote" id="observed-referer">
-            </blockquote>
-          </div>
-
           <h2>Expected behavior</h2>
           <ul>
             <li>
               <strong>Enabled:</strong>
-              You should be returned to this page, and see
-              <code class="this-origin">...</code> above as the referer.
+              The referrer displayed below should match what appears
+              in the "Enabled" column.
             </li>
             <li>
               <strong>Disabled:</strong>
-              You should either not be returned to this page, or you should
-              see a referer matching the pattern <code>*.youtube.com</code>.
+              You should either not be returned to this page, or the referrer
+              displayed below should match what appears in the "Disabled" column.
             </li>
           </ul>
 
-          <button id="start" class="btn btn-primary btn-block btn-large" disabled>Run test</button>
+          <div class="d-none" id="observed-referer-section">
+            <h2>Observed Referrer</h2>
+            <p><code class="blockquote" id="observed-referer">...</code></p>
+          </div>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Test Name</th>
+                <th>Enabled</th>
+                <th>Disabled</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="debounce-youtube" data-test-url="https://www.youtube.com/redirect?q=">
+                <th>YouTube</th>
+                <td><code class="this-origin">...</code></td>
+                <td><code>*.youtube.com</code></td>
+                <td><button class="btn btn-primary" disabled>Run</button></td>
+              </tr>
+              <tr class="debounce-instagram" data-test-url="https://test.instagram.com/test?u=">
+                <th>Instagram</th>
+                <td><code class="this-origin">...</code></td>
+                <td><code>*.instagram.com</code></td>
+                <td><button class="btn btn-primary" disabled>Run</button></td>
+              </tr>
+              <tr class="debounce-reddit" data-test-url="https://out.reddit.com/test?url=">
+                <th>Reddit</th>
+                <td><code class="this-origin">...</code></td>
+                <td><code>out.reddit.com</code></td>
+                <td><button class="btn btn-primary" disabled>Run</button></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
