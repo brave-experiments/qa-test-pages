@@ -7,6 +7,9 @@
   const jQuery = W.jQuery
 
   const fp2Options = {
+    fonts: {
+      extendedJsFonts: true
+    },
     excludes: {
       userAgent: false,
       webdriver: true,
@@ -37,7 +40,7 @@
       hasLiedOs: true,
       hasLiedBrowser: true,
       touchSupport: true,
-      fonts: true,
+      fonts: false,
       fontsFlash: true,
       audio: false,
       enumerateDevices: false,
@@ -87,12 +90,21 @@
     modal.modal('show')
   }
 
+  let numIFrameTestsInAir = 0
   const displayedHashLength = 8
   const stressTableBody = document.querySelector('#stress-table tbody')
   const onMessage = msg => {
     if (msg.data.action === 'fp-complete') {
       const context = msg.data.context
       const cellClass = `.${context}-value`
+      if (context.includes('-frame')) {
+        numIFrameTestsInAir -= 1
+        if (numIFrameTestsInAir === 0) {
+          for (const aFrame of iframeElms) {
+            aFrame.classList.add('d-none')
+          }
+        }
+      }
       for (const [fpName, [fpInput, fpHash]] of Object.entries(msg.data.fpValues)) {
         const selector = cellClass + '.value-' + fpName
         const tdElm = document.querySelector(selector)
@@ -139,7 +151,7 @@
   SW.addEventListener('message', onMessage, false)
 
   const startButton = document.getElementById('start')
-  const iframeElms = document.getElementsByTagName('iframe')
+  const iframeElms = Array.from(document.getElementsByTagName('iframe'))
 
   startButton.addEventListener('click', _ => {
     SW.controller.postMessage('generate')
@@ -148,6 +160,8 @@
     worker.onmessage = onMessage
 
     for (const aFrame of iframeElms) {
+      numIFrameTestsInAir += 1
+      aFrame.classList.remove('d-none')
       aFrame.contentWindow.postMessage('generate', '*')
     }
 

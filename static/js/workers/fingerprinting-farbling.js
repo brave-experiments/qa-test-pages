@@ -1491,6 +1491,9 @@
 })
 
 const fp2Options = {
+  fonts: {
+    extendedJsFonts: true
+  },
   excludes: {
     userAgent: false,
     webdriver: true,

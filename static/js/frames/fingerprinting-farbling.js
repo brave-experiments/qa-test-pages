@@ -1,6 +1,9 @@
 (_ => {
   const FP2 = window.Fingerprint2
   const fp2Options = {
+    fonts: {
+      extendedJsFonts: true
+    },
     excludes: {
       userAgent: false,
       webdriver: true,
@@ -31,7 +34,7 @@
       hasLiedOs: true,
       hasLiedBrowser: true,
       touchSupport: true,
-      fonts: true,
+      fonts: false,
       fontsFlash: true,
       audio: false,
       enumerateDevices: false,
