@@ -3,6 +3,8 @@
   const D = W.document
   const BU = W.BRAVE
 
+  const isWebKit = _ => (W.OffscreenCanvas === undefined)
+
   const getWebGLContext = _ => {
     const canvas = D ? new W.OffscreenCanvas(256, 256) : D.createElement('canvas')
     return canvas.getContext('webgl')
@@ -11,9 +13,15 @@
   const makeAPICall = (apiName, ...args) => {
     switch (apiName) {
       case 'webgl-get-supported-extensions':
+        if (isWebKit()) {
+          return 'Not supported in WebKit'
+        }
         return getWebGLContext().getSupportedExtensions()
 
       case 'webgl-get-extension': {
+        if (isWebKit()) {
+          return 'Not supported in WebKit'
+        }
         const extensionName = args ?? args[0]
         const rs = getWebGLContext().getExtension(extensionName)
         return {

@@ -35,6 +35,10 @@
 
   var _webGlFP = []
   var buildWebglFp = function (callback) {
+    if (self.OffscreenCanvas === undefined) {
+      _webGlFP = ['NA']
+      return callback()
+    }
     var canvas = new OffscreenCanvas(300, 150)
     var gl = canvas.getContext('webgl')
 
@@ -157,6 +161,10 @@
   let _canvasFP
   const _canvasFPByChannel = {}
   const buildCanvasFp = function (callback, channelIndex) {
+    if (self.OffscreenCanvas === undefined) {
+      _canvasFP = ['NA']
+      return callback()
+    }
     var result = []
     // Very simple now, need to make it more complex (geo shapes etc)
     var canvas = new OffscreenCanvas(2000, 200)
@@ -536,6 +544,9 @@
 
   // @pes
   var webglParamsKey = function (done, options) {
+    if (self.OffscreenCanvas === undefined) {
+      return 'NA'
+    }
     var params = [
       'MAX_VERTEX_UNIFORM_COMPONENTS',
       'MAX_VERTEX_UNIFORM_BLOCKS',
@@ -1303,6 +1314,9 @@
     window.swfobject.embedSWF(options.fonts.swfPath, id, '1', '1', '9.0.0', false, flashvars, flashparams, {})
   }
   var getWebglCanvas = function () {
+    if (self.OffscreenCanvas === undefined) {
+      return 'NA'
+    }
     var canvas = new OffscreenCanvas(300, 150)
     var gl = null
     try {
