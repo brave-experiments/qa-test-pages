@@ -51,11 +51,15 @@
     }
   }
 
-  const swUrl = './fingerprinting-farbling-service-worker.js'
-  if (SW.controller === null || (await SW.getRegistrations()).length === 0) {
-    await SW.register(swUrl)
-    W.location.reload()
-    return
+  const supportsServiceWorkers = (SW !== undefined)
+
+  if (supportsServiceWorkers) {
+    const swUrl = './fingerprinting-farbling-service-worker.js'
+    if (SW.controller === null || (await SW.getRegistrations()).length === 0) {
+      await SW.register(swUrl)
+      W.location.reload()
+      return
+    }
   }
 
   const fpFramePath = '/frames/fingerprinting-farbling-stress.html'
@@ -148,13 +152,17 @@
     }
   }
   W.addEventListener('message', onMessage, false)
-  SW.addEventListener('message', onMessage, false)
+  if (supportsServiceWorkers) {
+    SW.addEventListener('message', onMessage, false)
+  }
 
   const startButton = document.getElementById('start')
   const iframeElms = Array.from(document.getElementsByTagName('iframe'))
 
   startButton.addEventListener('click', _ => {
-    SW.controller.postMessage('generate')
+    if (supportsServiceWorkers) {
+      SW.controller.postMessage('generate')
+    }
 
     const worker = new W.Worker('./static/js/workers/fingerprinting-farbling.js')
     worker.onmessage = onMessage

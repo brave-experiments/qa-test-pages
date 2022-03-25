@@ -1386,13 +1386,27 @@
       return done('no voices')
     }, speechTimeout)
 
-    var voices = window.speechSynthesis.getVoices();
+    var voices = window.speechSynthesis.getVoices()
     if (voices.length !== 0) {
       clearTimeout(speechSynthesisTimerId)
       done(voicesFormatted(voices))
     } else {
       window.speechSynthesis.addEventListener('voiceschanged', onVoicesChanged)
     }
+  }
+
+  // @pes
+  var acceptLanguageKey = function (done) {
+    fetch('/reflect', { mode: 'same-origin' })
+      .then(response => response.json())
+      .then(responseObj => {
+        try {
+          done(responseObj.headers['accept-language'][0].value)
+        } catch (e) {
+          done(e.toString())
+        }
+      })
+      .catch(e => done(e.toString()))
   }
 
   var components = [
@@ -1434,7 +1448,8 @@
     { key: 'canvas-red', getData: canvasKeyChannel.bind(undefined, 0) },
     { key: 'canvas-green', getData: canvasKeyChannel.bind(undefined, 1) },
     { key: 'canvas-blue', getData: canvasKeyChannel.bind(undefined, 2) },
-    { key: 'speechSynthesisVoices', getData: speechSynthesisKey }
+    { key: 'speechSynthesisVoices', getData: speechSynthesisKey },
+    { key: 'acceptLang', getData: acceptLanguageKey }
   ]
 
   var Fingerprint2 = function (options) {

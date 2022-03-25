@@ -1332,6 +1332,23 @@
     }
   }
 
+  // @pes
+  var acceptLanguageKey = function (done) {
+    var origin = (document && document.location.origin)
+      ? document.location.origin
+      : self.location.origin
+    fetch(origin + '/reflect', { mode: 'same-origin' })
+      .then(response => response.json())
+      .then(responseObj => {
+        try {
+          done(responseObj.headers['accept-language'][0].value)
+        } catch (e) {
+          done(e.toString())
+        }
+      })
+      .catch(e => done(e.toString()))
+  }
+
   var components = [
     { key: 'userAgent', getData: UserAgent },
     { key: 'webdriver', getData: webdriver },
@@ -1370,7 +1387,8 @@
     { key: 'audio', getData: audioKey },
     { key: 'enumerateDevices', getData: enumerateDevicesKey },
     // @pes
-    { key: 'webglParams', getData: webglParamsKey }
+    { key: 'webglParams', getData: webglParamsKey },
+    { key: 'acceptLang', getData: acceptLanguageKey }
   ]
 
   var Fingerprint2 = function (options) {
@@ -1545,7 +1563,8 @@ const fp2Options = {
     webglParams: false,
     'canvas-red': false,
     'canvas-green': false,
-    'canvas-blue': false
+    'canvas-blue': false,
+    acceptLang: false
   }
 }
 
