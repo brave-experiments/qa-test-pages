@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Brave QA Tests | Navigation Tracking | Warning Interstitial</title>
+  <title>Brave QA Tests | Navigation Tracking</title>
   <link rel="icon" href="/static/images/brave-favicon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/static/css/bootstrap.min.css">
@@ -18,8 +18,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
-              <li class="breadcrumb-item"><a href="/navigation-tracking/index.html">Navigation tracking</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Warning interstitial</li>
+              <li class="breadcrumb-item active" aria-current="page">Navigation tracking</li>
               <li class="ml-auto"><a class="other-origin" data-href="/navigation-tracking/warning-interstitial.html" href="#">Other site</a></li>
             </ol>
           </nav>
@@ -30,57 +29,12 @@
     <section>
       <div class="row">
         <div class="col">
-          <h1>Warning interstitial</h1>
+          <h1>Navigation Tracking Tests</h1>
 
-          <h2>Expected behavior</h2>
-          <ul>
-            <li>
-              <strong>Enabled:</strong>
-              The referrer displayed below should match what appears
-              in the "Enabled" column.
-            </li>
-            <li>
-              <strong>Disabled:</strong>
-              You should either not be returned to this page, or the referrer
-              displayed below should match what appears in the "Disabled" column.
-            </li>
+          <ul class="list-group">
+            <li class="list-group-item"><a href="/navigation-tracking/debouncing.html">Debouncing</a></li>
+            <li class="list-group-item"><a href="/navigation-tracking/warning-interstitial.html">Warning interstitial</a></li>
           </ul>
-
-          <div class="d-none" id="observed-referer-section">
-            <h2>Observed Referrer</h2>
-            <p><code class="blockquote" id="observed-referer">...</code></p>
-          </div>
-
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Test Name</th>
-                <th>Enabled</th>
-                <th>Disabled</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="debounce-youtube" data-test-url="https://www.youtube.com/redirect?q=">
-                <th>YouTube</th>
-                <td><code class="this-origin">...</code></td>
-                <td><code>*.youtube.com</code></td>
-                <td><button class="btn btn-primary" disabled>Run</button></td>
-              </tr>
-              <tr class="debounce-instagram" data-test-url="https://l.instagram.com/?u=">
-                <th>Instagram</th>
-                <td><code class="this-origin">...</code></td>
-                <td><code>*.instagram.com</code></td>
-                <td><button class="btn btn-primary" disabled>Run</button></td>
-              </tr>
-              <tr class="debounce-reddit" data-test-url="https://out.reddit.com/test?url=">
-                <th>Reddit</th>
-                <td><code class="this-origin">...</code></td>
-                <td><code>out.reddit.com</code></td>
-                <td><button class="btn btn-primary" disabled>Run</button></td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </section>
