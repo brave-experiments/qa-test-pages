@@ -51,44 +51,33 @@
             <p><code class="blockquote" id="observed-referer">...</code></p>
           </div>
 
+          <h3>Test cases</h3>
           <table class="table">
             <thead>
               <tr>
-                <th>Test Name</th>
+                <th>Condition</th>
                 <th>Enabled</th>
                 <th>Disabled</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr class="debounce-youtube" data-test-url="https://www.youtube.com/redirect?q=">
-                <th>YouTube</th>
+              <tr data-test-url="/navigation-tracking/error.html?test=urlencode&brave_testing=">
+                <td>Default</td>
                 <td><code class="this-origin">...</code></td>
-                <td><code>*.youtube.com</code></td>
+                <td><code class="other-origin">...</code></td>
                 <td><button class="btn btn-primary" disabled>Run</button></td>
               </tr>
-              <tr class="debounce-instagram" data-test-url="https://l.instagram.com/?u=">
-                <th>Instagram</th>
+              <tr data-test-action="base64" data-test-url="/navigation-tracking/error.html?test=base64&brave_testing_base64=">
+                <td>Base64</td>
                 <td><code class="this-origin">...</code></td>
-                <td><code>*.instagram.com</code></td>
+                <td><code class="other-origin">...</code></td>
                 <td><button class="btn btn-primary" disabled>Run</button></td>
               </tr>
-              <tr class="debounce-reddit" data-test-url="https://out.reddit.com/test?url=">
-                <th>Reddit</th>
+              <tr data-test-action="regex" data-test-url="/navigation-tracking/{replace};.html">
+                <td>Regex</td>
                 <td><code class="this-origin">...</code></td>
-                <td><code>out.reddit.com</code></td>
-                <td><button class="btn btn-primary" disabled>Run</button></td>
-              </tr>
-              <tr class="debounce-reddit" data-test-url="https://m.facebook.com/l.php?u=">
-                <th>Facebook</th>
-                <td><code class="this-origin">...</code></td>
-                <td><code>m.facebook.com</code></td>
-                <td><button class="btn btn-primary" disabled>Run</button></td>
-              </tr>
-              <tr class="debounce-fmarier" data-test-url="https://fmarier.github.io/brave-testing/debouncer/redirect.html?brave_testing=">
-                <th>FMarier</th>
-                <td><code class="this-origin">...</code></td>
-                <td><code>fmarier.github.io</code></td>
+                <td><code>N/A (error)</code></td>
                 <td><button class="btn btn-primary" disabled>Run</button></td>
               </tr>
             </tbody>
