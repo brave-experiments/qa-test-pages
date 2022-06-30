@@ -18,7 +18,7 @@
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
               <li class="breadcrumb-item"><a href="/filtering/index.html">Filtering</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Network requests</li>
+              <li class="breadcrumb-item active" aria-current="page">Text ads</li>
               <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
             </ol>
           </nav>
@@ -45,7 +45,13 @@
     <section class="show-on-brave-software-com">
       <div class="row">
         <div class="col">
-          <h2>Not a Text Ad</h2>
+          <h2>Main frame tests</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <h3>Not a text ad</h3>
         </div>
       </div>
 
@@ -78,12 +84,10 @@
           </div>
         </div>
       </div>
-    </section>
 
-    <section class="show-on-brave-software-com">
       <div class="row">
         <div class="col">
-          <h2>Is a Text Ad</h2>
+          <h3>Is a text ad</h3>
         </div>
       </div>
 
@@ -116,12 +120,10 @@
           </div>
         </div>
       </div>
-    </section>
 
-    <section class="show-on-brave-software-com">
       <div class="row">
         <div class="col">
-          <h2>Handling Script Tags</h2>
+          <h3>Handling Script Tags</h3>
         </div>
       </div>
 
@@ -154,6 +156,86 @@
                 // and here is a lot of no op-text, that should
                 // not be considered when evaluating how "text-y" an ad looks.
               </script>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="show-on-brave-software-com">
+      <div class="row">
+        <div class="col">
+          <h2>Frame tests</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <h3>Local frame containing a text ad</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p>
+            This ad element is only text, and has only text, that we consider
+            it a first-party ad, and so only hide it in aggressive mode.
+          </p>
+          <h3>Expected Results</h3>
+          <ul class="list-inline">
+            <li class="list-inline-item">
+              <strong>Disabled:</strong>
+              <span class="badge badge-pill badge-primary">Shown</span>
+            </li>
+            <li class="list-inline-item">
+              <strong>Default:</strong>
+              <span class="badge badge-pill badge-primary">Shown</span>
+            </li>
+            <li class="list-inline-item">
+              <strong>Aggressive:</strong>
+              <span class="badge badge-pill badge-dark">Hidden</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="border border-primary">
+            <div class="embed-responsive embed-responsive-4by3">
+              <iframe iframe data-src="/frames/filtering-text-ads-text.html" class="this-origin embed-responsive-item"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <h3>Local frame containing a low-text ad</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <p>
+            This ad element has a small enough amount of text that we do not
+            consider it a local "ad" in default modes.
+          </p>
+          <h3>Expected Results</h3>
+          <ul class="list-inline">
+            <li class="list-inline-item">
+              <strong>Disabled:</strong>
+              <span class="badge badge-pill badge-primary">Shown</span>
+            </li>
+            <li class="list-inline-item">
+              <strong>Default:</strong>
+              <span class="badge badge-pill badge-dark">Hidden</span>
+            </li>
+            <li class="list-inline-item">
+              <strong>Aggressive:</strong>
+              <span class="badge badge-pill badge-dark">Hidden</span>
+            </li>
+          </ul>
+        </div>
+        <div class="col">
+          <div class="border border-primary">
+            <div class="embed-responsive embed-responsive-4by3">
+              <iframe iframe data-src="/frames/filtering-text-ads-low-text.html" class="this-origin embed-responsive-item"></iframe>
             </div>
           </div>
         </div>
