@@ -1408,6 +1408,9 @@
       })
       .catch(e => done(e.toString()))
   }
+  var navigatorLanguagesKey = function (done) {
+    done(window.navigator.languages)
+  }
 
   var components = [
     { key: 'userAgent', getData: UserAgent },
@@ -1449,7 +1452,8 @@
     { key: 'canvas-green', getData: canvasKeyChannel.bind(undefined, 1) },
     { key: 'canvas-blue', getData: canvasKeyChannel.bind(undefined, 2) },
     { key: 'speechSynthesisVoices', getData: speechSynthesisKey },
-    { key: 'acceptLang', getData: acceptLanguageKey }
+    { key: 'acceptLang', getData: acceptLanguageKey },
+    { key: 'navigatorLanguages', getData: navigatorLanguagesKey }
   ]
 
   var Fingerprint2 = function (options) {

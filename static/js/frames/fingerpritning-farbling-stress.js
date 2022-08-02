@@ -38,7 +38,8 @@
       fontsFlash: true,
       audio: true,
       enumerateDevices: false,
-      webglParams: false
+      webglParams: false,
+      navigatorLanguages: false
     }
   }
 

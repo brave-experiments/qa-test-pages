@@ -1348,6 +1348,9 @@
       })
       .catch(e => done(e.toString()))
   }
+  var navigatorLanguagesKey = function (done, options) {
+    done(navigator.languages)
+  }
 
   var components = [
     { key: 'userAgent', getData: UserAgent },
@@ -1388,7 +1391,8 @@
     { key: 'enumerateDevices', getData: enumerateDevicesKey },
     // @pes
     { key: 'webglParams', getData: webglParamsKey },
-    { key: 'acceptLang', getData: acceptLanguageKey }
+    { key: 'acceptLang', getData: acceptLanguageKey },
+    { key: 'navigatorLanguages', getData: navigatorLanguagesKey }
   ]
 
   var Fingerprint2 = function (options) {
@@ -1564,7 +1568,8 @@ const fp2Options = {
     'canvas-red': false,
     'canvas-green': false,
     'canvas-blue': false,
-    acceptLang: false
+    acceptLang: false,
+    navigatorLanguages: false
   }
 }
 

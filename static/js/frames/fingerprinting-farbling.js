@@ -39,7 +39,8 @@
       audio: false,
       enumerateDevices: false,
       webglParams: false,
-      speechSynthesisVoices: false
+      speechSynthesisVoices: false,
+      navigatorLanguages: false
     }
   }
 
