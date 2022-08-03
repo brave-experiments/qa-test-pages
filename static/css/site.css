@@ -30,3 +30,7 @@ section:not(:last-child) {
 .show-on-brave-software-com {
   display: none;
 }
+
+.table td {
+  word-break: break-word;
+}

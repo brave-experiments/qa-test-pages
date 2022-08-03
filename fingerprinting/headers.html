@@ -32,46 +32,41 @@
         <div class="col">
           <h1>Headers</h1>
 
+          <h3>Accept-Language</h3>
           <p>
-            <button id="start" class="btn btn-primary btn-block btn-large" disabled>Collect values</button>
+            Should be a single language code (e.g., "en", "es", etc.), followed
+            by <code>q=</code> and a value between 0 and 1.
           </p>
+
+          <p>
+            When fingerprinting protections are <strong>disabled</strong>, the listed
+            language codes should match each language set in
+            <code>brave://settings/languages</code>.
+          </p>
+
+          <p>
+            In <strong>default</strong> fingerprinting settings, this value
+            should match <em>only the first</em> language set in
+            <code>brave://settings/languages</code>.
+          </p>
+
+          <p>
+            In <strong>aggressive</strong> fingerprinting settings, this value
+            should always be <code>en</code>, regardless of the language
+            settings in <code>brave://settings/languages</code>.
+          </p>
+
+          <h3>Accept</h3>
+          <p>In all configurations, should <em>not</em> include <code>application/signed-exchange</code></p>
         </div>
       </div>
 
       <div class="row">
         <div class="col">
-          <h2>Expected values</h2>
+          <p>
+            <button id="start" class="btn btn-primary btn-block btn-large" disabled>Collect values</button>
+          </p>
 
-          <dl>
-            <dt>Accept-Language</dt>
-            <dd>
-              <p>
-                Should be a single language code (e.g., "en", "es", etc.), followed
-                by <code>q=</code> and a value between 0 and 1.
-              </p>
-
-              <p>
-                When fingerprinting protections are <strong>disabled</strong>, the listed
-                language codes should match each language set in
-                <code>brave://settings/languages</code>.
-              </p>
-
-              <p>
-                In <strong>default</strong> fingerprinting settings, this value
-                should match <em>only the first</em> language set in
-                <code>brave://settings/languages</code>.
-              </p>
-
-              <p>
-                In <strong>aggressive</strong> fingerprinting settings, this value
-                should always be <code>en</code>, regardless of the language
-                settings in <code>brave://settings/languages</code>.
-              </p>
-            </dd>
-          </dl>
-        </div>
-
-        <div class="col">
           <table class="table table-sm">
             <thead class="thead-light">
               <tr>
@@ -83,6 +78,11 @@
             <tbody>
               <tr data-header-name="accept-language">
                 <th scope="row"><code>Accept-Language</code></th>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr data-header-name="accept">
+                <th scope="row"><code>Accept</code></th>
                 <td></td>
                 <td></td>
               </tr>

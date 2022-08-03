@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Fingerprinting | Fonts (src:local)</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/fingerprinting/index.html">Fingerprinting</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Fonts (src:local)</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Fonts (<code>src:local</code>)</h1>
+
+          <h2>Setup instructions</h2>
+          <ol>
+            <li>Be running MacOS or Windows (feature is not enabled on linux)</li>
+            <li>Download and install the <a href="https://fonts.google.com/specimen/Fredoka+One?query=fredoka+one">fredoka
+              one</a> font from Google Fonts.</li>
+            <li>Reload this page.</li>
+          </ol>
+
+          <p>When fingerprinting protections are enabled and reduce "Prevent sites from fingerprinting me based on my
+            language preferences" are enabled in <code>brave://settings/shields/</code>, the text below should be rendered
+            identically (i.e., looking the same and having the same width).</p>
+
+          <p><strong>Note</strong>: since there is some randomization in the font-fingerprinting feature, the test may
+          occasionally <em>fail</em> despite the feature working correctly. If the test fails, please check again
+          on the <a class="other-origin">other test site</a> (since its very unlikely that randomization would cause
+          the test to incorrectly fail twice).</p>
+
+          <p>
+            <button id="start" class="btn btn-primary btn-block btn-large" disabled>Start test</button>
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <div id="control-section">
+            <h2>Control</h2>
+            <p><span class="badge badge-pill badge-primary">-</span></p>
+            <p>Width: <code>-</code></p>
+          </div>
+        </div>
+
+        <div class="col">
+          <div id="test-section">
+            <h2>Test</h2>
+            <p><span class="badge badge-pill badge-warning">-</span></p>
+            <p>Width: <code>-</code></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+<style id="src-local-style">
+@font-face {
+  font-family: FakeFont;
+  src:local('Fredoka One')
+}
+#test-section .badge {
+  font-family: FakeFont, -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+.badge {
+  font-size: 2em;
+}
+</style>
+          <pre class="border"></pre>
+        </div>
+      </div>
+
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/fingerprinting-fonts.js"></script>
+</body>
+
+</html>
