@@ -2,18 +2,21 @@
   const W = window
   const D = W.document
 
-  const btnElm = D.getElementById('start')
-  const preElm = D.getElementsByTagName('pre')[0]
-  const styleElm = D.getElementById('src-local-style')
-
   const testString = 'mmmmmmmmmmlli'
-  const tests = ['control-section', 'test-section']
 
-  preElm.innerText = styleElm.outerHTML
+  const btnElm = D.getElementById('start')
+  const fontTestSections = D.getElementsByClassName('font-test')
+  const testsCases = ['control-section', 'test-section']
 
-  const runTest = testId => {
-    const testSpanElm = D.querySelector(`#${testId} span.badge`)
-    const testCodeElm = D.querySelector(`#${testId} code`)
+  for (const aTestSection of fontTestSections) {
+    const preElm = aTestSection.getElementsByTagName('pre')[0]
+    const styleElm = aTestSection.getElementsByTagName('style')[0]
+    preElm.innerText = styleElm.outerHTML
+  }
+
+  const runTest = (fontTestSectionElm, testCaseName) => {
+    const testSpanElm = fontTestSectionElm.querySelector(`.${testCaseName} span.badge`)
+    const testCodeElm = fontTestSectionElm.querySelector(`.${testCaseName} code`)
 
     testSpanElm.innerText = testString
     testCodeElm.innerText = testSpanElm.offsetWidth
@@ -21,8 +24,10 @@
 
   const onClick = _ => {
     btnElm.setAttribute('disabled', true)
-    for (const aSectionId of tests) {
-      runTest(aSectionId)
+    for (const aTestSectionElm of fontTestSections) {
+      for (const aTestCase of testsCases) {
+        runTest(aTestSectionElm, aTestCase)
+      }
     }
     btnElm.removeAttribute('disabled')
   }
