@@ -34,3 +34,7 @@ section:not(:last-child) {
 .table td {
   word-break: break-word;
 }
+
+.font-test .badge {
+  font-size: 2em;
+}
