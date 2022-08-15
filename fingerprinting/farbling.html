@@ -279,6 +279,28 @@
                 <td class="worker-value value-navigatorLanguages">-</td>
                 <td class="serviceworker-value value-navigatorLanguages">-</td>
               </tr>
+              <tr>
+                <th scope="row">Screen resolution</th>
+                <td>1.44</td>
+                <td>both</td>
+                <td>diff</td>
+                <td class="local-value value-screenResolution">-</td>
+                <td class="local-frame-value value-screenResolution">-</td>
+                <td class="remote-frame-value value-screenResolution">-</td>
+                <td class="worker-value value-screenResolution">-</td>
+                <td class="serviceworker-value value-screenResolution">-</td>
+              </tr>
+              <tr>
+                <th scope="row">Available screen resolution</th>
+                <td>1.44</td>
+                <td>both</td>
+                <td>diff</td>
+                <td class="local-value value-availableScreenResolution">-</td>
+                <td class="local-frame-value value-availableScreenResolution">-</td>
+                <td class="remote-frame-value value-availableScreenResolution">-</td>
+                <td class="worker-value value-availableScreenResolution">-</td>
+                <td class="serviceworker-value value-availableScreenResolution">-</td>
+              </tr>
             </tbody>
           </table>
 
@@ -296,20 +318,22 @@
             <div class="form-group">
               <label for="individual-fp-test-select">Fingerprint Test</label>
               <select class="form-control" id="individual-fp-test-select">
-                <option value="webgl">WebGL Drawing</option>
-                <option value="webglVendorAndRenderer">WebGL Vendor and Render</option>
-                <option value="webglParams">WebGL2 Params</option>
-                <option value="userAgent">User Agent</option>
+                <option value="webgl">WebGL drawing</option>
+                <option value="webglVendorAndRenderer">WebGL vendor and render</option>
+                <option value="webglParams">WebGL2 params</option>
+                <option value="userAgent">User agent</option>
                 <option value="canvas">Canvas</option>
                 <option value="canvas-red"> ∟ red channel</option>
                 <option value="canvas-green"> ∟ green channel</option>
                 <option value="canvas-blue"> ∟ blue channel</option>
-                <option value="audio">Web Audio</option>
+                <option value="audio">Web audio</option>
                 <option value="plugins">Plugins</option>
-                <option value="hardwareConcurrency">Hardware Concurrency</option>
-                <option value="enumerateDevices">Enumerate Devices</option>
-                <option value="deviceMemory">Device Memory</option>
-                <option value="speechSynthesisVoices">Speech Synthesis Voices</option>
+                <option value="hardwareConcurrency">Hardware concurrency</option>
+                <option value="enumerateDevices">Enumerate devices</option>
+                <option value="deviceMemory">Device memory</option>
+                <option value="speechSynthesisVoices">Speech synthesis voices</option>
+                <option value="screenResolution">Screen resolution</option>
+                <option value="availableScreenResolution">Available screen resolution</option>
               </select>
             </div>
             <div class="form-group">
