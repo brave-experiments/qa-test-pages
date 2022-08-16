@@ -13,6 +13,7 @@
       pixelRatio: true,
       hardwareConcurrency: false,
       screenResolution: true,
+      screenResolutionMediaQuery: true,
       availableScreenResolution: true,
       timezoneOffset: true,
       timezone: true,

@@ -464,6 +464,26 @@
     }
     return resolution
   }
+  var screenResolutionMediaQueryKey = function (done, options) {
+    done(getScreenResolutionMediaQuery(options))
+  }
+  var getScreenResolutionMediaQuery = function (options) {
+    const lessThan = (feature, val) =>
+          !matchMedia(`(min-${feature}: ${val}px)`).matches
+    const find = function (min, max, feature) {
+      if (min === max) {
+	return min
+      }
+      const mid = Math.ceil((max + min)/2)
+      return lessThan(feature, mid) ?
+	find(min, mid - 1, feature) : find(mid, max, feature)
+    }
+    const resolution = [find(0, 10000, "device-width"), find(0, 10000, "device-height")]
+    if (options.screen.detectScreenOrientation) {
+      resolution.sort().reverse()
+    }
+    return resolution
+  }
   var availableScreenResolutionKey = function (done, options) {
     done(getAvailableScreenResolution(options))
   }
@@ -1421,6 +1441,7 @@
     { key: 'pixelRatio', getData: pixelRatioKey },
     { key: 'hardwareConcurrency', getData: hardwareConcurrencyKey },
     { key: 'screenResolution', getData: screenResolutionKey },
+    { key: 'screenResolutionMediaQuery', getData: screenResolutionMediaQueryKey },
     { key: 'availableScreenResolution', getData: availableScreenResolutionKey },
     { key: 'timezoneOffset', getData: timezoneOffset },
     { key: 'timezone', getData: timezone },
