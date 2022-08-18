@@ -15,42 +15,26 @@ jobs:
       id-token: write
       contents: read # This is required for actions/checkout
     strategy:
+      fail-fast: false
       matrix:
         environment: ["development", "staging"]
+    environment: ${{ matrix.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Select AWS role and bucket
-        id: aws_vars
-        run: |
-          case "${ENVIRONMENT}" in
-            "development")
-              echo "::set-output name=awsrole::${{ secrets.AWS_ROLE_DEVELOPMENT }}"
-              echo "::set-output name=bucket_name::${{ secrets.S3_BUCKET_DEVELOPMENT }}"
-              echo "::set-output name=cloudfront_id::${{ secrets.CLOUDFRONT_ID_DEVELOPMENT }}"
-              ;;
-            "staging")
-              echo "::set-output name=awsrole::${{ secrets.AWS_ROLE_STAGING }}"
-              echo "::set-output name=bucket_name::${{ secrets.S3_BUCKET_STAGING }}"
-              echo "::set-output name=cloudfront_id::${{ secrets.CLOUDFRONT_ID_STAGING }}"
-              ;;
-          esac
-        env:
-          ENVIRONMENT: ${{ matrix.environment }}
-
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ steps.aws_vars.outputs.awsrole }}
+          role-to-assume: ${{ secrets.AWS_ROLE }}
           role-session-name: github-actions-dev_pages-brave-com-${{ github.triggering_actor }}-${{ github.run_id }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Deploy site
         id: deploy
         env:
-          S3_BUCKET_NAME: ${{ steps.aws_vars.outputs.bucket_name }}
-          CLOUDFRONT_ID: ${{ steps.aws_vars.outputs.cloudfront_id }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET }}
+          CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
         run: |
           set -eux
           echo "::group::Upload to AWS S3"
