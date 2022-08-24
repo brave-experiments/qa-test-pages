@@ -1,0 +1,46 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read # This is required for actions/checkout
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: ["development", "staging"]
+    environment: ${{ matrix.environment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE }}
+          role-session-name: github-actions-dev_pages-brave-com-${{ github.triggering_actor }}-${{ github.run_id }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Deploy site
+        id: deploy
+        env:
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET }}
+          CLOUDFRONT_ID: ${{ secrets.CLOUDFRONT_ID }}
+        run: |
+          set -eux
+          echo "::group::Upload to AWS S3"
+          aws s3 sync . s3://${S3_BUCKET_NAME} --exclude "node_modules/*" --exclude package.json --exclude package-lock.json --exclude ".*" --delete
+          echo "::endgroup::"
+
+          echo "::group::Invalidate CDN Cache"
+          aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*"
+          echo "::endgroup::"
