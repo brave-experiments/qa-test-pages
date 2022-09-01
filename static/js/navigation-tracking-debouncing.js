@@ -14,14 +14,19 @@
   const D = W.document
   const BU = W.BRAVE
 
-  const currentUrl = BU.thisOriginUrlSecure('/navigation-tracking/debouncing.html?complete')
+  const currentPath = '/navigation-tracking/debouncing.html?complete'
+  const currentUrl = BU.thisOriginUrlSecure(currentPath)
   const actionFunctionMapping = {
     base64: bouncerUrl => bouncerUrl + base64UrlEncode(currentUrl),
     regex: bouncerUrl => {
       // The debouncing rule being tested does not want a protocol in place.
       const currentUrlNoProto = currentUrl.replace('https://', '')
       const encodedCurUrl = W.encodeURIComponent(currentUrlNoProto)
-      return bouncerUrl.replace('{replace}', encodedCurUrl)
+      const destUrl = bouncerUrl
+        .replace('{replace}', encodedCurUrl)
+        .replace('{this-path}', W.encodeURIComponent(currentPath))
+        .replace('{this-origin}', W.encodeURIComponent(D.location.host))
+      return destUrl
     },
     none: bouncerUrl => bouncerUrl + W.encodeURIComponent(currentUrl)
   }
