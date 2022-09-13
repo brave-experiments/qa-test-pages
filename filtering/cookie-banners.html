@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Filtering | Cookie Banners</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/filtering/index.html">Filtering</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Cookie banners</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+
+          <h1>Cookie Banners</h1>
+          <p>
+            This page shows page content that should be hidden or modified
+            only when the user has enabled cookie notification blocking.
+            In Brave this is done by enabling the cookie notification filter
+            list in <code>brave://settings/shields/filters</code>, or accepting
+            the "Cookie consent blocking" prompt.
+          </p>
+
+          <p>
+            The below, right hand content should be hidden when the following are
+            true.
+          </p>
+
+          <ul>
+            <li>Shields are enabled and "Block trackers and ads" is either
+              default or aggressive.</li>
+            <li><strong>EasyList-Cookie List</strong> is enabled in
+              <code>brave://settings/shields/filters</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h3>Control Case</h3>
+          <div class="border border-primary">
+            <img src="/static/images/test.jpg" class="img-thumbnail">
+          </div>
+
+          <p>The above image should be displayed in all browser configurations.</p>
+        </div>
+
+        <div class="col">
+          <h3>Test Case</h3>
+          <div class="border border-primary ">
+            <img src="/static/images/test.jpg" class="img-thumbnail" id="EUCookieBar">
+          </div>
+
+          <p>The above image should be hidden if cookie-banner blocking is enabled.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+</body>
+
+</html>
