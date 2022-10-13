@@ -3,7 +3,7 @@
   const BU = W.BRAVE
 
   const isGlobalTrue = path => {
-    const upperName = path.map(x => x.toUpperCase).join('_')
+    const upperName = path.map(x => x.toUpperCase()).join('_')
     return W[upperName] === true
   }
 

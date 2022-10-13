@@ -10,10 +10,11 @@
   }
 
   const makeResultSpan = (exists, isError) => {
-    const span = D.createElement('span')
-    span.className = 'badge badge-pill '
-    span.className += isError ? 'badge-error' : 'badge-primary'
-    span.innerText = exists ? 'true' : 'null'
+    const spanElm = D.createElement('span')
+    spanElm.className = 'badge badge-pill '
+    spanElm.className += isError ? 'badge-error' : 'badge-primary'
+    spanElm.innerText = exists ? 'true' : 'null'
+    return spanElm
   }
 
   const testRows = D.querySelectorAll('tr[data-property]')
