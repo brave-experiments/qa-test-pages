@@ -3,7 +3,7 @@
   const D = W.document
   const BU = W.BRAVE
 
-  const frameMapping = {
+  const windowMapping = {
     'this-frame': W,
     'local-frame': D.querySelector('iframe.this-origin').contentWindow,
     'remote-frame': D.querySelector('iframe.other-origin').contentWindow
@@ -18,15 +18,18 @@
   }
 
   const testRows = D.querySelectorAll('tr[data-property]')
-  for (const aTestRow of testRows) {
-    const testProp = aTestRow.dataset.property
-    const testMsg = 'filtering-scriptlets::read'
-    for (const [aFrameLabel, aFrame] of Object.entries(frameMapping)) {
-      const isPropTrue = await BU.sendPostMsg(aFrame, testMsg, {
-        path: testProp.split('.')
-      })
-      const testCell = D.querySelector(`tr[data-property=${testProp}] td.${aFrameLabel}`)
-      testCell.appendChild(makeResultSpan(isPropTrue, !isPropTrue))
+
+  W.setTimeout(async _ => {
+    for (const aTestRow of testRows) {
+      const testProp = aTestRow.dataset.property
+      const testMsg = 'filtering-scriptlets::read'
+      for (const [aFrameLabel, aWindow] of Object.entries(windowMapping)) {
+        const isPropTrue = await BU.sendPostMsg(aWindow, testMsg, {
+          path: testProp.split('.')
+        })
+        const testCell = D.querySelector(`tr[data-property=${testProp}] td.${aFrameLabel}`)
+        testCell.appendChild(makeResultSpan(isPropTrue, !isPropTrue))
+      }
     }
-  }
+  }, 2000)
 })()

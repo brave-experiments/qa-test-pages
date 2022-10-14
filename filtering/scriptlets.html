@@ -42,7 +42,7 @@
           <p>
             This test checks to see if the <code>brave-fix</code> scriptlet
             is being applied correctly, by checking whether
-            <code>navigator.brave</code> existed by the time the <code>head</code>
+            <code>window.BRAVE_TEST_VALUE</code> existed by the time the <code>head</code>
             element was parsed.
           </p>
 
@@ -50,6 +50,7 @@
             <thead>
               <tr>
                 <th></th>
+                <th>Expected</th>
                 <th>This frame</th>
                 <th>Local frame</th>
                 <th>Remote frame</th>
@@ -58,6 +59,7 @@
             <tbody>
               <tr data-property="BRAVE_TEST_VALUE_EXISTS">
                 <th scope="row"><code>##+js(set, window.BRAVE_TEST_VALUE, true)</code></th>
+                <th><span class="badge badge-pill badge-primary">true</span></th>
                 <td class="this-frame"></td>
                 <td class="local-frame"></td>
                 <td class="remote-frame"></td>

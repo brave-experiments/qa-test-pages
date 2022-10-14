@@ -250,6 +250,7 @@
     thisOriginUrlSecure,
     otherOriginUrl,
     sendPostMsg,
-    receivePostMsg
+    receivePostMsg,
+    getFrameMapping
   }
 })()
