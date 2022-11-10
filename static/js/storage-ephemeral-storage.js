@@ -405,9 +405,13 @@
     const initialCellElms = D.querySelectorAll('#initial .cell-nested-frame')
     const cellStyle = cookieSettingOpt === cookieSettingEnum.BLOCK_ALL
       ? testOutcomeEnum.EXCEPTION
-      : testOutcomeEnum.SET
+      : testOutcomeEnum.EMPTY
     for (const aCell of Array.from(initialCellElms)) {
-      styleCellForExpectedValue(aCell, cellStyle)
+      const shouldBeBlocked = aCell.parentNode.classList.contains('row-index-db')
+      const finalCellStyle = shouldBeBlocked
+        ? testOutcomeEnum.EXCEPTION
+        : cellStyle
+      styleCellForExpectedValue(aCell, finalCellStyle)
     }
 
     updateTestUrlText()
@@ -482,8 +486,8 @@
         testResults[nestedStorageKey] = testOutcomeEnum.EXCEPTION
       } else {
         testResults[nestedStorageKey] = nestedStorageVal === nestedFrameTestValue
-          ? testOutcomeEnum.SET
-          : testOutcomeEnum.WRONG
+          ? testOutcomeEnum.WRONG
+          : testOutcomeEnum.EMPTY
       }
     }
     return testResults
