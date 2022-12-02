@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | DOM properties | performance.now</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/dom-properties/index.html">DOM properties</a></li>
+              <li class="breadcrumb-item active" aria-current="page">performance.now</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Clamping performance.now()</h1>
+          <p>
+            <strong>Test instructions:</strong>
+            After clicking the run test button, the test will record 1000
+            measurements from <code>performance.now()</code>.  When Shields
+            are up, these should all be integers. When Shields are down,
+            they should be a mix of integers and float values.
+          </p>
+          <p>
+            The test will also summarize the findings for you too.
+          </p>
+          <button id="button-start-test" type="button" disabled class="btn btn-primary btn-lg btn-block">Run test</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <section class="frame-test" data-test="this-frame">
+            <h2>This Frame</h2>
+            <div class="d-none alert-secondary alert">---</div>
+            <div class="results well"></div>
+          </section>
+        </div>
+        <div class="col">
+          <section class="frame-test" data-test="local-frame">
+            <h2>Local Frame</h2>
+            <div class="d-none alert-secondary alert">---</div>
+            <div class="results well"></div>
+          </section>
+        </div>
+        <div class="col">
+          <section class="frame-test" data-test="remote-frame">
+            <h2>Remote Frame</h2>
+            <div class="d-none alert-secondary alert">---</div>
+            <div class="results well"></div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/frames/dom-properties-performance.js"></script>
+  <script src="/static/js/dom-properties-performance.js"></script>
+</body>
+
+</html>
