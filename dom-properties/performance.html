@@ -33,10 +33,11 @@
           <h1>Clamping performance.now()</h1>
           <p>
             <strong>Test instructions:</strong>
-            After clicking the run test button, the test will record 1000
-            measurements from <code>performance.now()</code>.  When Shields
-            are up, these should all be integers. When Shields are down,
-            they should be a mix of integers and float values.
+            After clicking the run test button, the test will record 100
+            measurements from <code>performance.now()</code>. Clamping of this
+            API is tied to the brave://flags/#brave-round-time-stamps feature flag.
+            When the flag enabled,  these should all be integers. When the flag
+            is disabled they should be a mix of integers and float values.
           </p>
           <p>
             The test will also summarize the findings for you too.
