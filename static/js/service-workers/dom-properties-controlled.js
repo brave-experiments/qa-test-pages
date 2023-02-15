@@ -1,18 +1,18 @@
 /* eslint-env worker,serviceworker */
 
-let isServiceWorker
-try {
-  isServiceWorker = !!self.clients
-} catch (e) {
-  isServiceWorker = false
-}
-
 const getProperties = _ => {
   return {
     gpc: navigator.globalPrivacyControl,
     isbrave: navigator.brave,
     connection: navigator.connection && 'NetworkInformation'
   }
+}
+
+let isServiceWorker
+try {
+  isServiceWorker = !!self.clients
+} catch (e) {
+  isServiceWorker = false
 }
 
 if (isServiceWorker) {
