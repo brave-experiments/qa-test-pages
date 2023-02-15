@@ -1,4 +1,4 @@
-/* eslint-env worker */
+/* eslint-env worker,serviceworker */
 
 /*
 * Fingerprintjs2 2.1.0 - Modern & flexible browser fingerprint library v2
@@ -1315,7 +1315,7 @@
   }
   var getWebglCanvas = function () {
     if (self.OffscreenCanvas === undefined) {
-      return null
+      return 'NA'
     }
     var canvas = new OffscreenCanvas(300, 150)
     var gl = null
@@ -1330,6 +1330,26 @@
     if (loseContextExtension != null) {
       loseContextExtension.loseContext()
     }
+  }
+
+  // @pes
+  var acceptLanguageKey = function (done) {
+    var origin = (document && document.location.origin)
+      ? document.location.origin
+      : self.location.origin
+    fetch(origin + '/reflect', { mode: 'same-origin' })
+      .then(response => response.json())
+      .then(responseObj => {
+        try {
+          done(responseObj.headers['accept-language'][0].value)
+        } catch (e) {
+          done(e.toString())
+        }
+      })
+      .catch(e => done(e.toString()))
+  }
+  var navigatorLanguagesKey = function (done, options) {
+    done(navigator.languages)
   }
 
   var components = [
@@ -1370,7 +1390,9 @@
     { key: 'audio', getData: audioKey },
     { key: 'enumerateDevices', getData: enumerateDevicesKey },
     // @pes
-    { key: 'webglParams', getData: webglParamsKey }
+    { key: 'webglParams', getData: webglParamsKey },
+    { key: 'acceptLang', getData: acceptLanguageKey },
+    { key: 'navigatorLanguages', getData: navigatorLanguagesKey }
   ]
 
   var Fingerprint2 = function (options) {
@@ -1505,6 +1527,9 @@
 })
 
 const fp2Options = {
+  fonts: {
+    extendedJsFonts: true
+  },
   excludes: {
     userAgent: false,
     webdriver: true,
@@ -1542,8 +1567,17 @@ const fp2Options = {
     webglParams: false,
     'canvas-red': false,
     'canvas-green': false,
-    'canvas-blue': false
+    'canvas-blue': false,
+    acceptLang: false,
+    navigatorLanguages: false
   }
+}
+
+let isServiceWorker
+try {
+  isServiceWorker = !!self.clients
+} catch (e) {
+  isServiceWorker = false
 }
 
 const fpValues = Object.create(null)
@@ -1555,9 +1589,31 @@ Fingerprint2.get(fp2Options, values => {
     fpValues[key] = [hashInput, hashValue]
   }
 
-  postMessage({
-    action: 'fp-complete',
-    context: 'worker',
-    fpValues
-  })
+  if (isServiceWorker === false) {
+    postMessage({
+      action: 'fp-complete',
+      context: 'worker',
+      fpValues
+    })
+  }
 })
+
+if (isServiceWorker === true) {
+  self.addEventListener('activate', async event => {
+    event.waitUntil(clients.claim())
+  })
+
+  self.addEventListener('message', async event => {
+    if (event.data !== 'generate') {
+      console.error(`Unexpected message: ${event.data}`)
+      return
+    }
+
+    const client = await clients.get(event.source.id)
+    client.postMessage({
+      action: 'fp-complete',
+      context: 'serviceworker',
+      fpValues
+    })
+  })
+}

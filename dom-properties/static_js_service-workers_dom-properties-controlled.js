@@ -1,0 +1,1 @@
+../static/js/service-workers/dom-properties-controlled.js

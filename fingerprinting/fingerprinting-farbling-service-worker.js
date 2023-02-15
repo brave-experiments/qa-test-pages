@@ -1,1 +1,0 @@
-../static/js/workers/fingerprinting-farbling.js

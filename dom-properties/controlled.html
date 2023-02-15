@@ -36,27 +36,37 @@
             Confirm that each of the DOM properties are present and return
             their expected values with shields up and down:
           </p>
-          <button id="button-start-test" type="button" class="btn btn-primary btn-lg btn-block">Run test</button>
+          <button id="button-start-test" disabled type="button" class="btn btn-primary btn-lg btn-block">Run test</button>
         </div>
       </div>
       <div class="row">
         <div class="col">
-          <table class="table">
+          <table class="table table-bordered">
             <thead>
               <tr>
                 <th></th>
                 <th></th>
                 <th class="text-center" colspan="2">Expected Values</th>
-                <th class="text-center" colspan="3">Received Values</th>
+                <th class="text-center" colspan="5">Received Values</th>
+              </tr>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="text-center" colspan="3">Frames</th>
+                <th class="text-center" colspan="2">Workers</th>
               </tr>
               <tr>
                 <th>API</th>
                 <th>Issue</th>
                 <th>Shields Up</th>
                 <th>Shields Down</th>
-                <th>Current Frame</th>
-                <th>Local Frame</th>
-                <th>Remote Frame</th>
+                <th>Current</th>
+                <th>Local</th>
+                <th>Remote</th>
+                <th>Service</th>
+                <th>Web</th>
               </tr>
             </thead>
             <tbody>
@@ -72,6 +82,8 @@
                 <td class="col-this-frame"><code></code></td>
                 <td class="col-local-frame"><code></code></td>
                 <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
               </tr>
               <tr id="row-gpc">
                 <th scope="row">
@@ -85,6 +97,8 @@
                 <td class="col-this-frame"><code></code></td>
                 <td class="col-local-frame"><code></code></td>
                 <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
               </tr>
               <tr id="row-connection">
                 <th scope="row">
@@ -98,6 +112,8 @@
                 <td class="col-this-frame"><code></code></td>
                 <td class="col-local-frame"><code></code></td>
                 <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
               </tr>
             </tbody>
           </table>
@@ -109,7 +125,6 @@
   <iframe data-src="/frames/dom-properties-controlled.html" class="other-origin d-none"></iframe>
   <script src="/static/js/site.js"></script>
   <script src="/static/js/frames/dom-properties-controlled.js"></script>
-  <script src="/static/js/dom-properties-controlled.js"></script>
 </body>
 
 </html>

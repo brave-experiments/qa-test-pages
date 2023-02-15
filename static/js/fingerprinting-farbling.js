@@ -53,13 +53,10 @@
   }
 
   const supportsServiceWorkers = (SW !== undefined)
-
   if (supportsServiceWorkers) {
-    const swUrl = './fingerprinting-farbling-service-worker.js'
-    if (SW.controller === null || (await SW.getRegistrations()).length === 0) {
+    const swUrl = './static_js_service-workers_fingerprinting-farbling.js'
+    if (SW.controller === null) {
       await SW.register(swUrl)
-      W.location.reload()
-      return
     }
   }
 

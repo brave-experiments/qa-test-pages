@@ -28,7 +28,7 @@
     "ignore": [
       "static/js/libs/*",
       "fingerprinting/static/js/workers/fingerprinting-farbling.js",
-      "static/js/workers/fingerprinting-farbling.js"
+      "static/js/service-workers/fingerprinting-farbling.js"
     ]
   },
   "dependencies": {
