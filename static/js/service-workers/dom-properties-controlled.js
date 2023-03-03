@@ -3,7 +3,7 @@
 const getProperties = _ => {
   return {
     gpc: navigator.globalPrivacyControl,
-    isbrave: navigator.brave,
+    isbrave: navigator.brave === undefined ? null : true,
     connection: navigator.connection && 'NetworkInformation'
   }
 }
