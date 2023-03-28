@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Fingerprinting | Exceptions</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/fingerprinting/index.html">Fingerprinting</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Exceptions</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Exceptions</h1>
+
+          <p>This page provides tests for cases where we intentionally don't
+             want to randomize an API's response, usually because the API
+            is being used in a non-standard way that does not provide
+            fingerprinting surface.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Accept-Language</h2>
+
+          <p>Generally we want to farble and/or clamp the <code>accept-language</code>
+            header to remove or minimize the fingerprinting surface. However,
+            when a site explicitly sets the <code>accept-language</code>
+            value, its no longer a fingerprinting surface, and so we should not
+            modify it (i.e., we should use the value the page set).</p>
+
+          <p>For the test to pass all the following should be true:</p>
+
+          <ul>
+            <li>all cells in the <strong>Default</strong> rows match.</li>
+            <li>all cells in the <strong>Default</strong> rows show a valid <code>accept-language</code>
+              value</li>
+            <li>all cells in the <strong>Controlled</strong> rows match.</li>
+            <li>all cells in the <strong>Controlled</strong> rows show <code>br-AVE</code>.</li>
+          </ul>
+
+          <p>
+            <button id="button-start-test" class="btn btn-primary btn-block btn-large" disabled>Start tests</button>
+          </p>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th colspan="2"></th>
+                <th class="text-center" colspan="3">Frames</th>
+                <th class="text-center" colspan="2">Workers</th>
+              </tr>
+              <tr>
+                <th>API</th>
+                <th>Case</th>
+                <th>Current</th>
+                <th>Local</th>
+                <th>Remote</th>
+                <th>Service</th>
+                <th>Web</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-secondary">
+                <th colspan="7">Fetch</th>
+              </tr>
+              <tr id="row-test-case-fetch-default">
+                <th></th>
+                <th scope="row">Default</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+              <tr id="row-test-case-fetch-controlled">
+                <th></th>
+                <th scope="row">Controlled</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+              <tr class="table-secondary">
+                <th colspan="7">AJAX</th>
+              </tr>
+              <tr id="row-test-case-ajax-default">
+                <th></th>
+                <th scope="row">Default</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+              <tr id="row-test-case-ajax-controlled">
+                <th></th>
+                <th scope="row">Controlled</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/frames/fingerprinting-exceptions.js"></script>
+  <script src="/static/js/fingerprinting-exceptions.js"></script>
+</body>
+
+</html>

@@ -5,17 +5,17 @@
   const SW = W.navigator.serviceWorker
 
   await BU.insertTestFramesWithScript([
-    '/static/js/frames/dom-properties-controlled.js'
+    '/static/js/frames/fingerprinting-exceptions.js'
   ])
 
-  const workerScriptUrl = './static_js_service-workers_dom-properties-controlled.js'
+  const workerScriptUrl = './static_js_frames_fingerprinting-exceptions.js'
 
-  const testDomPropsInWin = async win => {
-    return await BU.sendPostMsg(win, 'dom-properties::read')
+  const testInWindow = async (win, lang) => {
+    return await BU.sendPostMsg(win, 'fingerprinting-exceptions::read', lang)
   }
 
   const updateTestResults = (frameDesc, testDesc, testResults) => {
-    const sel = `#row-${testDesc} .col-${frameDesc} code`
+    const sel = `#row-test-case-${testDesc} .col-${frameDesc} code`
     const elm = D.querySelector(sel)
     if (testResults === undefined || testResults === null) {
       elm.textContent = 'null'
@@ -34,8 +34,8 @@
 
   const onWorkerMessage = (workerType, msg) => {
     if (msg.data.action === 'read') {
-      for (const [testName, testValue] of Object.entries(msg.data.navigator)) {
-        updateTestResults(workerType, testName, testValue)
+      for (const [testName, testValue] of Object.entries(msg.data.headers)) {
+        updateTestResults(workerType, `${testName}-${msg.data.case}`, testValue)
       }
     }
   }
@@ -45,17 +45,31 @@
     const initialText = elm.textContent
     disablePage()
     elm.textContent = 'Running test'
+    const langCases = {
+      controlled: 'br-AVE',
+      default: undefined
+    }
     for (const [frameDesc, frameWin] of BU.getTestWindowNamesAndValues()) {
-      const testRs = await testDomPropsInWin(frameWin)
-      for (const [testName, testValue] of Object.entries(testRs)) {
-        updateTestResults(frameDesc, testName, testValue)
+      for (const [langCaseName, langCaseVal] of Object.entries(langCases)) {
+        const testRs = await testInWindow(frameWin, langCaseVal)
+        for (const [testName, testValue] of Object.entries(testRs)) {
+          updateTestResults(frameDesc, `${testName}-${langCaseName}`, testValue)
+        }
       }
     }
 
-    SW.controller.postMessage('read')
-
     const worker = new W.Worker(workerScriptUrl)
     worker.addEventListener('message', onWorkerMessage.bind(undefined, 'web-worker'))
+
+    for (const [langCaseName, langCaseVal] of Object.entries(langCases)) {
+      const msg = {
+        action: 'read',
+        case: langCaseName,
+        lang: langCaseVal
+      }
+      SW.controller.postMessage(msg)
+      worker.postMessage(msg)
+    }
 
     elm.textContent = initialText
     enablePage()
@@ -64,7 +78,6 @@
 
   SW.addEventListener('message', onWorkerMessage.bind(undefined, 'service-worker'))
   SW.ready.then(reg => {
-    console.log(SW.controller)
     enablePage()
   })
 
