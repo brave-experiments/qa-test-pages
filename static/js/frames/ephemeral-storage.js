@@ -32,13 +32,13 @@
     const result = Object.create(null)
     try {
       if (W.navigator.cookieEnabled === false) {
-        result.cookies = exceptionEncoding
+        result['dom-cookies'] = exceptionEncoding
       } else {
         C.remove(key)
-        result.cookies = true
+        result['dom-cookies'] = true
       }
     } catch (_) {
-      result.cookies = exceptionEncoding
+      result['dom-cookies'] = exceptionEncoding
     }
 
     try {
@@ -69,13 +69,13 @@
     const result = Object.create(null)
     try {
       if (W.navigator.cookieEnabled === false) {
-        result.cookies = exceptionEncoding
+        result['dom-cookies'] = exceptionEncoding
       } else {
         const readCookieValue = C.get(key)
-        result.cookies = readCookieValue === undefined ? null : readCookieValue
+        result['dom-cookies'] = readCookieValue === undefined ? null : readCookieValue
       }
     } catch (_) {
-      result.cookies = exceptionEncoding
+      result['dom-cookies'] = exceptionEncoding
     }
 
     try {
@@ -103,16 +103,16 @@
     const result = Object.create(null)
     try {
       if (W.navigator.cookieEnabled === false) {
-        result.cookies = false
+        result['dom-cookies'] = false
       } else {
         C.set(key, value, {
           secure: true,
           sameSite: 'None'
         })
-        result.cookies = C.get(key) === value
+        result['dom-cookies'] = C.get(key) === value
       }
     } catch (_) {
-      result.cookies = exceptionEncoding
+      result['dom-cookies'] = exceptionEncoding
     }
 
     try {
