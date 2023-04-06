@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Fingerprinting | Devices</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/fingerprinting/index.html">Fingerprinting</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Devices</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Devices and Hardware</h1>
+        </div>
+      </div>
+    </section>
+
+    <section id="enumerate-devices-section">
+      <div class="row">
+        <div class="col">
+          <h2>Enumerate Devices Order</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <ul>
+            <li>
+              <strong>Disabled:</strong>
+              Items in both lists should appear in the same order on
+              both test domains (see
+              <a class="other-origin" data-href="/fingerprinting/devices.html" href="#">other site</a>)
+            </li>
+            <li>
+              <strong>Default:</strong>
+              The default item should always appear first, other items should
+              appear in randomized order, and so <em>sometimes</em> will appear
+              in different orders on both both test domains (see <a class="other-origin" data-href="/fingerprinting/devices.html" href="#">other site</a>)
+            </li>
+          </ul>
+
+          <div id="enumerate-devices-results">
+            <button class="btn btn-primary btn-block btn-large" disabled>Query devices</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="webusb-section">
+      <div class="row">
+        <div class="col">
+          <h2>WebUSB Serial Number</h2>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <p>In order to run this test, you need to have a USB device attached
+            to your computer. Most, but not all, devices will work. If you do
+            not see a serial number reported for the device, it means that
+            the device will not work for this test (but also, that the device
+            does not put users at risk for fingerprinting).</p>
+
+          <ul>
+            <li>
+              <strong>Disabled:</strong>
+              All serial numbers for USB devices should be identical on
+              both test domains (see
+              <a class="other-origin" data-href="/fingerprinting/devices.html" href="#">other site</a>)
+            </li>
+            <li>
+              <strong>Default:</strong>
+              All serial numbers for USB devices should be different
+              on both both test domains
+              (see <a class="other-origin" data-href="/fingerprinting/devices.html" href="#">other site</a>)
+            </li>
+          </ul>
+
+          <table class="table d-none">
+            <thead>
+              <tr>
+                <th>Device name</th>
+                <th>Vendor</th>
+                <th>Product ID</th>
+                <th>Serial number</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+
+          <div>
+            <button class="btn btn-primary btn-block btn-large" disabled>Query new device</button>
+            <button class="btn btn-secondary btn-block btn-large" disabled>Query previously connected devices</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/fingerprinting-devices.js"></script>
+</body>
+
+</html>
