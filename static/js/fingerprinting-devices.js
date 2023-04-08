@@ -118,7 +118,7 @@
 
   const onWebUSBQueryClick = async _ => {
     await updateUSBTable(async _ => {
-      return await N.usb.requestDevice({ filters: [] })
+      return [await N.usb.requestDevice({ filters: [] })]
     })
   }
   webUSBQueryBtn.addEventListener('click', onWebUSBQueryClick)
