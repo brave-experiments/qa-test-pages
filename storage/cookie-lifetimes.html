@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Storage | Cookie Lifetimes</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/storage/index.html">Storage</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Cookies</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Cookie lifetimes</h1>
+          <button id="button-start-test" disabled type="button" class="btn btn-primary btn-lg btn-block">Run test</button>
+          <button id="clear-test" disabled type="button" class="btn btn-warning btn-lg btn-block">Run test</button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th></th>
+                <th class="text-center" colspan="5">Received Values</th>
+              </tr>
+              <tr>
+                <th>Lifetime</th>
+                <th class="text-center" colspan="3">Frames</th>
+                <th class="text-center" colspan="2">Workers</th>
+              </tr>
+              <tr>
+                <th>This</th>
+                <th>Local</th>
+                <th>Remote</th>
+                <th>Service</th>
+                <th>Web</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-minutes="1">
+                <th scope="row">One minute</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+              <tr data-minutes="60">
+                <th scope="row">One hour</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+              <tr data-minutes="1440">
+                <th scope="row">One day</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+              <tr data-minutes="10080">
+                <th scope="row">Seven days</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+              <tr data-minutes="43200">
+                <th scope="row">30 days</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+              <tr data-minutes="525600">
+                <th scope="row">365 days</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/frames/storage-cookie-lifetimes.js"></script>
+  <script src="/static/js/storage-cookie-lifetimes.js"></script>
+</body>
+
+</html>

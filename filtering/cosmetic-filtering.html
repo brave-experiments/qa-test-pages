@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Filtering | Network requests</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/filtering/index.html">Filtering</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Cosmetic filtering</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Cosmetic filtering</h2>
+          <p>This test checks whether ads injected into the page are correctly
+            blocked (i.e., if the content-blocker is correctly reacting to DOM
+            modifications)</p>
+
+          <p><strong>CSS IDs to inject</strong></p>
+          <textarea disabled id="css-ids-text-area" rows="10" class="form-control">#AC_ad
+#AD_160
+#AD_300
+#AD_468x60
+#AD_G
+#AD_L
+#AD_ROW
+#AD_Top
+#AD_text
+#ADbox
+#Ad-3-Slider
+#Ad-4-Slider
+#Ad-Container
+#Ad-Content
+#Ad-Top
+#AdBanner
+#AdBar
+#AdBigBox
+#AdBillboard
+#AdBlock
+#AdBottomLeader
+#AdBottomRight
+#AdBox2
+#AdColumn
+          </textarea>
+          <button id="button-start-test" disabled type="button" class="btn btn-primary btn-lg btn-block">Run test</button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Partiness</th>
+                <th>Image</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+  <script src="/static/js/filtering-cosmetic-filtering.js"></script>
+</body>
+
+</html>
