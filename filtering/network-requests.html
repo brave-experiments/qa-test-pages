@@ -90,13 +90,109 @@
         </div>
         <div class="col">
           <div class="border border-primary">
-            <img src="/static/images/test.jpg?335962573013224749" class="other-origin img-thumbnail">
+            <img data-src="/static/images/test.jpg?335962573013224749" class="other-origin img-thumbnail">
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h2>Relative URLs</h2>
+
+          <p>The below test checks if the blocking engine correctly handles
+            images that should be blocked when requested from relative
+            URLs.
+          </p>
+
+          <ul>
+            <li><strong>Default</strong>: All third-party cells should be blocked.</li>
+            <li><strong>Aggressive</strong>: All cells should be blocked.</li>
+          </ul>
+
+          <p>
+            <button id="button-start-test" class="btn btn-primary btn-block btn-large" disabled>Start tests</button>
+          </p>
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th></th>
+                <th class="text-center" colspan="3">Frames</th>
+                <th class="text-center" colspan="2">Workers</th>
+              </tr>
+              <tr>
+                <th>Partiness</th>
+                <th>This</th>
+                <th>Local</th>
+                <th>Remote</th>
+                <th>Service</th>
+                <th>Web</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="table-secondary">
+                <th colspan="6">Full URL (e.g., <code>https://example.com/image</code>)</th>
+              </tr>
+              <tr data-test-origin="this" data-test-case="full">
+                <th span="row">First</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+              <tr data-test-origin="other" data-test-case="full">
+                <th span="row">Third</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+
+              <tr class="table-secondary">
+                <th colspan="6">Same protocol (e.g., <code>//example.com/image</code>)</th>
+              </tr>
+              <tr data-test-origin="this" data-test-case="protocol">
+                <th span="row">First</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+              <tr data-test-origin="other" data-test-case="protocol">
+                <th span="row">Third</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+
+              <tr class="table-secondary">
+                <th colspan="6">Same host (e.g., <code>/image</code>)</th>
+              </tr>
+              <tr data-test-origin="this" data-test-case="path">
+                <th span="row">First</th>
+                <td class="col-this-frame"><code></code></td>
+                <td class="col-local-frame"><code></code></td>
+                <td class="col-remote-frame"><code></code></td>
+                <td class="col-service-worker"><code></code></td>
+                <td class="col-web-worker"><code></code></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
   </div>
   <script src="/static/js/site.js"></script>
+  <script src="/static/js/site-combo-callee.js"></script>
+  <script src="/filtering/static_js_combo_filtering-network-requests.js"></script>
+  <script src="/static/js/filtering-network-requests.js"></script>
 </body>
 
 </html>

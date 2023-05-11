@@ -50,27 +50,62 @@
     tableBodyElm.prepend(rowElm)
   }
 
-  const onClick = _ => {
-    startBtn.setAttribute('disabled', 'disabled')
-    const idsToInsert = idTextArea.value.trim().split('\n')
-    idTextArea.setAttribute('disabled', 'disabled')
+  const setupBtnAsStartBtn = btn => {
+    btn.classList.add('btn-primary')
+    btn.classList.remove('btn-warning')
+    btn.innerText = btn.dataset.initText
+  }
 
-    for (const aChildElm of tableBodyElm.childNodes) {
-      tableBodyElm.removeChild(aChildElm)
+  const setupBtnAsStopBtn = btn => {
+    btn.classList.remove('btn-primary')
+    btn.classList.add('btn-warning')
+    startBtn.innerText = 'Stop test'
+  }
+
+  let timeoutIntervalId
+  const stopTheTest = _ => {
+    W.clearInterval(timeoutIntervalId)
+    timeoutIntervalId = undefined
+  }
+
+  const onClick = event => {
+    const btnElm = event.target
+    const isTestRunning = timeoutIntervalId !== undefined
+
+    if (isTestRunning === false) {
+      setupBtnAsStopBtn(btnElm)
+
+      for (const aChildElm of Array.from(tableBodyElm.childNodes)) {
+        tableBodyElm.removeChild(aChildElm)
+      }
+
+      const idsToInsert = idTextArea.value.trim().split('\n')
+      idTextArea.setAttribute('disabled', 'disabled')
+
+      timeoutIntervalId = W.setInterval(_ => {
+        if (timeoutIntervalId === undefined) {
+          // test was already cancelled.
+          return
+        }
+        const anIdToInsert = idsToInsert.pop()
+        if (anIdToInsert === undefined) {
+          stopTheTest()
+          setupBtnAsStartBtn(btnElm)
+          return
+        }
+        addIdTest(anIdToInsert)
+      }, 500)
+      return
     }
 
-    const intervalId = W.setInterval(() => {
-      const anIdToInsert = idsToInsert.pop()
-      if (anIdToInsert === undefined) {
-        W.clearInterval(intervalId)
-        startBtn.removeAttribute('disabled')
-        idTextArea.removeAttribute('disabled')
-        return
-      }
-      addIdTest(anIdToInsert)
-    }, 500)
+    // Otherwise, we received a click to stop the test, so we set up
+    // the button to be a "start the test" button, and stop the currently
+    // running test.
+    setupBtnAsStartBtn(btnElm)
+    stopTheTest()
   }
   startBtn.addEventListener('click', onClick)
+  startBtn.dataset.initText = startBtn.innerText
   startBtn.removeAttribute('disabled')
   idTextArea.removeAttribute('disabled')
 })()

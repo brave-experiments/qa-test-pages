@@ -34,11 +34,14 @@
       }
 
       case 'script-inject::url': {
-        const scriptUrl = msg.value
-        const scriptElm = D.createElement('script')
-        scriptElm.src = scriptUrl
-        const scriptHandle = insertScriptElm(scriptElm)
-        return { handle: scriptHandle }
+        const scriptUrls = msg.value
+        const scriptHandles = []
+        for (const aScriptUrl of scriptUrls) {
+          const scriptElm = D.createElement('script')
+          scriptElm.src = aScriptUrl
+          scriptHandles.push(insertScriptElm(scriptElm))
+        }
+        return { handles: scriptHandles }
       }
 
       case 'script-inject::source': {
