@@ -262,7 +262,8 @@
 
   // A "combo" test here means one where we're testing all three frame
   // cases and workers with a single API.
-  const setupComboTest = async script => {
+  const setupComboTest = async (script, options = {}) => {
+    const { omitSW, omitWorkers, omitWW } = options
     await insertTestFramesWithScript([
       '/static/js/site-combo-callee.js',
       script
@@ -271,7 +272,7 @@
     // Keep track of all the tests we have running at once, so we can know when
     // all 5 cases have been completed.
     const testMap = new WeakMap()
-    let numTests
+    let numTests = 0
 
     const onTestResponse = (msg) => {
       const { request, response } = msg.data
@@ -292,13 +293,11 @@
       testHandles[handleName] = handle
     }
 
-    const worker = new W.Worker(script)
-    worker.addEventListener('message', onTestResponse)
-
-    testHandles['web-worker'] = worker
-    testHandles['service-worker'] = SW.controller
-
-    numTests = Object.values(testHandles).length
+    if (omitWW !== true && omitWorkers !== true) {
+      const worker = new W.Worker(script)
+      worker.addEventListener('message', onTestResponse)
+      testHandles['web-worker'] = worker
+    }
 
     const runTest = (action, args) => {
       return new Promise(resolve => {
@@ -325,6 +324,14 @@
         }
       })
     }
+
+    if (omitSW === true || omitWorkers === true) {
+      numTests = Object.values(testHandles).length
+      return runTest
+    }
+
+    testHandles['service-worker'] = SW.controller
+    numTests = Object.values(testHandles).length
 
     return new Promise(resolve => {
       SW.addEventListener('message', onTestResponse)

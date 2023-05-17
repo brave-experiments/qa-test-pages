@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Brave QA Tests | Network state | Request "off the record" pre-page</title>
+  <link rel="icon" href="/static/images/brave-favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/site.css">
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="row">
+        <div class="col">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/index.html">Home</a></li>
+              <li class="breadcrumb-item"><a href="/network-state/index.html">Network state</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Request "off the record"</li>
+              <li class="ml-auto"><a class="other-origin" data-href="/index.html" href="#">Other site</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <section>
+      <div class="row">
+        <div class="col">
+          <h1>Request "off the record"</h1>
+
+          <p>This tests whether Brave's Request "off the record" feature
+            works as intended. The test works as follows:</p>
+
+          <ol>
+            <li>
+              <strong>Step one: Set up</strong>
+              <p>Start this test in a clean profile.</p>
+            </li>
+            <li>
+              <strong>Step two: "Off the record" is enabled</strong>
+              <ol>
+                <li>Click the link below to visit a "off the record" protected page
+                  on the other test domain, <code class="other-origin">-</code>.</li>
+                <li>Choose to visit the page "off the record".</li>
+                <li>Note that no stored values should appear in the table.</li>
+                <li>Click the <code>store test values</code> button</li>
+                <li>Confirm those new values appear recorded in the table.</li>
+                <li>Click back to return to this page.</li>
+              </ol>
+            </li>
+            <li>
+              <strong>Step three: Confirm "off the record" worked</strong>
+              <p>Check browsing history and confirm that no visits to
+                <code class="other-origin">-</code> appear.</p>
+            </li>
+            <li>
+              <strong>Step four: "Off the record" is disabled</strong>
+              <ol>
+                <li>Click the link below to visit a "off the record" protected page
+                  on the other test domain, <code class="other-origin">-</code>.</li>
+                <li>Choose <strong>not to</strong> visit the page "off the record".</li>
+                <li>Note that no stored values should appear in the table.</li>
+                <li>Click the <code>store test values</code> button</li>
+                <li>Confirm those new values appear recorded in the table.</li>
+                <li>Click back to return to this page.</li>
+              </ol>
+            </li>
+            <li>
+              <strong>Step five: Confirm normal behavior</strong>
+              <p>Check browsing history and confirm a visits to
+                <code class="other-origin">-</code> now does appear.</p>
+            </li>
+          </ol>
+
+          <a data-href="/network-state/request-otr.html" class="other-origin btn btn-primary btn-lg btn-block">Visit "off the record" page</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script src="/static/js/site.js"></script>
+</body>
+
+</html>
