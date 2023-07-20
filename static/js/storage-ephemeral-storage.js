@@ -80,7 +80,7 @@
     [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.EMPTY,
     [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.EMPTY,
     [frameCaseEnum.REMOTE_FRAME]: allEmptyButIDBCol,
-    [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.EMPTY
+    [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.NA
   }
   const allSetButRemoteIdbTable = {
     [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
@@ -117,6 +117,7 @@
   // {current frame, local frame, remote frame} x
   //   {cookie, localStorage, sessionStorage}
   const expectedOutcomes = {
+    // Step 1: Initial Case
     [testCasesEnum.INITIAL]: {
       [ephemeralStorageEnum.OFF]: {
         [cookieSettingEnum.ALLOW_ALL]: allSetTable,
@@ -135,6 +136,7 @@
       }
     },
 
+    // Step 2: Remote Page, Same Session
     [testCasesEnum.REMOTE_PAGE_SAME_SESSION]: {
       [ephemeralStorageEnum.OFF]: {
         [cookieSettingEnum.ALLOW_ALL]: allSetTable,
@@ -153,6 +155,7 @@
       }
     },
 
+    // Step 3: Remote Page, New Session
     [testCasesEnum.REMOTE_PAGE_DIFF_SESSION]: {
       [ephemeralStorageEnum.OFF]: {
         [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
@@ -166,6 +169,7 @@
       }
     },
 
+    // Step 4: This Page, Same Session Case
     [testCasesEnum.SAME_PAGE_SAME_SESSION]: {
       [ephemeralStorageEnum.OFF]: {
         [cookieSettingEnum.ALLOW_ALL]: allSetTable,
@@ -184,6 +188,7 @@
       }
     },
 
+    // Step 5: This Page, Different Session
     [testCasesEnum.SAME_PAGE_DIFF_SESSION]: {
       [ephemeralStorageEnum.OFF]: {
         [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
@@ -196,12 +201,18 @@
           [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
           [frameCaseEnum.LOCAL_FRAME]: allSetButSessionCol,
           [frameCaseEnum.REMOTE_FRAME]: allSetButSessionOrIDBCol,
-          [frameCaseEnum.NESTED_FRAME]: allSetButSessionCol
+          [frameCaseEnum.NESTED_FRAME]: {
+            [apiCaseEnum.COOKIE]: testOutcomeEnum.SET,
+            [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.SET,
+            [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.NA,
+            [apiCaseEnum.INDEX_DB]: testOutcomeEnum.SET
+          }
         },
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
 
+    // Step 6: New Page, Reset Session Case
     [testCasesEnum.SAME_PAGE_RESET_SESSION]: {
       [ephemeralStorageEnum.OFF]: {
         [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
