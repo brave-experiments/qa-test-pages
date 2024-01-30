@@ -34,7 +34,10 @@
       if (W.navigator.cookieEnabled === false) {
         result['dom-cookies'] = exceptionEncoding
       } else {
-        C.remove(key)
+        C.remove(key, {
+          secure: true,
+          sameSite: 'None'
+        })
         result['dom-cookies'] = true
       }
     } catch (_) {
@@ -91,7 +94,8 @@
     }
 
     try {
-      result['index-db'] = await IDB.get(key)
+      const readIdbValue = await IDB.get(key)
+      result['index-db'] = readIdbValue === undefined ? null : readIdbValue
     } catch (_) {
       result['index-db'] = exceptionEncoding
     }

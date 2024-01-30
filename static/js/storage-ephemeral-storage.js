@@ -307,7 +307,7 @@
   }
 
   const nestedFrameTestKey = 'nested-frame-storage-key'
-  const nestedFrameTestValue = Math.random().toString()
+  const nestedFrameTestValue = queryParams.get(nestedFrameTestKey) || Math.random().toString()
 
   const ephemStorageQueryKey = 'ephemeral-storage-setting'
   const initEphemeralStorageVal = queryParams.get(ephemStorageQueryKey) || 'ON'
@@ -327,6 +327,7 @@
     const destUrl = new URL(L)
     const destUrlParams = destUrl.searchParams
     destUrlParams.set(storageTestKey, storageTestValue)
+    destUrlParams.set(nestedFrameTestKey, nestedFrameTestValue)
     destUrlParams.set(ephemStorageQueryKey, storageSettingSelect.value)
     destUrlParams.set(cookieBlockingQueryKey, cookieBlockingSelect.value)
 
@@ -451,6 +452,7 @@
     const destUrl = new URL(event.target.href)
     const destParams = destUrl.searchParams
     destParams.set(storageTestKey, storageTestValue)
+    destParams.set(nestedFrameTestKey, nestedFrameTestValue)
     destParams.set(ephemStorageQueryKey, storageSettingSelect.value)
     destParams.set(cookieBlockingQueryKey, cookieBlockingSelect.value)
     W.open(destUrl.toString())
@@ -467,10 +469,10 @@
     'remote-frame': remoteFrameWin
   }
 
-  const resultToOutcome = (val) => {
+  const resultToOutcome = (val, testValue) => {
     if (val === exceptionEncoding) {
       return testOutcomeEnum.EXCEPTION
-    } else if (val === storageTestValue) {
+    } else if (val === testValue) {
       return testOutcomeEnum.SET
     } else if (!val) {
       return testOutcomeEnum.EMPTY
@@ -506,15 +508,7 @@
     })
     const testResults = O.create(null)
     for (const [nestedStorageKey, nestedStorageVal] of O.entries(nestedFrameStorage)) {
-      if (nestedStorageVal === exceptionEncoding) {
-        testResults[nestedStorageKey] = testOutcomeEnum.EXCEPTION
-      } else if (nestedStorageVal === nestedFrameTestValue) {
-        testResults[nestedStorageKey] = testOutcomeEnum.SET
-      } else if (nestedStorageVal === undefined) {
-        testResults[nestedStorageKey] = testOutcomeEnum.EMPTY
-      } else {
-        testResults[nestedStorageKey] = testOutcomeEnum.WRONG
-      }
+      testResults[nestedStorageKey] = resultToOutcome(nestedStorageVal, nestedFrameTestValue)
     }
     return testResults
   }
@@ -549,7 +543,7 @@
     for (const [frameName, frameWin] of O.entries(testFrameWindows)) {
       const frameStoreVals = await readStorageInFrame(frameWin, storageTestKey)
       for (const [storageKey, storageValue] of O.entries(frameStoreVals)) {
-        report[storageKey][frameName] = resultToOutcome(storageValue)
+        report[storageKey][frameName] = resultToOutcome(storageValue, storageTestValue)
       }
     }
 
