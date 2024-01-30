@@ -25,8 +25,7 @@
     SAME_PAGE_RESET_SESSION: 5
   }
   const ephemeralStorageEnum = {
-    ON: 0,
-    OFF: 1
+    BRAVE_PRE_CR121: 0
   }
   const cookieSettingEnum = {
     BLOCK_THIRD_PARTY: 0,
@@ -88,22 +87,10 @@
     [frameCaseEnum.REMOTE_FRAME]: allSetButIDBCol,
     [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.SET
   }
-  const allEmpty3pBlockTable = {
-    [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.EMPTY,
-    [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.EMPTY,
-    [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION,
-    [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.EMPTY
-  }
   const allButSessionTable = {
     [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
     [frameCaseEnum.LOCAL_FRAME]: allSetButSessionCol,
     [frameCaseEnum.REMOTE_FRAME]: allSetButSessionCol,
-    [frameCaseEnum.NESTED_FRAME]: allSetButSessionCol
-  }
-  const allButSession3pBlockingTable = {
-    [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
-    [frameCaseEnum.LOCAL_FRAME]: allSetButSessionCol,
-    [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION,
     [frameCaseEnum.NESTED_FRAME]: allSetButSessionCol
   }
 
@@ -119,17 +106,7 @@
   const expectedOutcomes = {
     // Step 1: Initial Case
     [testCasesEnum.INITIAL]: {
-      [ephemeralStorageEnum.OFF]: {
-        [cookieSettingEnum.ALLOW_ALL]: allSetTable,
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
-          [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
-          [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
-          [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION,
-          [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.SET
-        },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
-      },
-      [ephemeralStorageEnum.ON]: {
+      [ephemeralStorageEnum.BRAVE_PRE_CR121]: {
         [cookieSettingEnum.ALLOW_ALL]: allSetTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: allSetButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
@@ -138,17 +115,7 @@
 
     // Step 2: Remote Page, Same Session
     [testCasesEnum.REMOTE_PAGE_SAME_SESSION]: {
-      [ephemeralStorageEnum.OFF]: {
-        [cookieSettingEnum.ALLOW_ALL]: allSetTable,
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
-          [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.EMPTY,
-          [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.EMPTY,
-          [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION,
-          [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.EMPTY
-        },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
-      },
-      [ephemeralStorageEnum.ON]: {
+      [ephemeralStorageEnum.BRAVE_PRE_CR121]: {
         [cookieSettingEnum.ALLOW_ALL]: allSetTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
@@ -157,12 +124,7 @@
 
     // Step 3: Remote Page, New Session
     [testCasesEnum.REMOTE_PAGE_DIFF_SESSION]: {
-      [ephemeralStorageEnum.OFF]: {
-        [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmpty3pBlockTable,
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
-      },
-      [ephemeralStorageEnum.ON]: {
+      [ephemeralStorageEnum.BRAVE_PRE_CR121]: {
         [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
@@ -171,17 +133,7 @@
 
     // Step 4: This Page, Same Session Case
     [testCasesEnum.SAME_PAGE_SAME_SESSION]: {
-      [ephemeralStorageEnum.OFF]: {
-        [cookieSettingEnum.ALLOW_ALL]: allSetTable,
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
-          [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
-          [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
-          [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EXCEPTION,
-          [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.SET
-        },
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
-      },
-      [ephemeralStorageEnum.ON]: {
+      [ephemeralStorageEnum.BRAVE_PRE_CR121]: {
         [cookieSettingEnum.ALLOW_ALL]: allSetTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: allSetButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
@@ -190,12 +142,7 @@
 
     // Step 5: This Page, Different Session
     [testCasesEnum.SAME_PAGE_DIFF_SESSION]: {
-      [ephemeralStorageEnum.OFF]: {
-        [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allButSession3pBlockingTable,
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
-      },
-      [ephemeralStorageEnum.ON]: {
+      [ephemeralStorageEnum.BRAVE_PRE_CR121]: {
         [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
           [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
@@ -214,12 +161,7 @@
 
     // Step 6: New Page, Reset Session Case
     [testCasesEnum.SAME_PAGE_RESET_SESSION]: {
-      [ephemeralStorageEnum.OFF]: {
-        [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
-        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allButSession3pBlockingTable,
-        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
-      },
-      [ephemeralStorageEnum.ON]: {
+      [ephemeralStorageEnum.BRAVE_PRE_CR121]: {
         [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
           [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
@@ -310,7 +252,7 @@
   const nestedFrameTestValue = queryParams.get(nestedFrameTestKey) || Math.random().toString()
 
   const ephemStorageQueryKey = 'ephemeral-storage-setting'
-  const initEphemeralStorageVal = queryParams.get(ephemStorageQueryKey) || 'ON'
+  const initEphemeralStorageVal = queryParams.get(ephemStorageQueryKey) || 'BRAVE_PRE_CR121'
   storageSettingSelect.value = initEphemeralStorageVal
 
   const cookieBlockingQueryKey = 'cookie-blocking-setting'
