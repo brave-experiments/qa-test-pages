@@ -25,7 +25,8 @@
     SAME_PAGE_RESET_SESSION: 5
   }
   const ephemeralStorageEnum = {
-    BRAVE_PRE_CR121: 0
+    BRAVE_PRE_CR121: 0,
+    BRAVE_CR121: 1
   }
   const cookieSettingEnum = {
     BLOCK_THIRD_PARTY: 0,
@@ -69,6 +70,13 @@
     [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY,
     [apiCaseEnum.INDEX_DB]: testOutcomeEnum.EXCEPTION
   }
+  const cookiesSetCol = {
+    [apiCaseEnum.COOKIE]: testOutcomeEnum.SET,
+    [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.EMPTY,
+    [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY,
+    [apiCaseEnum.INDEX_DB]: testOutcomeEnum.EMPTY
+  }
+
   const allSetTable = {
     [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
     [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
@@ -93,6 +101,24 @@
     [frameCaseEnum.REMOTE_FRAME]: allSetButSessionCol,
     [frameCaseEnum.NESTED_FRAME]: allSetButSessionCol
   }
+  const allButNestedStoragesTable = {
+    [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
+    [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
+    [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.SET,
+    [frameCaseEnum.NESTED_FRAME]: cookiesSetCol
+  }
+  const allButSessionAndNestedStoragesTable = {
+    [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
+    [frameCaseEnum.LOCAL_FRAME]: allSetButSessionCol,
+    [frameCaseEnum.REMOTE_FRAME]: allSetButSessionCol,
+    [frameCaseEnum.NESTED_FRAME]: cookiesSetCol
+  }
+  const unpartitionedCookiesSetTable = {
+    [frameCaseEnum.CURRENT_FRAME]: cookiesSetCol,
+    [frameCaseEnum.LOCAL_FRAME]: cookiesSetCol,
+    [frameCaseEnum.REMOTE_FRAME]: cookiesSetCol,
+    [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.EMPTY
+  }
 
   // If the value is a number (a testOutcomeEnum value) than
   // that is the expected value for every API in every frame case.
@@ -110,6 +136,11 @@
         [cookieSettingEnum.ALLOW_ALL]: allSetTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: allSetButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.BRAVE_CR121]: {
+        [cookieSettingEnum.ALLOW_ALL]: allButNestedStoragesTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allButNestedStoragesTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
 
@@ -123,6 +154,11 @@
           [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.EMPTY
         },
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyButRemoteIdbTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.BRAVE_CR121]: {
+        [cookieSettingEnum.ALLOW_ALL]: unpartitionedCookiesSetTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: testOutcomeEnum.EMPTY,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
@@ -138,6 +174,11 @@
         },
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.BRAVE_CR121]: {
+        [cookieSettingEnum.ALLOW_ALL]: unpartitionedCookiesSetTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: testOutcomeEnum.EMPTY,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
 
@@ -146,6 +187,11 @@
       [ephemeralStorageEnum.BRAVE_PRE_CR121]: {
         [cookieSettingEnum.ALLOW_ALL]: allSetTable,
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: allSetButRemoteIdbTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.BRAVE_CR121]: {
+        [cookieSettingEnum.ALLOW_ALL]: allButNestedStoragesTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allButNestedStoragesTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
@@ -166,6 +212,11 @@
           }
         },
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.BRAVE_CR121]: {
+        [cookieSettingEnum.ALLOW_ALL]: allButSessionAndNestedStoragesTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: allButSessionAndNestedStoragesTable,
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
     },
 
@@ -178,6 +229,16 @@
           [frameCaseEnum.LOCAL_FRAME]: allSetButSessionCol,
           [frameCaseEnum.REMOTE_FRAME]: allEmptyButIDBCol,
           [frameCaseEnum.NESTED_FRAME]: allSetButSessionCol
+        },
+        [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
+      },
+      [ephemeralStorageEnum.BRAVE_CR121]: {
+        [cookieSettingEnum.ALLOW_ALL]: allButSessionAndNestedStoragesTable,
+        [cookieSettingEnum.BLOCK_THIRD_PARTY]: {
+          [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
+          [frameCaseEnum.LOCAL_FRAME]: allSetButSessionCol,
+          [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.EMPTY,
+          [frameCaseEnum.NESTED_FRAME]: cookiesSetCol
         },
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
@@ -262,7 +323,7 @@
   const nestedFrameTestValue = queryParams.get(nestedFrameTestKey) || Math.random().toString()
 
   const ephemStorageQueryKey = 'ephemeral-storage-setting'
-  const initEphemeralStorageVal = queryParams.get(ephemStorageQueryKey) || 'BRAVE_PRE_CR121'
+  const initEphemeralStorageVal = queryParams.get(ephemStorageQueryKey) || 'BRAVE_CR121'
   storageSettingSelect.value = initEphemeralStorageVal
 
   const cookieBlockingQueryKey = 'cookie-blocking-setting'
