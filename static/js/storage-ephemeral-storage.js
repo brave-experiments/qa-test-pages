@@ -79,7 +79,7 @@
     [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.EMPTY,
     [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.EMPTY,
     [frameCaseEnum.REMOTE_FRAME]: allEmptyButIDBCol,
-    [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.NA
+    [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.EMPTY
   }
   const allSetButRemoteIdbTable = {
     [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
@@ -116,7 +116,12 @@
     // Step 2: Remote Page, Same Session
     [testCasesEnum.REMOTE_PAGE_SAME_SESSION]: {
       [ephemeralStorageEnum.BRAVE_PRE_CR121]: {
-        [cookieSettingEnum.ALLOW_ALL]: allSetTable,
+        [cookieSettingEnum.ALLOW_ALL]: {
+          [frameCaseEnum.CURRENT_FRAME]: testOutcomeEnum.SET,
+          [frameCaseEnum.LOCAL_FRAME]: testOutcomeEnum.SET,
+          [frameCaseEnum.REMOTE_FRAME]: testOutcomeEnum.SET,
+          [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.EMPTY
+        },
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
@@ -125,7 +130,12 @@
     // Step 3: Remote Page, New Session
     [testCasesEnum.REMOTE_PAGE_DIFF_SESSION]: {
       [ephemeralStorageEnum.BRAVE_PRE_CR121]: {
-        [cookieSettingEnum.ALLOW_ALL]: allButSessionTable,
+        [cookieSettingEnum.ALLOW_ALL]: {
+          [frameCaseEnum.CURRENT_FRAME]: allSetButSessionCol,
+          [frameCaseEnum.LOCAL_FRAME]: allSetButSessionCol,
+          [frameCaseEnum.REMOTE_FRAME]: allSetButSessionCol,
+          [frameCaseEnum.NESTED_FRAME]: testOutcomeEnum.EMPTY
+        },
         [cookieSettingEnum.BLOCK_THIRD_PARTY]: allEmptyButRemoteIdbTable,
         [cookieSettingEnum.BLOCK_ALL]: testOutcomeEnum.EXCEPTION
       }
@@ -151,7 +161,7 @@
           [frameCaseEnum.NESTED_FRAME]: {
             [apiCaseEnum.COOKIE]: testOutcomeEnum.SET,
             [apiCaseEnum.LOCAL_STORAGE]: testOutcomeEnum.SET,
-            [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.NA,
+            [apiCaseEnum.SESSION_STORAGE]: testOutcomeEnum.EMPTY,
             [apiCaseEnum.INDEX_DB]: testOutcomeEnum.SET
           }
         },
@@ -487,14 +497,6 @@
       for (const [storageKey, storageValue] of O.entries(frameStoreVals)) {
         report[storageKey][frameName] = resultToOutcome(storageValue, storageTestValue)
       }
-    }
-
-    for (const storageType in report) {
-      report[storageType]['nested-frame'] = testOutcomeEnum.NA
-    }
-
-    if (isMainTestFrame === false) {
-      return report
     }
 
     const nestedStorageRs = await testNestedFrameStorage(remoteFrameWin)
