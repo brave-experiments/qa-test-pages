@@ -52,6 +52,8 @@ async function launchBrowser (executablePath, port) {
       resolve()
     })
   })
+
+  fs.rmSync(tempDir, { recursive: true, force: true })
 }
 
 async function main () {
