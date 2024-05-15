@@ -10,7 +10,7 @@
   const isCookiesAvailable = async _ => {
     const testCookie = `${testKey}=${testValue}`
     try {
-      D.cookie = testCookie
+      D.cookie = `${testCookie};SameSite=None;Secure`
       return D.cookie.includes(testCookie)
     } catch (_) {
       return false
