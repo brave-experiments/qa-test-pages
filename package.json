@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/brave-experiments/qa-test-pages#readme",
   "devDependencies": {
-    "@linthtml/linthtml": "0.10.1",
+    "@linthtml/linthtml": "0.10.2",
     "commander": "11.1.0",
     "http-server": "14.1.1",
     "standard": "16.0.4"
