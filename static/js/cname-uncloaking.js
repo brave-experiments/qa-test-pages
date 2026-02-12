@@ -31,11 +31,11 @@
   }
 
   const onClickNavigate = async event => {
-    W.location.href = '//test-cname.brave.software/cname-uncloaking.html'
+    W.location.href = '//test-cname.brave.dev/cname-uncloaking.html'
   }
 
   const thisOrigin = document.location.host
-  if (thisOrigin !== 'test-cname.brave.software') {
+  if (thisOrigin !== 'test-cname.brave.dev') {
     startButtonElm.textContent = 'Visit the CNAME cloaked domain'
     startButtonElm.addEventListener('click', onClickNavigate, false)
   } else {
