@@ -83,8 +83,9 @@
       preCheckElm.textContent = isDnsCheckError
         ? err.message
         : 'DNS pre-check failed: could not reach Cloudflare DoH (' +
-          err.message + '). Check your network connection and try again.'
+          err.message + ').'
       preCheckElm.className = 'text-danger'
+      startButtonElm.textContent = 'Test blocked: DNS verification of test setup failed'
     }
   }
 
