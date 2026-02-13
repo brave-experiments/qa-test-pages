@@ -50,6 +50,18 @@
           <li><strong>Standard</strong> shields mode: request is <span class="badge bg-success">allowed</span></li>
           <li><strong>Aggressive</strong> shields mode: request is <span class="badge bg-danger">blocked</span></li>
         </ul>
+        <h3>Disabling conditions</h3>
+        <p>
+          <em>Any</em> of the following conditions should cause the request to
+          be <span class="badge bg-success">allowed</span>. Network analysis should also reveal that no additional
+          DNS queries are made alongside the request.
+        </p>
+        <ul>
+          <li>Shields down</li>
+          <li><code>#brave-adblock-cname-uncloaking</code> feature flag disabled in <code>brave://flags</code></li>
+          <li>Tor session</li>
+          <li>Proxy/VPN WebExtension installed and active</li>
+        </ul>
         <p class="text-muted"><small>If this test page isn't working as expected, ping on #privacy channel.</small></p>
       </div>
     </section>
