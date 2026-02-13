@@ -36,27 +36,21 @@
             and confirm that the status of a CNAME cloaked network request is
             consistent with the following expected behavior:
           </p>
-          <button id="button-start-test" type="button" class="btn btn-primary btn-lg btn-block">Run test</button>
+          <p id="dns-precheck-status"></p>
+          <button id="button-start-test" type="button" class="btn btn-primary btn-lg btn-block" disabled>Run test</button>
         </div>
       </div>
       <p id="test-result"></p>
       <div>
-        <h3>Initial Setup</h3>
-        <p>First, add the following line to <code>brave://adblock</code>:</p>
+        <h3>Setup</h3>
+        <p>Add the following line to <code>brave://adblock</code>:</p>
         <pre>||dev-pages.brave.software/static/images/test.jpg</pre>
-        <p>A default Brave installation should then cause the request to be <span class="badge bg-danger">blocked</span>.</p>
-        <h3>Disabling conditions</h3>
-        <p>
-          <em>Any</em> of the following conditions should cause the request to
-          be <span class="badge bg-success">allowed</span>. Network analysis should also reveal that no additional
-          DNS queries are made alongside the request.
-        </p>
+        <h3>Expected behavior</h3>
         <ul>
-          <li>Shields down</li>
-          <li><code>#brave-adblock-cname-uncloaking</code> feature flag disabled in <code>brave://flags</code></li>
-          <li>Tor session</li>
-          <li>Proxy/VPN WebExtension installed and active</li>
+          <li><strong>Standard</strong> shields mode: request is <span class="badge bg-success">allowed</span></li>
+          <li><strong>Aggressive</strong> shields mode: request is <span class="badge bg-danger">blocked</span></li>
         </ul>
+        <p class="text-muted"><small>If this test page isn't working as expected, ping on #privacy channel.</small></p>
       </div>
     </section>
   </div>
