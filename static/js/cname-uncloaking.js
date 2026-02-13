@@ -79,9 +79,11 @@
       startButtonElm.removeAttribute('disabled')
       startButtonElm.addEventListener('click', onClickTest, false)
     } catch (err) {
-      preCheckElm.textContent = err.message ||
-        'DNS pre-check failed: could not reach Cloudflare DoH. ' +
-        'Check your network connection and try again.'
+      const isDnsCheckError = err.message && err.message.startsWith('DNS pre-check failed')
+      preCheckElm.textContent = isDnsCheckError
+        ? err.message
+        : 'DNS pre-check failed: could not reach Cloudflare DoH (' +
+          err.message + '). Check your network connection and try again.'
       preCheckElm.className = 'text-danger'
     }
   }
