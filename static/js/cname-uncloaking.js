@@ -58,16 +58,19 @@
     try {
       const cname = await resolveDoHCNAME('test-cname.brave.dev')
       if (cname !== 'dev-pages.brave.software') {
+        const got = cname === null ? 'no CNAME record found' : cname
         throw new Error(
-          'DNS pre-check failed: test-cname.brave.dev does not CNAME to ' +
-          'dev-pages.brave.software as expected (got: ' + cname + ')'
+          'DNS pre-check failed: expected test-cname.brave.dev to CNAME to ' +
+          'dev-pages.brave.software, but ' + got +
+          '. The DNS configuration may have changed -- ping #privacy channel.'
         )
       }
       const secondCname = await resolveDoHCNAME('dev-pages.brave.software')
       if (secondCname !== null) {
         throw new Error(
           'DNS pre-check failed: dev-pages.brave.software has an unexpected ' +
-          'CNAME to ' + secondCname
+          'further CNAME to ' + secondCname +
+          '. The DNS configuration may have changed -- ping #privacy channel.'
         )
       }
       preCheckElm.textContent = 'DNS pre-check passed: test-cname.brave.dev ' +
@@ -76,7 +79,9 @@
       startButtonElm.removeAttribute('disabled')
       startButtonElm.addEventListener('click', onClickTest, false)
     } catch (err) {
-      preCheckElm.textContent = err.message
+      preCheckElm.textContent = err.message ||
+        'DNS pre-check failed: could not reach Cloudflare DoH. ' +
+        'Check your network connection and try again.'
       preCheckElm.className = 'text-danger'
     }
   }

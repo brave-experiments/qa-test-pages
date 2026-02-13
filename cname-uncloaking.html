@@ -36,15 +36,20 @@
             and confirm that the status of a CNAME cloaked network request is
             consistent with the following expected behavior:
           </p>
+          <h3>Setup</h3>
+          <p>Add the following line to <code>brave://adblock</code>:</p>
+          <pre>||dev-pages.brave.software/static/images/test.jpg</pre>
+          <p>
+            A DoH pre-check will verify that
+            <code>test-cname.brave.dev</code> CNAMEs to
+            <code>dev-pages.brave.software</code> before enabling the test.
+          </p>
           <p id="dns-precheck-status"></p>
           <button id="button-start-test" type="button" class="btn btn-primary btn-lg btn-block" disabled>Run test</button>
         </div>
       </div>
       <p id="test-result"></p>
       <div>
-        <h3>Setup</h3>
-        <p>Add the following line to <code>brave://adblock</code>:</p>
-        <pre>||dev-pages.brave.software/static/images/test.jpg</pre>
         <h3>Expected behavior</h3>
         <ul>
           <li><strong>Standard</strong> shields mode: request is <span class="badge bg-success">allowed</span></li>
