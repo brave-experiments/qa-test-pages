@@ -16,6 +16,11 @@
   const braveSoftwareOrigin = 'dev-pages.bravesoftware.com'
   const braveSoftwareComOrigin = 'dev-pages.brave.software'
 
+  const allowedMessageOrigins = new Set([
+    'https://' + braveSoftwareOrigin,
+    'https://' + braveSoftwareComOrigin
+  ])
+
   const thisOrigin = W.location.host
   const onlyLocal = W.location.protocol === 'http:'
   let otherOrigin
@@ -126,6 +131,9 @@
     return new Promise((resolve) => {
       const messageNonce = Math.random().toString()
       const onResponseCallback = response => {
+        if (!allowedMessageOrigins.has(response.origin)) {
+          return
+        }
         const { nonce, direction, payload } = response.data
         if (direction !== 'response') {
           return
@@ -151,6 +159,9 @@
 
   const receivePostMsg = async handler => {
     const onMessage = async msg => {
+      if (!allowedMessageOrigins.has(msg.origin)) {
+        return
+      }
       const { action, payload, direction, nonce } = msg.data
       if (direction !== 'sending') {
         return
