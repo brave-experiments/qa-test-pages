@@ -180,7 +180,7 @@
         nonce
       }
 
-      msg.source.postMessage(response, '*')
+      msg.source.postMessage(response, msg.origin)
     }
 
     W.addEventListener('message', onMessage, false)
