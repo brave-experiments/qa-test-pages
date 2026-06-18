@@ -16,6 +16,11 @@
   const braveSoftwareOrigin = 'dev-pages.bravesoftware.com'
   const braveSoftwareComOrigin = 'dev-pages.brave.software'
 
+  const allowedMessageOrigins = new Set([
+    'https://' + braveSoftwareOrigin,
+    'https://' + braveSoftwareComOrigin
+  ])
+
   const thisOrigin = W.location.host
   const onlyLocal = W.location.protocol === 'http:'
   let otherOrigin
@@ -122,10 +127,21 @@
     }
   }
 
+  const targetOriginForWindow = windowElm => {
+    try {
+      return windowElm.location.origin
+    } catch (_) {
+      return 'https://' + otherOrigin
+    }
+  }
+
   const sendPostMsg = async (windowElm, action, msg) => {
     return new Promise((resolve) => {
       const messageNonce = Math.random().toString()
       const onResponseCallback = response => {
+        if (!allowedMessageOrigins.has(response.origin)) {
+          return
+        }
         const { nonce, direction, payload } = response.data
         if (direction !== 'response') {
           return
@@ -145,12 +161,15 @@
         direction: 'sending',
         action
       }
-      windowElm.postMessage(outMsg, '*')
+      windowElm.postMessage(outMsg, targetOriginForWindow(windowElm))
     })
   }
 
   const receivePostMsg = async handler => {
     const onMessage = async msg => {
+      if (!allowedMessageOrigins.has(msg.origin)) {
+        return
+      }
       const { action, payload, direction, nonce } = msg.data
       if (direction !== 'sending') {
         return
@@ -169,7 +188,7 @@
         nonce
       }
 
-      msg.source.postMessage(response, '*')
+      msg.source.postMessage(response, msg.origin)
     }
 
     W.addEventListener('message', onMessage, false)
