@@ -127,6 +127,14 @@
     }
   }
 
+  const targetOriginForWindow = windowElm => {
+    try {
+      return windowElm.location.origin
+    } catch (_) {
+      return 'https://' + otherOrigin
+    }
+  }
+
   const sendPostMsg = async (windowElm, action, msg) => {
     return new Promise((resolve) => {
       const messageNonce = Math.random().toString()
@@ -153,7 +161,7 @@
         direction: 'sending',
         action
       }
-      windowElm.postMessage(outMsg, '*')
+      windowElm.postMessage(outMsg, targetOriginForWindow(windowElm))
     })
   }
 
