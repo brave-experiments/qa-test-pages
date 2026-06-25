@@ -13,8 +13,11 @@
 
   if (isTestPage) {
     alertElm.classList.remove('alert-dark')
-    const alertText = `<code>window.name</code> = ${windowName || 'NA'}`
-    alertElm.innerHTML = alertText
+    const codeElm = D.createElement('code')
+    codeElm.textContent = 'window.name'
+    alertElm.textContent = ''
+    alertElm.appendChild(codeElm)
+    alertElm.appendChild(D.createTextNode(` = ${windowName || 'NA'}`))
     if (windowName) {
       alertElm.classList.add('alert-danger')
     } else {
