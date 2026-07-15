@@ -349,14 +349,8 @@
       return runTest
     }
 
-    // Wait until the service worker actually controls this page before we
-    // capture its handle and start messaging it. `controllerchange` fires once
-    // the worker has activated and called `clients.claim()`, which also means
-    // its own startup has finished and it is listening for messages. The
-    // previous code captured `SW.controller` up front (null on a first visit,
-    // so `runTest` crashed on `postMessage`); messaging the worker merely once
-    // it is "active" (e.g. via `registration.active`) instead races against
-    // the worker's startup and the messages get dropped.
+    // Capture the service worker handle only once it controls the page, so
+    // it's non-null and ready for messages (fixes a first-visit crash).
     return new Promise(resolve => {
       let hasFinished = false
       const finishSetup = _ => {
@@ -373,8 +367,7 @@
       SW.addEventListener('controllerchange', finishSetup)
       SW.register(script)
 
-      // Already controlled (e.g. a repeat visit), so no controllerchange
-      // event is coming; capture the handle straight away.
+      // Already controlled (e.g. a repeat visit); no controllerchange coming.
       if (SW.controller !== null) {
         finishSetup()
       }
