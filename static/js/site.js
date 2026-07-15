@@ -349,16 +349,28 @@
       return runTest
     }
 
-    testHandles['service-worker'] = SW.controller
-    numTests = Object.values(testHandles).length
-
+    // Capture the service worker handle only once it controls the page, so
+    // it's non-null and ready for messages (fixes a first-visit crash).
     return new Promise(resolve => {
-      SW.addEventListener('message', onTestResponse)
-      SW.ready.then(_ => resolve(runTest))
-      if (SW.controller !== null) {
+      let hasFinished = false
+      const finishSetup = _ => {
+        if (hasFinished === true) {
+          return
+        }
+        hasFinished = true
+        testHandles['service-worker'] = SW.controller
+        numTests = Object.values(testHandles).length
         resolve(runTest)
       }
+
+      SW.addEventListener('message', onTestResponse)
+      SW.addEventListener('controllerchange', finishSetup)
       SW.register(script)
+
+      // Already controlled (e.g. a repeat visit); no controllerchange coming.
+      if (SW.controller !== null) {
+        finishSetup()
+      }
     })
   }
 
