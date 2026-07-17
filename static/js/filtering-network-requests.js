@@ -3,10 +3,9 @@
   const D = W.document
   const BU = W.BRAVE
 
-  // Unique per-load token so reloads re-request (not cache-served, which hides blocking).
   for (const img of D.querySelectorAll('img')) {
     const token = Date.now().toString(36) + Math.random().toString(36).slice(2)
-    img.src = img.src.split('?')[0] + '?' + token
+    img.src += (img.src.includes('?') ? '&' : '?') + 'cb=' + token
   }
 
   const startBtn = D.getElementById('button-start-test')
