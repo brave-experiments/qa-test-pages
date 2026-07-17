@@ -54,13 +54,13 @@
           <p>
             <strong>Trackers &amp; ads blocked (aggressive)</strong>:
             There should <em>not</em> be an image in the next column.  A
-            request for <code>/static/images/test.jpg?335962573013224749</code>
+            request for <code>/static/images/test.jpg?&lt;unique&gt;</code>
             should be blocked.
           </p>
         </div>
         <div class="col">
           <div class="border border-primary">
-            <img src="/static/images/test.jpg?335962573013224749" class="img-thumbnail">
+            <img src="/static/images/test.jpg" class="img-thumbnail">
           </div>
         </div>
       </div>
@@ -84,13 +84,13 @@
             <strong>Trackers &amp; ads blocked (standard)</strong> and
             <strong>Trackers &amp; ads blocked (aggressive)</strong>:
             There should <em>not</em> be an image in the next column.  A request
-            for <code>/static/images/test.jpg?335962573013224749</code>
+            for <code>/static/images/test.jpg?&lt;unique&gt;</code>
             should be blocked.
           </p>
         </div>
         <div class="col">
           <div class="border border-primary">
-            <img src="/static/images/test.jpg?335962573013224749" data-src="/static/images/test.jpg?335962573013224749" class="other-origin img-thumbnail">
+            <img src="/static/images/test.jpg" data-src="/static/images/test.jpg" class="other-origin img-thumbnail">
           </div>
         </div>
       </div>
